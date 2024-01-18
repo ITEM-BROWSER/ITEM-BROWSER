@@ -1,4 +1,0 @@
--- CENTER-data.sql
-INSERT INTO CENTER (CENTER_CODE, MANAGER_NAME, COMPANY_CONTACT_NUMBER, ZIP_CODE, ADDRESS, ADDRESS_DETAIL)
-VALUES ('center001', 'Manager A', '111-111-1111', '10000', '123 Center St', 'Apt 1A'),
-       ('center002', 'Manager B', '222-222-2222', '20000', '456 Center Ln', 'Apt 2B');
