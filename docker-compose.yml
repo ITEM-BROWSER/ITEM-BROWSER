@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: "mysql:8.0.35-debian"
+    container_name: item-browser-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: Java3410!@#
+      MYSQL_DATABASE: item-browser
+      MYSQL_USER: item-admin
+      MYSQL_PASSWORD: 2H#@(#Jksj@kkwje
+    command: --default-authentication-plugin=caching_sha2_password --lower_case_table_names=1
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+volumes:
+  mysql-data:

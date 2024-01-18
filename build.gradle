@@ -1,0 +1,95 @@
+import org.yaml.snakeyaml.Yaml
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.7.16'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id('com.epages.restdocs-api-spec') version '0.15.3'
+}
+
+group = 'com.psj'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '11'
+    targetCompatibility = '11'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.3.1'
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    //REMEMBER JWT 토큰을 쉽게 구현하기 위하여 해당 라이브러리를 선택함. 내부적으로 시큐리티의 일부기능을 의존중.
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'mysql:mysql-connector-java:8.0.28'
+    implementation 'org.yaml:snakeyaml:2.0' // yaml 파싱을 위한 라이브러리
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    //logback
+    implementation group: 'org.bgee.log4jdbc-log4j2', name: 'log4jdbc-log4j2-jdbc4.1', version: '1.16'
+
+    //test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:2.3.1'
+    testImplementation("com.epages:restdocs-api-spec-mockmvc:0.15.3")
+}
+
+// properties file load...
+def loadYamlProperties() {
+    File file = file("src/main/resources/application.yaml")
+    Yaml yaml = new Yaml()
+    Map<String, Object> yamlProps = yaml.load(file.newInputStream())
+    println("yamlProps: ${yamlProps}")
+    return yamlProps
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    finalizedBy('copyOasToSwagger') // test 태스크 실행 후에 copyOasToSwagger 태스크 실행
+}
+
+openapi3 {
+    def props = loadYamlProperties()
+
+    def profile = props['spring']['profiles']['active'] == null ? 'local' : props['spring']['profiles']['active']
+    def domain = props['app']['domain'][profile]
+
+    println("domain: ${domain}")
+
+    server = domain
+    title = 'ITEM-BROWSER API'
+    description = 'ITEM-BROWSER API'
+    version = '0.0.1'
+    format = 'yaml' // or json
+}
+
+tasks.register('copyOasToSwagger', Copy) {
+    // 기존 yaml 파일 삭제
+    delete 'src/main/resources/static/swagger-ui/openapi3.yaml'
+
+    // 복제할 yaml 파일 타겟팅
+    from "$buildDir/api-spec/openapi3.yaml"
+
+    // 타겟 디렉토리로 파일 복제
+    into 'src/main/resources/static/swagger-ui'
+
+    // openapi3 task가 먼저 실행되도록 설정
+    dependsOn tasks.named('openapi3')
+}

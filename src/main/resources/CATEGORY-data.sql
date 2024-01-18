@@ -1,0 +1,4 @@
+-- CATEGORY-data.sql
+INSERT INTO CATEGORY (NAME, STATUS, PARENT_ID, CREATED_DATE, UPDATED_DATE)
+VALUES ('Category A', 'ACTIVE', NULL, NOW(), NOW()),
+       ('Subcategory A1', 'ACTIVE', 1, NOW(), NOW());

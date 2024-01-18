@@ -1,0 +1,33 @@
+spring:
+  jpa:
+    open-in-view: 'false'
+  main:
+    banner-mode: 'off'
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  profiles:
+    active: local
+
+mybatis:
+  mapper-locations: classpath:sqlmap/com/psj/itembrowser/*.xml
+
+customed:
+  table:
+    schema: item-browser
+
+app:
+  domain:
+    server: https://item.co.kr
+    local: https://localhost:8080
+    dev: https://item.dev.com
+
+jwt:
+  public:
+    key: classpath:app.pub
+  private:
+    key: classpath:app.key
+  access-token:
+    expiration-time: '3600' # 1 hour
+  refresh-token:
+    expiration-time: '31536000' # 1 year

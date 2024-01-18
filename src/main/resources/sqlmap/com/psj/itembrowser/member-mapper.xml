@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.psj.itembrowser.member.mapper.MemberMapper">
+    <resultMap id="memberResultMap" type="com.psj.itembrowser.member.domain.vo.Member">
+        <result property="phoneNumber" column="PHONE_NUMBER"/>
+        <result property="gender" column="GENDER" javaType="com.psj.itembrowser.member.domain.vo.Member$Gender"
+                typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+        <result property="role" column="ROLE" javaType="com.psj.itembrowser.member.domain.vo.Member$Role"
+                typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+        <result property="status" column="STATUS" javaType="com.psj.itembrowser.member.domain.vo.Member$Status"
+                typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+        <result property="birthday" column="BIRTHDAY"/>
+        <result property="lastLoginDate" column="LAST_LOGIN_DATE"/>
+        <result property="createdDate" column="CREATED_DATE"/>
+        <result property="updatedDate" column="UPDATED_DATE"/>
+        <result property="deletedDate" column="DELETED_DATE"/>
+
+        <association property="no" resultMap="memberNoResultMap"/>
+        <association property="credentials" resultMap="credentialsResultMap"/>
+        <association property="name" resultMap="nameResultMap"/>
+        <association property="address" resultMap="addressResultMap"/>
+    </resultMap>
+
+    <resultMap id="memberNoResultMap" type="com.psj.itembrowser.member.domain.vo.MemberNo">
+        <id property="memberNo" column="MEMBER_NO"/>
+    </resultMap>
+
+    <resultMap id="credentialsResultMap" type="com.psj.itembrowser.member.domain.vo.Credentials">
+        <result property="email" column="EMAIL"/>
+        <result property="password" column="PASSWORD"/>
+    </resultMap>
+
+    <resultMap id="nameResultMap" type="com.psj.itembrowser.member.domain.vo.Name">
+        <result property="firstName" column="FIRST_NAME"/>
+        <result property="lastName" column="LAST_NAME"/>
+    </resultMap>
+
+    <resultMap id="addressResultMap" type="com.psj.itembrowser.member.domain.vo.Address">
+        <result property="addressMain" column="ADDRESS_MAIN"/>
+        <result property="addressSub" column="ADDRESS_SUB"/>
+        <result property="zipCode" column="ZIP_CODE"/>
+    </resultMap>
+
+    <sql id="memberColumns">
+        MEMBER_NO,
+        EMAIL,
+        PASSWORD,
+        FIRST_NAME,
+        LAST_NAME,
+        PHONE_NUMBER,
+        ADDRESS_MAIN,
+        ADDRESS_SUB,
+        ZIP_CODE,
+        GENDER,
+        ROLE,
+        STATUS,
+        BIRTHDAY,
+        LAST_LOGIN_DATE,
+        CREATED_DATE,
+        UPDATED_DATE,
+        DELETED_DATE
+    </sql>
+
+    <select id="findByEmail" parameterType="string" resultMap="memberResultMap">
+        select
+        <include refid="memberColumns"/>
+        from member
+        where email = #{email}
+        limit 1
+    </select>
+
+    <insert id="insertMember" parameterType="com.psj.itembrowser.member.domain.dto.request.MemberSignUpRequestDTO">
+        <selectKey keyProperty="memberNo" order="AFTER" resultType="long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into member
+        (EMAIL,
+         PASSWORD,
+         FIRST_NAME,
+         LAST_NAME,
+         PHONE_NUMBER,
+         GENDER,
+         ROLE,
+         STATUS,
+         ADDRESS_MAIN,
+         ADDRESS_SUB,
+         ZIP_CODE,
+         BIRTHDAY)
+            value (
+                   #{credentialsEmail},
+                   #{credentialsPassword},
+                   #{nameFirstName},
+                   #{nameLastName},
+                   #{contactPhoneNumber},
+                   #{gender},
+                   #{role},
+                   #{status},
+                   #{addressAddressMain},
+                   #{addressAddressSub},
+                   #{addressZipCode},
+                   #{birthday}
+            );
+    </insert>
+
+    <select id="findById" resultMap="memberResultMap" parameterType="long">
+        select
+        <include refid="memberColumns"/>
+        from member
+        where member_no = #{memberNo}
+        limit 1
+    </select>
+</mapper>
