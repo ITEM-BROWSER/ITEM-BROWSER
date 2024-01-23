@@ -5,7 +5,7 @@ spring:
       mode: always
       encoding: UTF-8
   datasource:
-    password: Java3410!@#
+    password: 2H#@(#Jksj@kkwje
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
     username: item-admin
     url: jdbc:log4jdbc:mysql://localhost:3306/item-browser?serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=UTF-8
