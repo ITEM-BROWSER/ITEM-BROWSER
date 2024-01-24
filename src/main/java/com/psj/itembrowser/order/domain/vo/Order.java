@@ -1,6 +1,7 @@
 package com.psj.itembrowser.order.domain.vo;
 
 import com.psj.itembrowser.member.domain.vo.Member;
+import com.psj.itembrowser.order.domain.dto.response.OrderResponseDTO;
 import com.psj.itembrowser.shippingInfos.domain.vo.ShippingInfo;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -55,5 +56,9 @@ public class Order implements Cancelable {
         List<OrderStatus> cancelableStatus = List.of(OrderStatus.ACCEPT, OrderStatus.INSTRUCT);
         return cancelableStatus.stream()
             .noneMatch(orderStatus::equals);
+    }
+    
+    public OrderResponseDTO toOrderResponseDTO() {
+        return OrderResponseDTO.create(this);
     }
 }

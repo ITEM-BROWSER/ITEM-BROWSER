@@ -5,6 +5,8 @@ import static com.psj.itembrowser.order.domain.vo.OrderStatus.CANCELED;
 
 import com.psj.itembrowser.common.exception.NotFoundException;
 import com.psj.itembrowser.order.domain.dto.request.OrderDeleteRequestDTO;
+import com.psj.itembrowser.order.domain.dto.request.OrderRequestDTO;
+import com.psj.itembrowser.order.domain.dto.response.OrderResponseDTO;
 import com.psj.itembrowser.order.domain.vo.Order;
 import com.psj.itembrowser.order.mapper.OrderMapper;
 import lombok.RequiredArgsConstructor;
@@ -41,5 +43,14 @@ public class OrderPersistence {
             throw new NotFoundException(ORDER_NOT_FOUND);
         }
         return findOrder;
+    }
+    
+    public OrderResponseDTO getOrder(OrderRequestDTO orderRequestDTO) {
+        Order findOrder = orderMapper.selectOrder(orderRequestDTO);
+        if (findOrder == null) {
+            throw new NotFoundException(ORDER_NOT_FOUND);
+        }
+        
+        return findOrder.toOrderResponseDTO();
     }
 }
