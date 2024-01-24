@@ -1,7 +1,7 @@
 package com.psj.itembrowser.order.domain.dto.request;
 
-import com.psj.itembrowser.order.domain.vo.OrderPeriod;
 import com.psj.itembrowser.order.domain.vo.OrderStatus;
+import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,5 +18,10 @@ import lombok.NoArgsConstructor;
 public class OrderPageRequestDTO {
     
     private OrderStatus orderStatus;
-    private OrderPeriod orderPeriod;
+    @Pattern(regexp = "^[0-9]{4}$", message = "년도는 4자리 숫자만 가능합니다.")
+    private String orderYear;
+    
+    public static OrderPageRequestDTO create(OrderStatus orderStatus, String orderYear) {
+        return new OrderPageRequestDTO(orderStatus, orderYear);
+    }
 }

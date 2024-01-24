@@ -1,75 +1,75 @@
 <!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.psj.itembrowser.order.mapper.OrderMapper">
-  <resultMap id="orderResultMap" type="com.psj.itembrowser.order.domain.vo.Order">
-    <id property="id" column="id"/>
-    <result property="ordererId" column="orderer_id"/>
-    <result property="orderStatus" column="order_status"
-      typeHandler="com.psj.itembrowser.common.handler.OrderStatusTypeHandler"/>
-    <result property="paidDate" column="paid_date"/>
-    <result property="shippingInfoId" column="shipping_info_id"/>
-    <result property="createdDate" column="created_date"/>
-    <result property="updatedDate" column="updated_date"/>
-    <result property="deletedDate" column="deleted_date"/>
-  </resultMap>
-
-  <sql id="orderColumns">
-    O.id,
-    O.ORDERER_ID,
-    O.ORDER_STATUS,
-    O.PAID_DATE,
-    O.SHIPPING_INFO_ID,
-    O.CREATED_DATE,
-    O.UPDATED_DATE,
-    O.DELETED_DATE
-  </sql>
-
-  <select id="selectOrder" resultMap="orderResultMap"
-    parameterType="com.psj.itembrowser.order.domain.dto.request.OrderRequestDTO">
-    SELECT
-    <include refid="orderColumns"/>
-    FROM ORDERS O
-    <where>
-      AND id = #{orderRequestDTO.id}
-      <if test="orderRequestDTO.shownDeletedOrder == false">
-        AND O.DELETED_DATE IS NULL
-      </if>
-    </where>
-  </select>
-
-  <select id="selectOrderForUpdate" resultType="com.psj.itembrowser.order.domain.vo.Order"
-    resultMap="orderResultMap">
-    SELECT
-    <include refid="orderColumns"/>
-    FROM ORDERS O
-    WHERE ID =
-          #{orderId} for
-    update
-  </select>
-
-
-  <update id="deleteSoftly"
-    parameterType="com.psj.itembrowser.order.domain.dto.request.OrderDeleteRequestDTO">
-    UPDATE ORDERS
-    SET ORDER_STATUS = #{orderDeleteRequestDTO.orderStatus},
-        DELETED_DATE = NOW()
-    WHERE id = #{orderDeleteRequestDTO.id}
-  </update>
-  
-  <select id="selectOrders" resultMap="orderResultMap">
-      SELECT
-      <include refid="orderColumns"/>
-      FROM ORDERS O
-      <where>
-          <if test="orderPageRequestDTO.orderPeriod != null">
-              AND O.CREATED_DATE BETWEEN #{orderPageRequestDTO.orderPeriod.start} AND #{orderPageRequestDTO.orderPeriod.end}
-          </if>
-          <if test="orderPageRequestDTO.orderStatus != null">
-              AND O.ORDER_STATUS = #{orderPageRequestDTO.orderStatus}
-          </if>
-      </where>
-      ORDER BY O.CREATED_DATE DESC
-  </select>
+    <resultMap id="orderResultMap" type="com.psj.itembrowser.order.domain.vo.Order">
+        <id property="id" column="id"/>
+        <result property="ordererId" column="orderer_id"/>
+        <result property="orderStatus" column="order_status"
+            typeHandler="com.psj.itembrowser.common.handler.OrderStatusTypeHandler"/>
+        <result property="paidDate" column="paid_date"/>
+        <result property="shippingInfoId" column="shipping_info_id"/>
+        <result property="createdDate" column="created_date"/>
+        <result property="updatedDate" column="updated_date"/>
+        <result property="deletedDate" column="deleted_date"/>
+    </resultMap>
+    
+    <sql id="orderColumns">
+        O.id,
+        O.ORDERER_ID,
+        O.ORDER_STATUS,
+        O.PAID_DATE,
+        O.SHIPPING_INFO_ID,
+        O.CREATED_DATE,
+        O.UPDATED_DATE,
+        O.DELETED_DATE
+    </sql>
+    
+    <select id="selectOrder" resultMap="orderResultMap"
+        parameterType="com.psj.itembrowser.order.domain.dto.request.OrderRequestDTO">
+        SELECT
+        <include refid="orderColumns"/>
+        FROM ORDERS O
+        <where>
+            AND id = #{orderRequestDTO.id}
+            <if test="orderRequestDTO.shownDeletedOrder == false">
+                AND O.DELETED_DATE IS NULL
+            </if>
+        </where>
+    </select>
+    
+    <select id="selectOrderForUpdate" resultType="com.psj.itembrowser.order.domain.vo.Order"
+        resultMap="orderResultMap">
+        SELECT
+        <include refid="orderColumns"/>
+        FROM ORDERS O
+        WHERE ID =
+              #{orderId} for
+        update
+    </select>
+    
+    
+    <update id="deleteSoftly"
+        parameterType="com.psj.itembrowser.order.domain.dto.request.OrderDeleteRequestDTO">
+        UPDATE ORDERS
+        SET ORDER_STATUS = #{orderDeleteRequestDTO.orderStatus},
+            DELETED_DATE = NOW()
+        WHERE id = #{orderDeleteRequestDTO.id}
+    </update>
+    
+    <select id="selectOrders" resultMap="orderResultMap">
+        SELECT
+        <include refid="orderColumns"/>
+        FROM ORDERS O
+        <where>
+            <if test="orderPageRequestDTO.orderYear != null">
+                AND O.CREATED_DATE BETWEEN CONCAT(#{orderPageRequestDTO.orderYear}, '-01-01') AND CONCAT(#{orderPageRequestDTO.orderYear}, '-12-31')
+            </if>
+            <if test="orderPageRequestDTO.orderStatus != null">
+                AND O.ORDER_STATUS = #{orderPageRequestDTO.orderStatus}
+            </if>
+        </where>
+        ORDER BY O.CREATED_DATE DESC
+    </select>
 </mapper>
