@@ -4,7 +4,6 @@ import static java.text.MessageFormat.format;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.psj.itembrowser.common.config.jwt.JwtProvider;
 import com.psj.itembrowser.common.message.MessageDTO;
 import com.psj.itembrowser.order.domain.dto.request.OrderPageRequestDTO;
 import com.psj.itembrowser.order.domain.dto.request.OrderRequestDTO;
@@ -30,7 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderApiController {
     
     private final OrderService orderService;
-    private final JwtProvider jwtProvider;
     
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderResponseDTO> getOrder(@PathVariable Long orderId) {
