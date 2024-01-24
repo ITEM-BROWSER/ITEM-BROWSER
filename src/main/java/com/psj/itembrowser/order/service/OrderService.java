@@ -4,7 +4,6 @@ import com.psj.itembrowser.order.domain.dto.request.OrderPageRequestDTO;
 import com.psj.itembrowser.order.domain.dto.request.OrderRequestDTO;
 import com.psj.itembrowser.order.domain.dto.response.OrderResponseDTO;
 import java.util.List;
-import org.springframework.data.domain.Pageable;
 
 public interface OrderService {
     
@@ -12,7 +11,7 @@ public interface OrderService {
     
     OrderResponseDTO getOrder(OrderRequestDTO orderId);
     
-    List<OrderResponseDTO> getOrders(Pageable pageable, OrderPageRequestDTO orderRequestDTO);
+    List<OrderResponseDTO> getOrders(OrderPageRequestDTO orderRequestDTO);
     
     void createOrder();
     

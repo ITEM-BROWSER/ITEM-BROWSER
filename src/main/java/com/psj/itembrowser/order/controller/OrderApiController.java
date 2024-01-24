@@ -2,6 +2,8 @@ package com.psj.itembrowser.order.controller;
 
 import static java.text.MessageFormat.format;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.psj.itembrowser.common.config.jwt.JwtProvider;
 import com.psj.itembrowser.common.message.MessageDTO;
 import com.psj.itembrowser.order.domain.dto.request.OrderPageRequestDTO;
@@ -41,19 +43,19 @@ public class OrderApiController {
         return ResponseEntity.ok(findOrder);
     }
     
-    @GetMapping
-    public ResponseEntity<List<OrderResponseDTO>> getOrders(Pageable pageable,
+    @GetMapping("")
+    public ResponseEntity<PageInfo<OrderResponseDTO>> getOrders(Pageable pageable,
         OrderPageRequestDTO orderRequestDTO) {
         log.info("getOrders");
         
-        orderService.getOrders(pageable, orderRequestDTO);
+        PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize());
+        List<OrderResponseDTO> orders = orderService.getOrders(orderRequestDTO);
         
         log.info("getOrders is completed");
-        
-        return ResponseEntity.ok(orderService.getOrders(pageable, orderRequestDTO));
+        return ResponseEntity.ok(new PageInfo<>(orders));
     }
     
-    @PostMapping
+    @PostMapping("")
     public MessageDTO createOrder() {
         log.info("createOrder");
         orderService.createOrder();

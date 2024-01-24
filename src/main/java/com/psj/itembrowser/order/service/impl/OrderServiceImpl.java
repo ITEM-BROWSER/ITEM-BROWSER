@@ -13,7 +13,6 @@ import com.psj.itembrowser.security.service.impl.UserDetailsServiceImpl;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,9 +54,13 @@ public class OrderServiceImpl implements OrderService {
     }
     
     @Override
-    public List<OrderResponseDTO> getOrders(Pageable pageable,
-        OrderPageRequestDTO orderRequestDTO) {
-        return null;
+    public List<OrderResponseDTO> getOrders(OrderPageRequestDTO orderRequestDTO) {
+        log.info("getOrders() orderRequestDTO: {}", orderRequestDTO);
+        
+        List<OrderResponseDTO> orders = orderPersistence.getOrders(orderRequestDTO);
+        
+        log.info("getOrders() orderRequestDTO: {} is completed", orderRequestDTO);
+        return orders;
     }
     
     @Override

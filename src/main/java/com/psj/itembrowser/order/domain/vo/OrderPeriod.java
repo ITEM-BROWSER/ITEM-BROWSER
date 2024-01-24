@@ -1,5 +1,6 @@
 package com.psj.itembrowser.order.domain.vo;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.Getter;
 
@@ -16,10 +17,14 @@ public enum OrderPeriod {
     TWO_YEAR(24),
     THREE_YEAR(36),
     ;
-    private final int month;
+    private final LocalDateTime start;
+    private final LocalDateTime end;
+    
     
     OrderPeriod(int month) {
-        this.month = month;
+        LocalDateTime now = LocalDateTime.now();
+        this.start = now.minusMonths(month);
+        this.end = now;
     }
     
     public static OrderPeriod of(String period) {
