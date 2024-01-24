@@ -1,10 +1,9 @@
 package com.psj.itembrowser.order.domain.vo;
 
 
+import java.util.Objects;
 import lombok.Getter;
 import lombok.NonNull;
-
-import java.util.Objects;
 
 @Getter
 public enum OrderStatus {
@@ -32,7 +31,7 @@ public enum OrderStatus {
     public static OrderStatus of(@NonNull String value) {
         for (OrderStatus orderStatus : OrderStatus.values()) {
             if (Objects.equals(
-                    orderStatus.getValue(), value)) {
+                orderStatus.getValue(), value)) {
                 return orderStatus;
             }
         }

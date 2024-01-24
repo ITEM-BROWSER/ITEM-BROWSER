@@ -10,6 +10,7 @@ import lombok.Data;
 @Data
 @Builder
 public class OrderRequestDTO {
+    
     Long id;
     boolean shownDeletedOrder;
 }

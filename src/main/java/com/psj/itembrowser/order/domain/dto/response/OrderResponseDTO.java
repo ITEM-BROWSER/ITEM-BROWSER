@@ -1,16 +1,15 @@
-package com.psj.itembrowser.order.domain.dto;
+package com.psj.itembrowser.order.domain.dto.response;
+
+import static lombok.AccessLevel.PROTECTED;
 
 import com.psj.itembrowser.order.domain.vo.Order;
 import com.psj.itembrowser.order.domain.vo.OrderStatus;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.io.Serializable;
-import java.time.LocalDateTime;
-
-import static lombok.AccessLevel.PROTECTED;
 
 /**
  * DTO for {@link Order}
@@ -20,6 +19,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
 public class OrderResponseDTO implements Serializable {
+    
     Long id;
     Long ordererId;
     OrderStatus orderStatus;

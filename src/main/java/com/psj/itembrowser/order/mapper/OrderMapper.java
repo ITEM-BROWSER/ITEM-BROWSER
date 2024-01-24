@@ -1,11 +1,17 @@
 package com.psj.itembrowser.order.mapper;
 
+import com.psj.itembrowser.order.domain.dto.request.OrderDeleteRequestDTO;
 import com.psj.itembrowser.order.domain.dto.request.OrderRequestDTO;
 import com.psj.itembrowser.order.domain.vo.Order;
 import com.psj.itembrowser.order.domain.vo.OrdersProductRelation;
-import org.apache.ibatis.annotations.*;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.ResultMap;
+import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface OrderMapper {
@@ -24,24 +30,25 @@ public interface OrderMapper {
     void deleteSoftlyOrderProducts(@Param("orderId") long orderId);
     
     @Results(id = "orderProductResultMap", value = {
-            @Result(property = "groupId", column = "GROUP_ID"),
-            @Result(property = "productId", column = "PRODUCT_ID"),
-            @Result(property = "productQuantity", column = "PRODUCT_QUANTITY"),
-            @Result(property = "createdDate", column = "CREATED_DATE"),
-            @Result(property = "updatedDate", column = "UPDATED_DATE"),
-            @Result(property = "deletedDate", column = "DELETED_DATE")
+        @Result(property = "groupId", column = "GROUP_ID"),
+        @Result(property = "productId", column = "PRODUCT_ID"),
+        @Result(property = "productQuantity", column = "PRODUCT_QUANTITY"),
+        @Result(property = "createdDate", column = "CREATED_DATE"),
+        @Result(property = "updatedDate", column = "UPDATED_DATE"),
+        @Result(property = "deletedDate", column = "DELETED_DATE")
     })
-    @Select("SELECT GROUP_ID, PRODUCT_ID, PRODUCT_QUANTITY, CREATED_DATE, UPDATED_DATE, DELETED_DATE " +
+    @Select(
+        "SELECT GROUP_ID, PRODUCT_ID, PRODUCT_QUANTITY, CREATED_DATE, UPDATED_DATE, DELETED_DATE " +
             " FROM ORDERS_PRODUCT_RELATION " +
             "WHERE GROUP_ID = #{orderId}")
     List<OrdersProductRelation> selectOrderProductRelations(@Param("orderId") long orderId);
     
     @ResultMap("orderResultMap")
     @Select(
-            "SELECT ID, ORDER_STATUS, CREATED_DATE, UPDATED_DATE, DELETED_DATE " +
-                    "FROM ORDERS " +
-                    "WHERE ID = #{orderId} " +
-                    "for update"
+        "SELECT ID, ORDER_STATUS, CREATED_DATE, UPDATED_DATE, DELETED_DATE " +
+            "FROM ORDERS " +
+            "WHERE ID = #{orderId} " +
+            "for update"
     )
     Order selectOrderForUpdate(@Param("orderId") long orderId);
 }

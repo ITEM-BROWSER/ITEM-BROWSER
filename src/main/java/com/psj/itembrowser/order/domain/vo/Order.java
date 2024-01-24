@@ -2,10 +2,13 @@ package com.psj.itembrowser.order.domain.vo;
 
 import com.psj.itembrowser.member.domain.vo.Member;
 import com.psj.itembrowser.shippingInfos.domain.vo.ShippingInfo;
-import lombok.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @NoArgsConstructor
@@ -27,10 +30,10 @@ public class Order implements Cancelable {
     
     @Builder
     public static Order createOrder(
-            Long id, Long ordererId, OrderStatus orderStatus, LocalDateTime paidDate,
-            Long shippingInfoId, LocalDateTime createdDate, LocalDateTime updatedDate,
-            LocalDateTime deletedDate, List<OrdersProductRelation> products, Member member,
-            ShippingInfo shippingInfo
+        Long id, Long ordererId, OrderStatus orderStatus, LocalDateTime paidDate,
+        Long shippingInfoId, LocalDateTime createdDate, LocalDateTime updatedDate,
+        LocalDateTime deletedDate, List<OrdersProductRelation> products, Member member,
+        ShippingInfo shippingInfo
     ) {
         Order order = new Order();
         order.id = id;
@@ -51,6 +54,6 @@ public class Order implements Cancelable {
     public boolean isNotCancelable() {
         List<OrderStatus> cancelableStatus = List.of(OrderStatus.ACCEPT, OrderStatus.INSTRUCT);
         return cancelableStatus.stream()
-                .noneMatch(orderStatus::equals);
+            .noneMatch(orderStatus::equals);
     }
 }

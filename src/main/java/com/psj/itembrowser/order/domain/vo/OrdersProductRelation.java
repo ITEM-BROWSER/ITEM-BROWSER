@@ -1,15 +1,19 @@
 package com.psj.itembrowser.order.domain.vo;
 
 import com.psj.itembrowser.product.domain.vo.Product;
-import lombok.*;
-
 import java.time.LocalDateTime;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @EqualsAndHashCode(of = {"groupId", "productId", "productQuantity"})
 @NoArgsConstructor
 @ToString
 public class OrdersProductRelation {
+    
     /**
      * 주문그룹ID
      */
@@ -35,13 +39,13 @@ public class OrdersProductRelation {
     
     @Builder
     public static OrdersProductRelation createOrdersProductRelation(
-            Long groupId,
-            Long productId,
-            int productQuantity,
-            LocalDateTime createdDate,
-            LocalDateTime updatedDate,
-            LocalDateTime deletedDate,
-            Product product
+        Long groupId,
+        Long productId,
+        int productQuantity,
+        LocalDateTime createdDate,
+        LocalDateTime updatedDate,
+        LocalDateTime deletedDate,
+        Product product
     ) {
         OrdersProductRelation ordersProductRelation = new OrdersProductRelation();
         ordersProductRelation.groupId = groupId;

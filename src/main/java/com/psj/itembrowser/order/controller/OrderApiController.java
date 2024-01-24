@@ -3,7 +3,7 @@ package com.psj.itembrowser.order.controller;
 import static java.text.MessageFormat.format;
 
 import com.psj.itembrowser.common.message.MessageDTO;
-import com.psj.itembrowser.order.domain.dto.OrderResponseDTO;
+import com.psj.itembrowser.order.domain.dto.response.OrderResponseDTO;
 import com.psj.itembrowser.order.service.OrderService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

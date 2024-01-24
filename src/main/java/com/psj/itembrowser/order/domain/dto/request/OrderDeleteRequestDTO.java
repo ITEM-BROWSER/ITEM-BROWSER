@@ -1,4 +1,4 @@
-package com.psj.itembrowser.order.mapper;
+package com.psj.itembrowser.order.domain.dto.request;
 
 import com.psj.itembrowser.order.domain.vo.OrderStatus;
 import lombok.AllArgsConstructor;
@@ -12,6 +12,7 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class OrderDeleteRequestDTO {
+    
     private Long id;
     
     private OrderStatus orderStatus;
