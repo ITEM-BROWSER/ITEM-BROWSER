@@ -1,5 +1,16 @@
 package com.psj.itembrowser.order.controller;
 
+import static java.text.MessageFormat.format;
+import static org.mockito.Mockito.doThrow;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.epages.restdocs.apispec.ResourceDocumentation;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.psj.itembrowser.common.exception.DatabaseOperationException;
@@ -23,20 +34,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static java.text.MessageFormat.format;
-import static org.mockito.Mockito.doThrow;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 @WebMvcTest(OrderApiController.class)
 @AutoConfigureRestDocs
 public class OrderDeleteApiControllerTest {
-    private final String BASE_URL = "/v1/api/order";
+    private final String BASE_URL = "/v1/api/orders";
     
     @Autowired
     private MockMvc mockMvc;

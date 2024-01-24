@@ -1,6 +1,10 @@
 package com.psj.itembrowser.order.persistence;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.psj.itembrowser.order.mapper.OrderMapper;
+import com.psj.itembrowser.order.mapper.OrderProductRelationMapper;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,9 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * packageName    : com.psj.itembrowser.order.persistence
@@ -30,6 +31,9 @@ public class OrderDeletePersistenceTest {
     
     @Mock
     private OrderMapper orderMapper;
+    
+    @Mock
+    private OrderProductRelationMapper orderProductRelationMapper;
     
     @Test
     @DisplayName("주문에 대한 삭제시 성공의 경우 exception 이 발생하지 않아야함")
