@@ -9,7 +9,10 @@ services:
       MYSQL_DATABASE: item-browser
       MYSQL_USER: item-admin
       MYSQL_PASSWORD: 2H#@(#Jksj@kkwje
-    command: --lower_case_table_names=1
+      # 문자 인코딩 설정
+      MYSQL_CHARSET: 'utf8mb4'
+      MYSQL_COLLATION: 'utf8mb4_unicode_ci'
+    command: --lower_case_table_names=1  --character-set-server=utf8mb4
     volumes:
       - mysql-data:/var/lib/mysql
     ports:
