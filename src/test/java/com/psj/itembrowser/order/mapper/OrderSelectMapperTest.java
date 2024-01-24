@@ -1,5 +1,8 @@
 package com.psj.itembrowser.order.mapper;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+
 import com.psj.itembrowser.common.generator.order.OrderMockDataGenerator;
 import com.psj.itembrowser.member.domain.vo.Member;
 import com.psj.itembrowser.order.domain.dto.request.OrderRequestDTO;
@@ -7,6 +10,8 @@ import com.psj.itembrowser.order.domain.vo.Order;
 import com.psj.itembrowser.order.domain.vo.OrderStatus;
 import com.psj.itembrowser.order.domain.vo.OrdersProductRelation;
 import com.psj.itembrowser.shippingInfos.domain.vo.ShippingInfo;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
@@ -14,12 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
 @MybatisTest
 @Transactional
@@ -50,10 +49,7 @@ public class OrderSelectMapperTest {
             mock(ShippingInfo.class)
         );
         
-        OrderRequestDTO requestDTO = OrderRequestDTO.builder()
-                                                    .id(1L)
-                                                    .shownDeletedOrder(false)
-                                                    .build();
+        OrderRequestDTO requestDTO = OrderRequestDTO.create(1L, false);
         
         // when
         Order order = orderMapper.selectOrder(requestDTO);

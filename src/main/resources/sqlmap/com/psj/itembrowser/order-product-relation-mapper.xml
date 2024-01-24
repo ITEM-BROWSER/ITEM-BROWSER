@@ -1,0 +1,39 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.psj.itembrowser.order.mapper.OrderProductRelationMapper">
+    <resultMap id="selectOrderProductRelationsResultMap"
+        type="com.psj.itembrowser.order.domain.vo.OrdersProductRelation">
+        <result column="GROUP_ID" property="groupId"/>
+        <result column="PRODUCT_ID" property="productId"/>
+        <result column="PRODUCT_QUANTITY" property="productQuantity"/>
+        <result column="CREATED_DATE" property="createdDate"/>
+        <result column="UPDATED_DATE" property="updatedDate"/>
+        <result column="DELETED_DATE" property="deletedDate"/>
+    </resultMap>
+    
+    <sql id="orderProductRelationColumns">
+        ORR.GROUP_ID,
+        ORR.PRODUCT_ID,
+        ORR.PRODUCT_QUANTITY,
+        ORR.CREATED_DATE,
+        ORR.UPDATED_DATE,
+        ORR.DELETED_DATE
+    </sql>
+    
+    <select id="selectOrderProductRelations" resultMap="selectOrderProductRelationsResultMap"
+        parameterType="long">
+        SELECT
+        <include refid="orderProductRelationColumns"/>
+        FROM ORDERS_PRODUCT_RELATION ORR
+        WHERE ORR.GROUP_ID = #{orderId}
+    </select>
+    
+    
+    <update id="deleteSoftlyOrderProducts" parameterType="long">
+        UPDATE ORDERS_PRODUCT_RELATION
+        SET DELETED_DATE = NOW()
+        WHERE GROUP_ID = #{orderId}
+    </update>
+</mapper>
