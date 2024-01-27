@@ -1,15 +1,25 @@
 package com.psj.itembrowser.order.domain.dto.request;
 
-import com.psj.itembrowser.order.domain.vo.Order;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-/**
- * DTO for {@link Order}
- */
 @Data
 @Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class OrderRequestDTO {
+    
     Long id;
     boolean shownDeletedOrder;
+    
+    public static OrderRequestDTO forDeletedOrder(Long id) {
+        return new OrderRequestDTO(id, true);
+    }
+    
+    public static OrderRequestDTO forActiveOrder(Long id) {
+        return new OrderRequestDTO(id, false);
+    }
 }
