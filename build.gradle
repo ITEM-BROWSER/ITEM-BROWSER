@@ -32,8 +32,9 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    //REMEMBER JWT 토큰을 쉽게 구현하기 위하여 해당 라이브러리를 선택함. 내부적으로 시큐리티의 일부기능을 의존중.
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'com.github.pagehelper:pagehelper-spring-boot-starter:2.1.0'
+
     implementation 'mysql:mysql-connector-java:8.0.28'
     implementation 'org.yaml:snakeyaml:2.0' // yaml 파싱을 위한 라이브러리
 
