@@ -10,7 +10,7 @@ spring:
     username: item-admin
     url: jdbc:log4jdbc:mysql://localhost:3306/item-browser?serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=UTF-8
 app:
-  domain: https://localhost:8080
+  domain: http://localhost:8080
 logging:
   level:
     jdbc:

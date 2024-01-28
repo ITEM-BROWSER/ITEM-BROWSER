@@ -19,8 +19,8 @@ customed:
 app:
   domain:
     server: https://item.co.kr
-    local: https://localhost:8080
-    dev: https://item.dev.com
+    local: http://localhost:8080
+    dev: http://item.dev.com
 
 jwt:
   public:
