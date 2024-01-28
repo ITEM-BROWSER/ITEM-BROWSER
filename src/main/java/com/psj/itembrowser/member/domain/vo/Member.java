@@ -4,13 +4,12 @@ package com.psj.itembrowser.member.domain.vo;
 import com.psj.itembrowser.common.BaseDateTimeEntity;
 import com.psj.itembrowser.member.domain.dto.request.MemberRequestDTO;
 import com.psj.itembrowser.member.domain.dto.response.MemberResponseDTO;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @ToString
@@ -73,7 +72,7 @@ public class Member extends BaseDateTimeEntity {
         dto.setFirstName(this.getName().getFirstName());
         dto.setLastName(this.getName().getLastName());
         dto.setPhoneNumber(this.getPhoneNumber());
-        if(this.getAddress() != null) {
+        if (this.getAddress() != null) {
             dto.setAddressMain(this.getAddress().getAddressMain());
             dto.setAddressSub(this.getAddress().getAddressSub());
             dto.setZipCode(this.getAddress().getZipCode());
@@ -99,7 +98,8 @@ public class Member extends BaseDateTimeEntity {
     @Getter
     public enum Role {
         ROLE_CUSTOMER("일반 구매자"),
-        ROLE_STORE_MANAGER("상점 관리자");
+        ROLE_STORE_SELLER("상점 판매자"),
+        ROLE_ADMIN("관리자");
         
         private final String name;
         private final String description;
