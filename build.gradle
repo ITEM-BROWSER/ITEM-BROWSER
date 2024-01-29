@@ -37,6 +37,7 @@ dependencies {
 
     implementation 'mysql:mysql-connector-java:8.0.28'
     implementation 'org.yaml:snakeyaml:2.0' // yaml 파싱을 위한 라이브러리
+    implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -66,6 +67,7 @@ tasks.named('test') {
     finalizedBy('copyOasToSwagger') // test 태스크 실행 후에 copyOasToSwagger 태스크 실행
 }
 
+
 openapi3 {
     def props = loadYamlProperties()
 
@@ -83,14 +85,40 @@ openapi3 {
 
 tasks.register('copyOasToSwagger', Copy) {
     // 기존 yaml 파일 삭제
-    delete 'src/main/resources/static/swagger-ui/openapi3.yaml'
+    delete 'src/main/resources/static/openapi3.yaml'
 
     // 복제할 yaml 파일 타겟팅
     from "$buildDir/api-spec/openapi3.yaml"
 
     // 타겟 디렉토리로 파일 복제
-    into 'src/main/resources/static/swagger-ui'
+    into 'src/main/resources/static'
 
     // openapi3 task가 먼저 실행되도록 설정
     dependsOn tasks.named('openapi3')
+
+    doFirst {
+        // 빌드디렉터리 yaml 파일에 보안 스키마 추가
+        def openapi3File = file("$buildDir/api-spec/openapi3.yaml")
+
+        // JWT 인증을 위한 securitySchemes와 security 요소를 정의합니다.
+        def securitySchemesContent = "  securitySchemes:\n" +      \
+                                          "    APIKey:\n" +      \
+                                          "      type: apiKey\n" +      \
+                                          "      name: Authorization\n" +      \
+                                          "      in: header\n" +     \
+                                          "security:\n" +
+                "  - APIKey: []  # Apply the security scheme here"
+
+        // openapi3.yaml 파일에 내용을 추가합니다.
+        if (openapi3File.exists()) {
+            openapi3File.append(securitySchemesContent)
+        } else {
+            println "Warning: openapi3.yaml not found at ${openapi3File.path}"
+        }
+    }
+
+    bootRun {
+        //openapi3 task가 먼저 실행되도록 설정
+        dependsOn 'openapi3'
+    }
 }

@@ -1,7 +1,8 @@
 spring:
   sql:
     init:
-      schema-locations: classpath:/truncate-procedure.sql, classpath:/schema.sql
+      schema-locations: classpath:/drop-table.sql, classpath:/schema.sql
+      data-locations: classpath:/sql/member/init_member_data.sql, classpath:/sql/product/insert_product.sql
       mode: always
       encoding: UTF-8
   datasource:
@@ -10,7 +11,7 @@ spring:
     username: item-admin
     url: jdbc:log4jdbc:mysql://localhost:3306/item-browser?serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=UTF-8
 app:
-  domain: https://localhost:8080
+  domain: http://localhost:8080
 logging:
   level:
     jdbc:

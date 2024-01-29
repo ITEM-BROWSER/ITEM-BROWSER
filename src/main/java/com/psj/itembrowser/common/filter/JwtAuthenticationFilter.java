@@ -1,6 +1,12 @@
 package com.psj.itembrowser.common.filter;
 
 import com.psj.itembrowser.common.config.jwt.JwtProvider;
+import java.io.IOException;
+import java.util.Objects;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,13 +16,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Objects;
 
 /**
  * packageName    : com.psj.itembrowser.common.filter
@@ -31,6 +30,7 @@ import java.util.Objects;
  */
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    
     @Autowired
     private JwtProvider jwtProvider;
     
@@ -38,16 +38,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private UserDetailsService userDetailsService;
     
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+        FilterChain filterChain) throws ServletException, IOException {
+        
         String authorization = request.getHeader("Authorization");
         if (!Objects.isNull(authorization)) {
             String atk = authorization.substring(7);
             try {
                 String email = jwtProvider.extractUserEmail(atk);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-                Authentication token = new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+                Authentication token = new UsernamePasswordAuthenticationToken(userDetails, "",
+                    userDetails.getAuthorities());
                 SecurityContextHolder.getContext()
-                        .setAuthentication(token);
+                    .setAuthentication(token);
             } catch (JwtException e) {
                 request.setAttribute("exception", e.getMessage());
             }

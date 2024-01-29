@@ -1,5 +1,8 @@
 package com.psj.itembrowser.order.mapper;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+
 import com.psj.itembrowser.common.generator.order.OrderMockDataGenerator;
 import com.psj.itembrowser.member.domain.vo.Member;
 import com.psj.itembrowser.order.domain.dto.request.OrderRequestDTO;
@@ -7,6 +10,8 @@ import com.psj.itembrowser.order.domain.vo.Order;
 import com.psj.itembrowser.order.domain.vo.OrderStatus;
 import com.psj.itembrowser.order.domain.vo.OrdersProductRelation;
 import com.psj.itembrowser.shippingInfos.domain.vo.ShippingInfo;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
@@ -15,19 +20,15 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-
 @MybatisTest
 @Transactional
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Sql(scripts = {"classpath:sql/member/insert_member.sql", "classpath:sql/shippinginfo/insert_shipping_info.sql",
+@Sql(scripts = {"classpath:drop-table.sql", "classpath:schema.sql",
+    "classpath:sql/member/insert_member.sql", "classpath:sql/shippinginfo/insert_shipping_info.sql",
     "classpath:sql/product/insert_product.sql", "classpath:sql/order/insert_order_product.sql",
     "classpath:sql" + "/order/insert_order.sql"})
 public class OrderSelectMapperTest {
+    
     @Autowired
     private OrderMapper orderMapper;
     
@@ -51,9 +52,9 @@ public class OrderSelectMapperTest {
         );
         
         OrderRequestDTO requestDTO = OrderRequestDTO.builder()
-                                                    .id(1L)
-                                                    .shownDeletedOrder(false)
-                                                    .build();
+            .id(1L)
+            .shownDeletedOrder(false)
+            .build();
         
         // when
         Order order = orderMapper.selectOrder(requestDTO);

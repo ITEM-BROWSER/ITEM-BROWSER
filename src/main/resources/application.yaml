@@ -16,11 +16,18 @@ customed:
   table:
     schema: item-browser
 
+springdoc:
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    url: /static/openapi3.yaml
+    path: /docs/swagger
+
 app:
   domain:
     server: https://item.co.kr
-    local: https://localhost:8080
-    dev: https://item.dev.com
+    local: http://localhost:8080
+    dev: http://item.dev.com
 
 jwt:
   public:

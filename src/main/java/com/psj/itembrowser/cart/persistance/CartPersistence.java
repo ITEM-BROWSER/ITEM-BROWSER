@@ -1,5 +1,12 @@
 package com.psj.itembrowser.cart.persistance;
 
+import static com.psj.itembrowser.common.exception.ErrorCode.CART_INSERT_FAIL;
+import static com.psj.itembrowser.common.exception.ErrorCode.CART_NOT_FOUND;
+import static com.psj.itembrowser.common.exception.ErrorCode.CART_PRODUCT_DELETE_FAIL;
+import static com.psj.itembrowser.common.exception.ErrorCode.CART_PRODUCT_INSERT_FAIL;
+import static com.psj.itembrowser.common.exception.ErrorCode.CART_PRODUCT_NOT_FOUND;
+import static com.psj.itembrowser.common.exception.ErrorCode.CART_PRODUCT_UPDATE_FAIL;
+
 import com.psj.itembrowser.cart.domain.dto.request.CartProductDeleteRequestDTO;
 import com.psj.itembrowser.cart.domain.dto.request.CartProductRequestDTO;
 import com.psj.itembrowser.cart.domain.dto.request.CartProductUpdateRequestDTO;
@@ -12,39 +19,33 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import static com.psj.itembrowser.common.exception.ErrorCode.*;
-
 /**
- * packageName    : com.psj.itembrowser.cart.persistance
- * fileName       : CartPersistence
- * author         : ipeac
- * date           : 2023-10-06
- * description    :
- * ===========================================================
- * DATE              AUTHOR             NOTE
- * -----------------------------------------------------------
- * 2023-10-06        ipeac       최초 생성
+ * packageName    : com.psj.itembrowser.cart.persistance fileName       : CartPersistence author
+ *     : ipeac date           : 2023-10-06 description    :
+ * =========================================================== DATE              AUTHOR
+ * NOTE ----------------------------------------------------------- 2023-10-06        ipeac       최초
+ * 생성
  */
 @Component
 @RequiredArgsConstructor
 public class CartPersistence {
+    
     private final CartMapper cartMapper;
     
     public CartResponseDTO getCart(@NonNull String userId) {
-        
         Cart cart = cartMapper.getCartByUserId(userId);
         if (cart == null) {
-            throw new NotFoundException(CART_PRODUCT_NOT_FOUND.getMessage());
+            throw new NotFoundException(CART_NOT_FOUND);
         }
-        return cart.toCartResponseDTO();
+        return CartResponseDTO.of(cart);
     }
     
     public CartResponseDTO getCart(@NonNull Long cartId) {
         Cart cart = cartMapper.getCart(cartId);
         if (cart == null) {
-            throw new NotFoundException(CART_PRODUCT_NOT_FOUND.getMessage());
+            throw new NotFoundException(CART_PRODUCT_NOT_FOUND);
         }
-        return cart.toCartResponseDTO();
+        return CartResponseDTO.of(cart);
     }
     
     public void insertCartProduct(@NonNull CartProductRequestDTO cartProductRequestDTO) {
@@ -54,7 +55,8 @@ public class CartPersistence {
         }
     }
     
-    public void modifyCartProduct(@NonNull CartProductUpdateRequestDTO cartProductUpdateRequestDTO) {
+    public void modifyCartProduct(
+        @NonNull CartProductUpdateRequestDTO cartProductUpdateRequestDTO) {
         boolean isNotModified = !cartMapper.updateCartProductRelation(cartProductUpdateRequestDTO);
         if (isNotModified) {
             throw new DatabaseOperationException(CART_PRODUCT_UPDATE_FAIL);
