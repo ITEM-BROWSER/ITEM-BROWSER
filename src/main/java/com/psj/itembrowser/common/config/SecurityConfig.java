@@ -45,6 +45,8 @@ public class SecurityConfig {
             .antMatchers("/h2-console/**")
             .antMatchers("/favicon.ico")
             .antMatchers("/swagger-ui/**")
+            .antMatchers("/static/**")
+            .antMatchers("/docs/**")
             .antMatchers("/resources/**");
     }
     
