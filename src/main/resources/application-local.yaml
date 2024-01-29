@@ -2,6 +2,7 @@ spring:
   sql:
     init:
       schema-locations: classpath:/truncate-procedure.sql, classpath:/schema.sql
+      data-locations: classpath:/sql/member/init_member_data.sql
       mode: always
       encoding: UTF-8
   datasource:
