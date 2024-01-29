@@ -1,5 +1,16 @@
 package com.psj.itembrowser.cart.persistance;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.psj.itembrowser.cart.domain.dto.request.CartProductDeleteRequestDTO;
 import com.psj.itembrowser.cart.domain.dto.request.CartProductRequestDTO;
 import com.psj.itembrowser.cart.domain.dto.request.CartProductUpdateRequestDTO;
@@ -11,6 +22,8 @@ import com.psj.itembrowser.cart.mapper.CartMapper;
 import com.psj.itembrowser.common.exception.NotFoundException;
 import com.psj.itembrowser.common.generator.cart.CartMockDataGenerator;
 import com.psj.itembrowser.product.domain.vo.Product;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -21,18 +34,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 class CartPersistenceTest {
+    
     private static final String TEST_USER_ID = "psjoon3410";
     
     @InjectMocks
@@ -43,6 +47,7 @@ class CartPersistenceTest {
     
     @Nested
     class SelectTest {
+        
         private Cart cart;
         private Product product;
         private CartProductRelation cartProductRelation;
@@ -53,22 +58,23 @@ class CartPersistenceTest {
             cart = CartMockDataGenerator.createCart(1L, TEST_USER_ID, null);
             product = CartMockDataGenerator.createSimpleProduct(1L, "product1", 1, 10, 1000);
             cartProductRelation = CartMockDataGenerator.createCartProductRelation
-                                                       (1L,
-                                                        1L,
-                                                        1L,
-                                                        LocalDateTime.now(),
-                                                        null,
-                                                        null,
-                                                        mock(Cart.class),
-                                                        product
-                                                       );
+                (1L,
+                    1L,
+                    1L,
+                    LocalDateTime.now(),
+                    null,
+                    null,
+                    mock(Cart.class),
+                    product
+                );
         }
         
         @Test
         @DisplayName("장바구니 유저아이디로 조회시 값이 존재하며 - 반환값이 정상적인지 검증")
         void When_GetCartByUserId_Expect_CartResponseDTO() throws NotFoundException {
             // given
-            Cart expectedCart = CartMockDataGenerator.createCart(1L, TEST_USER_ID, List.of(cartProductRelation));
+            Cart expectedCart = CartMockDataGenerator.createCart(1L, TEST_USER_ID,
+                List.of(cartProductRelation));
             when(cartMapper.getCartByUserId(TEST_USER_ID)).thenReturn(expectedCart);
             
             // when
@@ -76,7 +82,7 @@ class CartPersistenceTest {
             
             // then
             assertThat(cart).isNotNull();
-            assertThat(expectedCart.toCartResponseDTO()).isEqualTo(cart);
+            assertThat(CartResponseDTO.of(expectedCart)).isEqualTo(cart);
             
             // verify - 유저아이디로 조회가 되었는지 검증
             verify(cartMapper, Mockito.times(1)).getCartByUserId(anyString());
@@ -113,7 +119,8 @@ class CartPersistenceTest {
         @DisplayName("장바구니 ID 로 조회시 값이 존재하며 - 반환값이 정상적인지 검증")
         void When_GetCartByCartId_Expect_() throws NotFoundException {
             // given
-            Cart expectedCart = CartMockDataGenerator.createCart(1L, TEST_USER_ID, List.of(cartProductRelation));
+            Cart expectedCart = CartMockDataGenerator.createCart(1L, TEST_USER_ID,
+                List.of(cartProductRelation));
             when(cartMapper.getCart(1L)).thenReturn(expectedCart);
             
             // when
@@ -121,7 +128,7 @@ class CartPersistenceTest {
             
             // then
             assertThat(actualCart).isNotNull();
-            assertThat(expectedCart.toCartResponseDTO()).isEqualTo(actualCart);
+            assertThat(CartResponseDTO.of(expectedCart)).isEqualTo(actualCart);
             
             // verify - 장바구니 번호로 조회가 되었는지 검증
             verify(cartMapper, times(1)).getCart(1L);
@@ -157,6 +164,7 @@ class CartPersistenceTest {
     
     @Nested
     class InsertTest {
+        
         private CartProductRequestDTO cartProductRequestDTO;
         private CartRequestDTO cartRequestDTO;
         
@@ -187,7 +195,8 @@ class CartPersistenceTest {
             when(cartMapper.insertCartProduct(cartProductRequestDTO)).thenReturn(false);
             
             // when - then
-            assertThrows(IllegalStateException.class, () -> cartPersistence.insertCartProduct(cartProductRequestDTO));
+            assertThrows(IllegalStateException.class,
+                () -> cartPersistence.insertCartProduct(cartProductRequestDTO));
             verify(cartMapper, times(1)).insertCartProduct(cartProductRequestDTO);
         }
         
@@ -237,19 +246,22 @@ class CartPersistenceTest {
     
     @Nested
     class UpdateTest {
+        
         private CartProductUpdateRequestDTO cartProductUpdateRequestDTO;
         
         @BeforeEach
         void setUp() {
             // given
-            cartProductUpdateRequestDTO = CartMockDataGenerator.createCartProductUpdateRequestDTO(1L, 1L, 10);
+            cartProductUpdateRequestDTO = CartMockDataGenerator.createCartProductUpdateRequestDTO(
+                1L, 1L, 10);
         }
         
         @Test
         @DisplayName("장바구니에 상품을 수정 -> 성공하는 경우")
         void When_UpdateCartProduct_Expect_Success() {
             // given
-            when(cartMapper.updateCartProductRelation(cartProductUpdateRequestDTO)).thenReturn(true);
+            when(cartMapper.updateCartProductRelation(cartProductUpdateRequestDTO)).thenReturn(
+                true);
             
             // when
             cartPersistence.modifyCartProduct(cartProductUpdateRequestDTO);
@@ -262,7 +274,8 @@ class CartPersistenceTest {
         @DisplayName("장바구니에 상품을 수정 -> 실패하는 경우 에러가 발생하는지 체크")
         void When_UpdateCartProduct_Expect_IllegalStateException() {
             // given
-            when(cartMapper.updateCartProductRelation(cartProductUpdateRequestDTO)).thenReturn(false);
+            when(cartMapper.updateCartProductRelation(cartProductUpdateRequestDTO)).thenReturn(
+                false);
             
             // when - then
             assertThatThrownBy(() -> cartPersistence.modifyCartProduct(cartProductUpdateRequestDTO))
@@ -281,18 +294,22 @@ class CartPersistenceTest {
     
     @Nested
     class DeleteTest {
+        
         private CartProductDeleteRequestDTO cartProductDeleteRequestDTO;
         
         @BeforeEach
         void setUp() {
             // given
-            cartProductDeleteRequestDTO = CartMockDataGenerator.createCartProductDeleteRequestDTO(1L, 1L);
+            cartProductDeleteRequestDTO = CartMockDataGenerator.createCartProductDeleteRequestDTO(
+                1L, 1L);
         }
+        
         @Test
         @DisplayName("장바구니에 상품을 삭제 -> 성공하는 경우")
         void When_DeleteCartProduct_Expect_Success() {
             // given
-            when(cartMapper.deleteCartProductRelation(cartProductDeleteRequestDTO)).thenReturn(true);
+            when(cartMapper.deleteCartProductRelation(cartProductDeleteRequestDTO)).thenReturn(
+                true);
             
             // when
             cartPersistence.deleteCart(cartProductDeleteRequestDTO);
@@ -305,7 +322,8 @@ class CartPersistenceTest {
         @DisplayName("장바구니에 상품을 삭제 -> 실패하는 경우 에러가 발생하는지 체크")
         void When_DeleteCartProduct_Expect_NotFoundException() {
             // given
-            when(cartMapper.deleteCartProductRelation(cartProductDeleteRequestDTO)).thenReturn(false);
+            when(cartMapper.deleteCartProductRelation(cartProductDeleteRequestDTO)).thenReturn(
+                false);
             
             // when - then
             assertThatThrownBy(() -> cartPersistence.deleteCart(cartProductDeleteRequestDTO))

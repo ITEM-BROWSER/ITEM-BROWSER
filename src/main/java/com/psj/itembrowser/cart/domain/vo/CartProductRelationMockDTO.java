@@ -31,7 +31,6 @@ public class CartProductRelationMockDTO {
                 this.cartId,
                 this.productId,
                 this.productQuantity,
-                null,
                 null
         );
     }
