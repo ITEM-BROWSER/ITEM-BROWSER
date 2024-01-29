@@ -64,6 +64,8 @@ class CartApiControllerTest {
     
     private final String BASE_URL = "/v1/api/cart";
     
+    private final String USER_EMAIL = "test@test.com";
+    
     @Autowired
     MockMvc mockMvc;
     
@@ -90,7 +92,7 @@ class CartApiControllerTest {
         void When_GetCart_Expect_Success() throws Exception {
             // given
             CartResponseDTO mock = createCartResponseDTO(
-                "user1",
+                USER_EMAIL,
                 List.of(
                     new CartProductRelationResponseDTO(),
                     new CartProductRelationResponseDTO()
@@ -102,7 +104,7 @@ class CartApiControllerTest {
             mockMvc
                 .perform(
                     RestDocumentationRequestBuilders
-                        .get(BASE_URL + "/{userId}/carts", "user1")
+                        .get(BASE_URL + "/{userId}/carts", USER_EMAIL)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.userId").value(mock.getUserId()))
@@ -151,7 +153,7 @@ class CartApiControllerTest {
             // when + then
             mockMvc
                 .perform(RestDocumentationRequestBuilders
-                    .get(BASE_URL + "/{userId}/carts", "user1")
+                    .get(BASE_URL + "/{userId}/carts", USER_EMAIL)
                     .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value(ErrorCode.CART_NOT_FOUND.getMessage()))
@@ -193,7 +195,7 @@ class CartApiControllerTest {
                 .cartId(1L)
                 .productId(1L)
                 .quantity(1)
-                .userId("user1")
+                .userId(USER_EMAIL)
                 .build();
         }
         
