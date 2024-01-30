@@ -1,7 +1,9 @@
 package com.psj.itembrowser.product.mapper;
 
 import com.psj.itembrowser.product.domain.dto.request.ProductQuantityUpdateRequestDTO;
+import com.psj.itembrowser.product.domain.dto.request.ProductRequestDTO;
 import com.psj.itembrowser.product.domain.vo.Product;
+import com.psj.itembrowser.product.domain.vo.ProductImage;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -74,4 +76,8 @@ public interface ProductMapper {
             "SET  QUANTITY = #{quantity}  " +
             "WHERE ID = #{id}")
     boolean updateProduct(ProductQuantityUpdateRequestDTO product);
+
+    void addProduct(ProductRequestDTO productRequestDTO);
+
+    void addProductImages(List<ProductImage> productImages);
 }
