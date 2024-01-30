@@ -15,6 +15,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.psj.itembrowser.authorization.service.AuthorizationService;
+import com.psj.itembrowser.common.exception.ErrorCode;
+import com.psj.itembrowser.common.exception.NotFoundException;
 import com.psj.itembrowser.member.domain.vo.Member;
 import com.psj.itembrowser.order.domain.dto.OrderResponseDTO;
 import com.psj.itembrowser.order.domain.dto.request.OrderRequestDTO;
@@ -55,15 +57,16 @@ public class OrderSelectServiceTest {
 	
 	@Test
 	@DisplayName("주문 정상 조회 후 주문 정보 반환이 올바르게 되는지 테스트")
-	void When_GetOrder_Expect_ThrowNotFoundException() {
+	void When_GetOrder_Expect_ReturnOrderResponseDTO() {
 		//given
 		given(orderPersistence.getOrder(validOrderRequestDTO)).willReturn(validOrder);
-		doNothing().when(authorizationService).authorizeOrder(validOrder);
 		
 		//when
 		OrderResponseDTO result = orderService.getOrder(validOrderRequestDTO);
 		
 		//then
+		verify(authorizationService, times(1)).authorizeOrder(validOrder);
+		
 		assertThat(result.getId()).isEqualTo(validOrder.getId());
 		assertThat(result.getOrdererId()).isEqualTo(validOrder.getOrdererId());
 		assertThat(result.getOrderStatus()).isEqualTo(validOrder.getOrderStatus());
@@ -72,5 +75,32 @@ public class OrderSelectServiceTest {
 		assertThat(result.getCreatedDate()).isEqualTo(validOrder.getCreatedDate());
 		assertThat(result.getUpdatedDate()).isEqualTo(validOrder.getUpdatedDate());
 		assertThat(result.getDeletedDate()).isEqualTo(validOrder.getDeletedDate());
+	}
+	
+	@Test
+	@DisplayName("주문 조회 시 주문 정보가 없을 경우 NotFoundException 발생")
+	void When_GetOrder_Expect_ThrowNotFoundException() {
+		//given
+		given(orderPersistence.getOrder(invalidOrderRequestDTO)).willThrow(
+			new NotFoundException(ErrorCode.ORDER_NOT_FOUND));
+		
+		//when - then
+		assertThatThrownBy(() -> orderService.getOrder(invalidOrderRequestDTO))
+			.isInstanceOf(NotFoundException.class)
+			.hasMessageContaining("Not Found Order");
+	}
+	
+	@Test
+	@DisplayName("주문 조회 시 주문 정보가 있으나 권한이 없을 경우 NotAuthorizedException 발생")
+	void When_GetOrder_Expect_ThrowNotAuthorizedException() {
+		//given
+		given(orderPersistence.getOrder(validOrderRequestDTO)).willReturn(validOrder);
+		willThrow(new NotFoundException(ErrorCode.CUSTOMER_NOT_AUTHORIZED)).given(authorizationService)
+			.authorizeOrder(validOrder);
+		
+		//when - then
+		assertThatThrownBy(() -> orderService.getOrder(validOrderRequestDTO))
+			.isInstanceOf(NotFoundException.class)
+			.hasMessageContaining("Customer is not authorized");
 	}
 }
