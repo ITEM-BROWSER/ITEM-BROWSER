@@ -7,5 +7,5 @@ public interface OrderService {
     
     void removeOrder(long orderId);
     
-    OrderResponseDTO getOrder(OrderRequestDTO orderId);
+    OrderResponseDTO getOrder(OrderRequestDTO orderRequestDTO);
 }
