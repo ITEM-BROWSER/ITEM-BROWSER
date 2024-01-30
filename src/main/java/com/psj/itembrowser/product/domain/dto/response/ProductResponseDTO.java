@@ -1,8 +1,10 @@
 package com.psj.itembrowser.product.domain.dto.response;
 
 import com.psj.itembrowser.product.domain.vo.Product;
+import com.psj.itembrowser.product.domain.vo.ProductImage;
 import com.psj.itembrowser.product.domain.vo.ProductStatus;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Builder;
 import lombok.Data;
 
@@ -29,6 +31,8 @@ public class ProductResponseDTO {
     String deliveryMethod;
     
     Integer deliveryDefaultFee;
+
+    List<ProductImage> productImages;
     
     public static ProductResponseDTO of(Product product) {
         if (product == null) {
@@ -46,6 +50,7 @@ public class ProductResponseDTO {
             .brand(product.getBrand())
             .deliveryMethod(product.getDeliveryMethod())
             .deliveryDefaultFee(product.getDeliveryDefaultFee())
+            .productImages(product.getProductImages())
             .build();
     }
     

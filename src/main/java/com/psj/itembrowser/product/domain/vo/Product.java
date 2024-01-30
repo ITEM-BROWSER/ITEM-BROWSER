@@ -1,6 +1,7 @@
 package com.psj.itembrowser.product.domain.vo;
 
 import com.psj.itembrowser.cart.domain.vo.CartProductRelation;
+import com.psj.itembrowser.common.BaseDateTimeEntity;
 import com.psj.itembrowser.product.domain.dto.request.ProductQuantityUpdateRequestDTO;
 import com.psj.itembrowser.product.domain.dto.response.ProductResponseDTO;
 import lombok.*;
@@ -13,8 +14,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
-public class Product {
+@EqualsAndHashCode(callSuper = false)
+public class Product extends BaseDateTimeEntity {
     /**
      * pk값
      */
@@ -39,9 +40,15 @@ public class Product {
      * 상품상태. 심사중/임시저장/승인대기/승인완료/부분승인/완료/승인반려/상품삭제
      */
     ProductStatus status;
-    
+
+    /**
+     * 재고
+     */
     Integer quantity;
-    
+
+    /**
+     * 가격
+     */
     Integer unitPrice;
     
     /**
@@ -85,7 +92,7 @@ public class Product {
     Integer deliveryDefaultFee;
     
     /**
-     * 무료배송금액. 무료 배송 기준 금
+     * 무료배송금액. 무료 배송 기준 금액
      */
     Integer freeShipOverAmount;
     
@@ -94,17 +101,9 @@ public class Product {
      */
     String returnCenterCode;
     
-    /**
-     * 생성일
-     */
-    LocalDateTime createdDate;
-    
-    /**
-     * 업데이트일
-     */
-    LocalDateTime updatedDate;
-    
     List<CartProductRelation> cartProductRelations;
+
+    List<ProductImage> productImages;
     
     // 상품 재고를 줄이는 메서드
     public void decreaseStock(int quantity) {

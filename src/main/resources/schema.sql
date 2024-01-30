@@ -56,6 +56,24 @@ CREATE TABLE product
     PRIMARY KEY (ID)
 );
 
+-- product_image Table Create SQL
+-- 테이블 생성 SQL - product_image
+CREATE TABLE product_image
+(
+    `ID`                  bigint      NOT NULL AUTO_INCREMENT COMMENT '이미지 pk값',
+    `PRODUCT_ID`          bigint      NOT NULL COMMENT '상품ID, product 테이블의 ID 참조',
+    `IMG_URL`             varchar(500) NOT NULL COMMENT '이미지 URL',
+    `CREATED_DATE`        timestamp   NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성일',
+    `UPDATED_DATE`        timestamp   NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '업데이트일',
+    `DELETED_DATE`        timestamp   NULL DEFAULT NULL COMMENT '삭제일',
+    PRIMARY KEY (ID),
+    FOREIGN KEY (PRODUCT_ID) REFERENCES product (ID) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- Index 설정 SQL - product_image(PRODUCT_ID)
+CREATE INDEX IDX_PRODUCT_IMAGE_PRODUCT_ID
+    ON product_image (PRODUCT_ID);
+
 
 -- orders_product_relation Table Create SQL
 -- 테이블 생성 SQL - orders_product_relation
