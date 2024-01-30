@@ -15,11 +15,9 @@ import lombok.NonNull;
  * 2023-11-05        ipeac       최초 생성
  */
 @Getter
-public class BadRequestException extends IllegalStateException {
-    private final ErrorCode errorCode;
-    
-    public BadRequestException(@NonNull ErrorCode e) {
-        super(e.getMessage());
-        this.errorCode = e;
-    }
+public class BadRequestException extends CustomIllegalStateException {
+	
+	public BadRequestException(@NonNull ErrorCode e) {
+		super(e);
+	}
 }
