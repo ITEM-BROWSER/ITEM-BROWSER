@@ -27,14 +27,14 @@ public class Order implements Cancelable {
     
     @Builder
     public static Order createOrder(
-            Long id, Long ordererId, OrderStatus orderStatus, LocalDateTime paidDate,
+            Long id, Long ordererNo, OrderStatus orderStatus, LocalDateTime paidDate,
             Long shippingInfoId, LocalDateTime createdDate, LocalDateTime updatedDate,
             LocalDateTime deletedDate, List<OrdersProductRelation> products, Member member,
             ShippingInfo shippingInfo
     ) {
         Order order = new Order();
         order.id = id;
-        order.ordererId = ordererId;
+        order.ordererId = ordererNo;
         order.orderStatus = orderStatus;
         order.paidDate = paidDate;
         order.shippingInfoId = shippingInfoId;
