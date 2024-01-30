@@ -67,14 +67,14 @@ public class OrderSelectServiceTest {
 		//then
 		verify(authorizationService, times(1)).authorizeOrder(validOrder);
 		
-		assertThat(result.getId()).isEqualTo(validOrder.getId());
-		assertThat(result.getOrdererId()).isEqualTo(validOrder.getOrdererId());
-		assertThat(result.getOrderStatus()).isEqualTo(validOrder.getOrderStatus());
-		assertThat(result.getPaidDate()).isEqualTo(validOrder.getPaidDate());
-		assertThat(result.getShippingInfoId()).isEqualTo(validOrder.getShippingInfoId());
-		assertThat(result.getCreatedDate()).isEqualTo(validOrder.getCreatedDate());
-		assertThat(result.getUpdatedDate()).isEqualTo(validOrder.getUpdatedDate());
-		assertThat(result.getDeletedDate()).isEqualTo(validOrder.getDeletedDate());
+		assertThat(validOrder.getId()).isEqualTo(result.getId());
+		assertThat(validOrder.getOrdererId()).isEqualTo(result.getOrdererId());
+		assertThat(validOrder.getOrderStatus()).isEqualTo(result.getOrderStatus());
+		assertThat(validOrder.getPaidDate()).isEqualTo(result.getPaidDate());
+		assertThat(validOrder.getShippingInfoId()).isEqualTo(result.getShippingInfoId());
+		assertThat(validOrder.getCreatedDate()).isEqualTo(result.getCreatedDate());
+		assertThat(validOrder.getUpdatedDate()).isEqualTo(result.getUpdatedDate());
+		assertThat(validOrder.getDeletedDate()).isEqualTo(result.getDeletedDate());
 	}
 	
 	@Test
