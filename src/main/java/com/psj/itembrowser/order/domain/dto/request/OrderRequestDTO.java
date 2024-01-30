@@ -11,15 +11,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class OrderRequestDTO {
-    
-    Long id;
-    boolean shownDeletedOrder;
-    
-    public static OrderRequestDTO forDeletedOrder(Long id) {
-        return new OrderRequestDTO(id, true);
-    }
-    
-    public static OrderRequestDTO forActiveOrder(Long id) {
-        return new OrderRequestDTO(id, false);
-    }
+	
+	Long id;
+	Boolean shownDeletedOrder = false;
+	
+	public static OrderRequestDTO forDeletedOrder(Long id) {
+		return new OrderRequestDTO(id, true);
+	}
+	
+	public static OrderRequestDTO forActiveOrder(Long id) {
+		return new OrderRequestDTO(id, false);
+	}
+	
+	public static OrderRequestDTO forAllOrder(Long id) {
+		return new OrderRequestDTO(id, null);
+	}
 }

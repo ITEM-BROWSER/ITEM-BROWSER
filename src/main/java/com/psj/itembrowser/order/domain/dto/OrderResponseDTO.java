@@ -29,7 +29,7 @@ public class OrderResponseDTO implements Serializable {
     LocalDateTime updatedDate;
     LocalDateTime deletedDate;
     
-    public static OrderResponseDTO create(Order order) {
+    public static OrderResponseDTO fromOrder(Order order) {
         OrderResponseDTO orderResponseDTO = new OrderResponseDTO();
         orderResponseDTO.setId(order.getId());
         orderResponseDTO.setOrdererId(order.getOrdererId());
