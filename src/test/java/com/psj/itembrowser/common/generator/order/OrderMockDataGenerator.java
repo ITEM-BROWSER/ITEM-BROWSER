@@ -54,14 +54,14 @@ public class OrderMockDataGenerator {
 		int productQuantity,
 		Product product
 	) {
-		return OrdersProductRelation.builder()
-			.groupId(groupId)
-			.productId(productId)
-			.productQuantity(productQuantity)
-			.createdDate(LocalDateTime.now())
-			.updatedDate(null)
-			.deletedDate(null)
-			.product(product)
-			.build();
+		return OrdersProductRelation.create(
+			groupId,
+			productId,
+			productQuantity,
+			LocalDateTime.now(),
+			null,
+			null,
+			product
+		);
 	}
 }
