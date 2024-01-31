@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OrderRequestDTO {
 	
-	Long id;
-	Boolean shownDeletedOrder = false;
+	private Long id;
+	private Boolean shownDeletedOrder = false;
 	
 	public static OrderRequestDTO forDeletedOrder(Long id) {
 		return new OrderRequestDTO(id, true);
