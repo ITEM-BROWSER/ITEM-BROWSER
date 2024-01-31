@@ -14,7 +14,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.psj.itembrowser.common.generator.order.OrderMockDataGenerator;
 import com.psj.itembrowser.member.domain.vo.Member;
 import com.psj.itembrowser.order.domain.dto.request.OrderRequestDTO;
 import com.psj.itembrowser.order.domain.vo.Order;
@@ -38,13 +37,15 @@ public class OrderSelectMapperTest {
 	@DisplayName("1번 주문을 조회시 기대한 1번 주문과 같은 주문이 조회되는지 테스트")
 	void When_SelectOrder_Expect_Order1() {
 		// given as @Sql
-		Order expectedOrder = OrderMockDataGenerator.createOrder(
+		Order expectedOrder = Order.createOrder(
 			1L,
 			1L,
 			OrderStatus.ACCEPT,
 			LocalDateTime.now(),
 			1L,
 			LocalDateTime.now(),
+			null,
+			null,
 			List.of(
 				mock(OrdersProductRelation.class),
 				mock(OrdersProductRelation.class)
