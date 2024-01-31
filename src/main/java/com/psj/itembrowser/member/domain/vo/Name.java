@@ -1,6 +1,10 @@
 package com.psj.itembrowser.member.domain.vo;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * packageName    : com.psj.itembrowser.member.domain.vo
@@ -19,12 +23,16 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Name {
-    /**
-     * 이름
-     */
-    private String firstName;
-    /**
-     * 성
-     */
-    private String lastName;
+	/**
+	 * 이름
+	 */
+	private String firstName;
+	/**
+	 * 성
+	 */
+	private String lastName;
+	
+	public static Name create(String firstName, String lastName) {
+		return new Name(firstName, lastName);
+	}
 }

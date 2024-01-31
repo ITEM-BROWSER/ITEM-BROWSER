@@ -1,6 +1,10 @@
 package com.psj.itembrowser.member.domain.vo;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * packageName    : com.psj.itembrowser.member.domain.vo
@@ -19,12 +23,16 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Credentials {
-    /**
-     * 아이디
-     */
-    private String email;
-    /**
-     * 비밀번호
-     */
-    private String password;
+	/**
+	 * 아이디
+	 */
+	private String email;
+	/**
+	 * 비밀번호
+	 */
+	private String password;
+	
+	public static Credentials create(String email, String password) {
+		return new Credentials(email, password);
+	}
 }
