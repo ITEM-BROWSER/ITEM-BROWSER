@@ -1,17 +1,23 @@
 package com.psj.itembrowser.common.config.jwt;
 
-import com.psj.itembrowser.token.mapper.RefreshTokenMapper;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.jwt.*;
-import org.springframework.stereotype.Component;
-
 import java.time.Instant;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.stereotype.Component;
+
+import com.psj.itembrowser.token.mapper.RefreshTokenMapper;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @RequiredArgsConstructor
@@ -70,10 +76,5 @@ public class JwtProvider {
         Instant expiresAt = jwt.getExpiresAt();
         return Objects.requireNonNull(expiresAt)
                 .isBefore(Instant.now());
-    }
-    
-    public String getClaims(String accessToken) {
-        Jwt jwt = jwtDecoder.decode(accessToken);
-        return jwt.getSubject();
     }
 }
