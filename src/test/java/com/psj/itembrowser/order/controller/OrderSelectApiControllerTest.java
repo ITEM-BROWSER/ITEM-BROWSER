@@ -76,7 +76,11 @@ public class OrderSelectApiControllerTest {
 			LocalDate.of(1995, 11, 3),
 			LocalDateTime.now());
 		
-		ShippingInfo expectedShppingInfo = new ShippingInfo(1L, "test@test.com", "홍길동", "test", "test", "010-1235-1234",
+		ShippingInfo expectedShppingInfo = new ShippingInfo(1L,
+			"test@test.com",
+			"홍길동",
+			"test",
+			"test", "010-1235-1234",
 			"010-1234-1234", "test",
 			LocalDateTime.now(),
 			null,

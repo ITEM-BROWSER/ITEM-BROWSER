@@ -1,11 +1,13 @@
 package com.psj.itembrowser.order.domain.dto;
 
-import static lombok.AccessLevel.PROTECTED;
+import static lombok.AccessLevel.*;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import com.psj.itembrowser.order.domain.vo.Order;
 import com.psj.itembrowser.order.domain.vo.OrderStatus;
-import java.io.Serializable;
-import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,7 +34,7 @@ public class OrderResponseDTO implements Serializable {
     public static OrderResponseDTO fromOrder(Order order) {
         OrderResponseDTO orderResponseDTO = new OrderResponseDTO();
         orderResponseDTO.setId(order.getId());
-        orderResponseDTO.setOrdererId(order.getOrdererId());
+        orderResponseDTO.setOrdererId(order.getOrdererNumber());
         orderResponseDTO.setOrderStatus(order.getOrderStatus());
         orderResponseDTO.setPaidDate(order.getPaidDate());
         orderResponseDTO.setShippingInfoId(order.getShippingInfoId());

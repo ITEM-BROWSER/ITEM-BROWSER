@@ -1,20 +1,25 @@
 package com.psj.itembrowser.order.domain.vo;
 
-import com.psj.itembrowser.member.domain.vo.Member;
-import com.psj.itembrowser.shippingInfos.domain.vo.ShippingInfo;
-import lombok.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.psj.itembrowser.member.domain.vo.Member;
+import com.psj.itembrowser.shippingInfos.domain.vo.ShippingInfo;
+
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 @Getter
 @NoArgsConstructor
-@EqualsAndHashCode(of = {"id", "ordererId", "orderStatus"})
+@EqualsAndHashCode(of = {"id", "ordererNumber", "orderStatus"})
 @ToString
 public class Order implements Cancelable {
     
     private Long id;
-    private Long ordererId;
+    private Long ordererNumber;
     private OrderStatus orderStatus;
     private LocalDateTime paidDate;
     private Long shippingInfoId;
@@ -27,14 +32,14 @@ public class Order implements Cancelable {
     
     @Builder
     public static Order createOrder(
-            Long id, Long ordererNo, OrderStatus orderStatus, LocalDateTime paidDate,
+            Long id, Long ordererNumber, OrderStatus orderStatus, LocalDateTime paidDate,
             Long shippingInfoId, LocalDateTime createdDate, LocalDateTime updatedDate,
             LocalDateTime deletedDate, List<OrdersProductRelation> products, Member member,
             ShippingInfo shippingInfo
     ) {
         Order order = new Order();
         order.id = id;
-        order.ordererId = ordererNo;
+        order.ordererNumber = ordererNumber;
         order.orderStatus = orderStatus;
         order.paidDate = paidDate;
         order.shippingInfoId = shippingInfoId;

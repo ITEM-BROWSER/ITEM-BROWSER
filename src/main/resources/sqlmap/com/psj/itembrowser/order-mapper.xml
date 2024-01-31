@@ -5,7 +5,7 @@
 <mapper namespace="com.psj.itembrowser.order.mapper.OrderMapper">
     <resultMap id="orderResultMap" type="com.psj.itembrowser.order.domain.vo.Order">
         <id property="id" column="id"/>
-        <result property="ordererId" column="orderer_id"/>
+        <result property="ordererNumber" column="ORDERER_NUMBER"/>
         <result property="orderStatus" column="order_status"
                 typeHandler="com.psj.itembrowser.common.handler.OrderStatusTypeHandler"/>
         <result property="paidDate" column="paid_date"/>
@@ -18,7 +18,7 @@
     <select id="selectOrder" resultMap="orderResultMap"
             parameterType="com.psj.itembrowser.order.domain.dto.request.OrderRequestDTO">
         SELECT O.id,
-        O.ORDERER_ID,
+        O.ORDERER_NUMBER,
         O.ORDER_STATUS,
         O.PAID_DATE,
         O.SHIPPING_INFO_ID,

@@ -68,7 +68,7 @@ public class OrderSelectServiceTest {
 		verify(authorizationService, times(1)).authorizeOrder(validOrder);
 		
 		assertThat(validOrder.getId()).isEqualTo(result.getId());
-		assertThat(validOrder.getOrdererId()).isEqualTo(result.getOrdererId());
+		assertThat(validOrder.getOrdererNumber()).isEqualTo(result.getOrdererId());
 		assertThat(validOrder.getOrderStatus()).isEqualTo(result.getOrderStatus());
 		assertThat(validOrder.getPaidDate()).isEqualTo(result.getPaidDate());
 		assertThat(validOrder.getShippingInfoId()).isEqualTo(result.getShippingInfoId());
