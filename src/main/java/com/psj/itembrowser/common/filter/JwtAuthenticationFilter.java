@@ -34,31 +34,31 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    
-    @Autowired
-    private JwtProvider jwtProvider;
-    
-    @Autowired
-    private UserDetailsService userDetailsService;
-    
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-        FilterChain filterChain) throws ServletException, IOException {
-        
-        String authorization = request.getHeader("Authorization");
-        if (!Objects.isNull(authorization)) {
-            String atk = authorization.substring(7);
-            try {
-                String email = jwtProvider.extractUserEmail(atk);
-                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-                Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, "",
-                    userDetails.getAuthorities());
-                SecurityContextHolder.getContext()
-                    .setAuthentication(authentication);
-            } catch (JwtException e) {
-                request.setAttribute("exception", e.getMessage());
-            }
-        }
-        filterChain.doFilter(request, response);
-    }
+	
+	@Autowired
+	private JwtProvider jwtProvider;
+	
+	@Autowired
+	private UserDetailsService userDetailsService;
+	
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+		FilterChain filterChain) throws ServletException, IOException {
+		
+		String authorization = request.getHeader("Authorization");
+		if (Objects.nonNull(authorization)) {
+			String atk = authorization.substring(7);
+			try {
+				String email = jwtProvider.extractUserEmail(atk);
+				UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+				Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, "",
+					userDetails.getAuthorities());
+				SecurityContextHolder.getContext()
+					.setAuthentication(authentication);
+			} catch (JwtException e) {
+				request.setAttribute("exception", e.getMessage());
+			}
+		}
+		filterChain.doFilter(request, response);
+	}
 }
