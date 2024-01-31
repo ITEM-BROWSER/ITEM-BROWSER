@@ -1,6 +1,5 @@
 package com.psj.itembrowser.authorization.service.impl;
 
-import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -10,7 +9,6 @@ import com.psj.itembrowser.common.exception.ErrorCode;
 import com.psj.itembrowser.common.exception.NotAuthorizedException;
 import com.psj.itembrowser.member.domain.vo.Member;
 import com.psj.itembrowser.order.domain.vo.Order;
-import com.psj.itembrowser.order.persistence.OrderPersistence;
 import com.psj.itembrowser.security.service.impl.UserDetailsServiceImpl;
 
 import lombok.RequiredArgsConstructor;
@@ -20,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 public class AuthorizationServiceImpl implements AuthorizationService {
 	
 	private final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	private final OrderPersistence orderPersistence;
 	
 	@Override
 	public void authorizeOrder(Order order) {
@@ -46,9 +43,11 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 	
 	private UserDetailsServiceImpl.CustomUserDetails getPrincipal() {
 		UserDetailsServiceImpl.CustomUserDetails principal = (UserDetailsServiceImpl.CustomUserDetails)authentication.getPrincipal();
+		
 		if (principal == null) {
-			throw new AuthenticationCredentialsNotFoundException("principal is null");
+			throw new NotAuthorizedException(ErrorCode.PRINCIPAL_NOT_FOUND);
 		}
+		
 		return principal;
 	}
 }

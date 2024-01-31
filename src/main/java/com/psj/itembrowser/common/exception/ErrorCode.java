@@ -50,7 +50,9 @@ public enum ErrorCode {
 	SELLER_NOT_AUTHORIZED(HttpStatus.UNAUTHORIZED, "AUTH_001", "Seller is not authorized"),
 	ADMIN_NOT_AUTHORIZED(HttpStatus.UNAUTHORIZED, "AUTH_002", "Admin is not authorized"),
 	CUSTOMER_NOT_AUTHORIZED(HttpStatus.UNAUTHORIZED, "AUTH_003", "Customer is not authorized"),
+	PRINCIPAL_NOT_FOUND(HttpStatus.UNAUTHORIZED, "AUTH_004", "Principal is not found"),
 	;
+	
 	private final HttpStatus status;
 	private final String code;
 	private final String message;
