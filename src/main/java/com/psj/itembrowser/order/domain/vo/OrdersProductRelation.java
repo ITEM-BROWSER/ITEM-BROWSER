@@ -1,9 +1,13 @@
 package com.psj.itembrowser.order.domain.vo;
 
-import com.psj.itembrowser.product.domain.vo.Product;
-import lombok.*;
-
 import java.time.LocalDateTime;
+
+import com.psj.itembrowser.product.domain.vo.Product;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @EqualsAndHashCode(of = {"groupId", "productId", "productQuantity"})
@@ -33,8 +37,7 @@ public class OrdersProductRelation {
     
     Product product;
     
-    @Builder
-    public static OrdersProductRelation createOrdersProductRelation(
+    public static OrdersProductRelation create(
             Long groupId,
             Long productId,
             int productQuantity,
