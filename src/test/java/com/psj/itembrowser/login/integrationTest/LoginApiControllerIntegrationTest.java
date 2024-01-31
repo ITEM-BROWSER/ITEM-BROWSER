@@ -1,16 +1,10 @@
 package com.psj.itembrowser.login.integrationTest;
 
-import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.psj.itembrowser.login.domain.dto.request.LoginRequestDTO;
-import com.psj.itembrowser.member.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,13 +16,17 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.psj.itembrowser.login.domain.dto.request.LoginRequestDTO;
+import com.psj.itembrowser.member.service.MemberService;
+
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
 public class LoginApiControllerIntegrationTest {
     
-    private final static String EXIST_USER_EMAIL = "test@test.com";
+    private final static String EXIST_USER_EMAIL = "qkrtkdwns3410@naver.com";
     private final static String EXIST_USER_PASSWORD = "jiohioqh123!@#";
     
     @Autowired
