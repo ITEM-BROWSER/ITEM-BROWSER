@@ -41,7 +41,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Getter
 	@RequiredArgsConstructor
 	public static final class CustomUserDetails implements UserDetails {
-		//QUESTION 스프링 예제에서는 상속을 받았지만, 상속받는 이유를 잘 모르겠다.
+		
 		private final MemberResponseDTO memberResponseDTO;
 		
 		/*
