@@ -19,91 +19,91 @@ public class Product extends BaseDateTimeEntity {
     /**
      * pk값
      */
-    Long id;
+    private Long id;
     
     /**
      * 상품명
      */
-    String name;
+    private String name;
     
     /**
      * 상품카테고리. CATEGORY 테이블 참조
      */
-    Integer category;
+    private Integer category;
     
     /**
      * 상품설명
      */
-    String detail;
+    private String detail;
     
     /**
      * 상품상태. 심사중/임시저장/승인대기/승인완료/부분승인/완료/승인반려/상품삭제
      */
-    ProductStatus status;
+    private ProductStatus status;
 
     /**
      * 재고
      */
-    Integer quantity;
+    private Integer quantity;
 
     /**
      * 가격
      */
-    Integer unitPrice;
+    private Integer unitPrice;
     
     /**
      * 판매자ID
      */
-    String sellerId;
+    private String sellerId;
     
     /**
      * 판매시작일시
      */
-    LocalDateTime sellStartDatetime;
+    private LocalDateTime sellStartDatetime;
     
     /**
      * 판매종료일시
      */
-    LocalDateTime sellEndDatetime;
+    private LocalDateTime sellEndDatetime;
     
     /**
      * 노출상품명. 실제노출되는 상품명
      */
-    String displayName;
+    private String displayName;
     
     /**
      * 브랜드
      */
-    String brand;
+    private String brand;
     
     /**
      * 배송비종류. DELIVERY_FEE_TYPE 테이블 참조
      */
-    String deliveryFeeType;
+    private String deliveryFeeType;
     
     /**
      * 배송방법. DELIVERY_METHOD 테이블 참조
      */
-    String deliveryMethod;
+    private String deliveryMethod;
     
     /**
      * 기본배송비. 기본 배송
      */
-    Integer deliveryDefaultFee;
+    private Integer deliveryDefaultFee;
     
     /**
      * 무료배송금액. 무료 배송 기준 금액
      */
-    Integer freeShipOverAmount;
+    private Integer freeShipOverAmount;
     
     /**
      * 반품지 센터 코드. CENTER 테이블 참조
      */
-    String returnCenterCode;
-    
-    List<CartProductRelation> cartProductRelations;
+    private String returnCenterCode;
 
-    List<ProductImage> productImages;
+    private List<CartProductRelation> cartProductRelations;
+
+    private List<ProductImage> productImages;
     
     // 상품 재고를 줄이는 메서드
     public void decreaseStock(int quantity) {

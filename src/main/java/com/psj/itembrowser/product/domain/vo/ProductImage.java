@@ -5,15 +5,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.validator.constraints.URL;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class ProductImage extends BaseDateTimeEntity {
 
-    private Long Id;
+    private Long id;
 
     private Long productId;
 

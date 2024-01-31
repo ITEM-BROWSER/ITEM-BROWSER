@@ -11,28 +11,28 @@ import lombok.Data;
 @Data
 @Builder
 public class ProductResponseDTO {
-    
-    Long id;
-    
-    String name;
-    
-    ProductStatus status;
-    
-    Integer quantity;
-    
-    LocalDateTime sellStartDatetime;
-    
-    LocalDateTime sellEndDatetime;
-    
-    String displayName;
-    
-    String brand;
-    
-    String deliveryMethod;
-    
-    Integer deliveryDefaultFee;
 
-    List<ProductImage> productImages;
+    private Long id;
+
+    private String name;
+
+    private ProductStatus status;
+
+    private Integer quantity;
+
+    private LocalDateTime sellStartDatetime;
+
+    private LocalDateTime sellEndDatetime;
+
+    private String displayName;
+
+    private String brand;
+
+    private String deliveryMethod;
+
+    private Integer deliveryDefaultFee;
+
+    private List<ProductImage> productImages;
     
     public static ProductResponseDTO of(Product product) {
         if (product == null) {

@@ -1,6 +1,6 @@
 package com.psj.itembrowser.product.service.impl;
 
-import static com.psj.itembrowser.common.exception.ErrorCode.PRODUCT_VALIDATE_FAIL;
+import static com.psj.itembrowser.common.exception.ErrorCode.PRODUCT_VALIDATION_FAIL;
 
 import com.psj.itembrowser.common.exception.BadRequestException;
 import com.psj.itembrowser.product.domain.dto.request.ProductQuantityUpdateRequestDTO;
@@ -12,7 +12,6 @@ import com.psj.itembrowser.product.mapper.ProductMapper;
 import com.psj.itembrowser.product.persistence.ProductPersistence;
 import com.psj.itembrowser.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,13 +43,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponseDTO getProduct(Long productId) throws NotFoundException {
+    public ProductResponseDTO getProduct(Long productId) {
         return productPersistence.findProductById(productId);
     }
 
     @Override
     public List<Product> getProducts(Long orderId) {
-        return productMapper.findProductsByOrderId(orderId);
+        return productPersistence.findProductsByOrderId(orderId);
     }
 
     @Override
@@ -60,7 +59,7 @@ public class ProductServiceImpl implements ProductService {
 
         if (productRequestDTO.getSellStartDatetime()
             .isBefore(productRequestDTO.getSellEndDatetime())) {
-            throw new BadRequestException(PRODUCT_VALIDATE_FAIL);
+            throw new BadRequestException(PRODUCT_VALIDATION_FAIL);
         }
 
         productPersistence.addProduct(productRequestDTO);

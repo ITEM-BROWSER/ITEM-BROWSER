@@ -12,6 +12,6 @@ import java.io.Serializable;
 @Data
 @Builder
 public class ProductQuantityUpdateRequestDTO implements Serializable {
-    Long id;
-    Integer quantity;
+    private Long id;
+    private Integer quantity;
 }

@@ -25,7 +25,7 @@ public interface ProductService {
 
     boolean modifyProductQuantity(ProductQuantityUpdateRequestDTO productQuantityUpdateRequestDTO);
 
-    ProductResponseDTO getProduct(Long productId) throws NotFoundException;
+    ProductResponseDTO getProduct(Long productId);
 
     List<Product> getProducts(Long orderId);
 

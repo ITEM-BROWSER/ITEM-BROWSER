@@ -3,7 +3,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.psj.itembrowser.product.mapper.ProductMapper">
-  <resultMap id="productResultMapXml" type="com.psj.itembrowser.product.domain.vo.Product">
+  <resultMap id="productResultMap" type="com.psj.itembrowser.product.domain.vo.Product">
     <id property="id" column="ID"/>
     <result property="name" column="NAME"/>
     <result property="category" column="CATEGORY"/>
@@ -28,11 +28,161 @@
       <id property="id" column="IMG_ID"/>
       <result property="productId" column="PRODUCT_ID"/>
       <result property="imgUrl" column="IMG_URL"/>
-      <result property="createdDate" column="CREATED_DATE"/>
-      <result property="updatedDate" column="UPDATED_DATE"/>
-      <result property="deleteDate" column="DELETE_DATE"/>
+      <result property="createdDate" column="IMG_CREATED_DATE"/>
+      <result property="updatedDate" column="IMG_UPDATED_DATE"/>
+      <result property="deleteDate" column="IMG_DELETE_DATE"/>
     </collection>
   </resultMap>
+
+  <select id="findProductById" resultMap="productResultMap">
+    SELECT P.ID,
+           P.NAME,
+           P.CATEGORY,
+           P.DETAIL,
+           P.STATUS,
+           P.QUANTITY,
+           P.SELLER_ID,
+           P.SELL_START_DATETIME,
+           P.SELL_END_DATETIME,
+           P.DISPLAY_NAME,
+           P.UNIT_PRICE,
+           P.BRAND,
+           P.DELIVERY_FEE_TYPE,
+           P.DELIVERY_METHOD,
+           P.DELIVERY_DEFAULT_FEE,
+           P.FREE_SHIP_OVER_AMOUNT,
+           P.RETURN_CENTER_CODE,
+           P.CREATED_DATE,
+           P.UPDATED_DATE,
+           I.ID           AS IMG_ID,
+           I.IMG_URL      AS IMG_URL,
+           I.CREATED_DATE AS IMG_CREATED_DATE,
+           I.UPDATED_DATE AS IMG_UPDATED_DATE
+    FROM PRODUCT P
+           LEFT JOIN PRODUCT_IMAGE I ON P.ID = I.PRODUCT_ID
+    WHERE P.ID = #{productId}
+  </select>
+
+  <select id="lockProductById" resultMap="productResultMap">
+    SELECT ID,
+           NAME,
+           CATEGORY,
+           DETAIL,
+           STATUS,
+           QUANTITY,
+           SELLER_ID,
+           SELL_START_DATETIME,
+           SELL_END_DATETIME,
+           DISPLAY_NAME,
+           UNIT_PRICE,
+           BRAND,
+           DELIVERY_FEE_TYPE,
+           DELIVERY_METHOD,
+           DELIVERY_DEFAULT_FEE,
+           FREE_SHIP_OVER_AMOUNT,
+           RETURN_CENTER_CODE,
+           CREATED_DATE,
+           UPDATED_DATE
+    FROM PRODUCT
+    WHERE ID = #{productId} LIMIT 1
+            FOR
+    UPDATE
+
+  </select>
+
+  <select id="findProductsByIds" parameterType="list" resultType="list"
+    resultMap="productResultMap">
+    SELECT P.ID,
+    P.NAME,
+    P.CATEGORY,
+    P.DETAIL,
+    P.STATUS,
+    P.QUANTITY,
+    P.SELLER_ID,
+    P.SELL_START_DATETIME,
+    P.SELL_END_DATETIME,
+    P.DISPLAY_NAME,
+    P.UNIT_PRICE,
+    P.BRAND,
+    P.DELIVERY_FEE_TYPE,
+    P.DELIVERY_METHOD,
+    P.DELIVERY_DEFAULT_FEE,
+    P.FREE_SHIP_OVER_AMOUNT,
+    P.RETURN_CENTER_CODE,
+    P.CREATED_DATE,
+    P.UPDATED_DATE,
+    I.ID           AS IMG_ID,
+    I.IMG_URL      AS IMG_URL,
+    I.CREATED_DATE AS IMG_CREATED_DATE,
+    I.UPDATED_DATE AS IMG_UPDATED_DATE
+    FROM PRODUCT P
+    LEFT JOIN PRODUCT_IMAGE I ON P.ID = I.PRODUCT_ID
+    WHERE P.ID IN
+    <foreach collection="productIds" item="id" index="index" separator=",">
+      (#{id})
+    </foreach>
+  </select>
+
+  <select id="lockAndFindProductsByIds" parameterType="list" resultType="list"
+    resultMap="productResultMap">
+    SELECT ID,
+    NAME,
+    CATEGORY,
+    DETAIL,
+    STATUS,
+    QUANTITY,
+    SELLER_ID,
+    SELL_START_DATETIME,
+    SELL_END_DATETIME,
+    DISPLAY_NAME,
+    UNIT_PRICE,
+    BRAND,
+    DELIVERY_FEE_TYPE,
+    DELIVERY_METHOD,
+    DELIVERY_DEFAULT_FEE,
+    FREE_SHIP_OVER_AMOUNT,
+    RETURN_CENTER_CODE,
+    CREATED_DATE,
+    UPDATED_DATE
+    FROM PRODUCT
+    WHERE ID IN
+    <foreach collection="productIds" item="id" index="index" separator=",">
+      (#{id})
+    </foreach>
+    FOR
+    UPDATE
+  </select>
+
+  <select id="findProductsByOrderId" resultMap="productResultMap">
+    SELECT P.ID,
+           P.NAME,
+           P.CATEGORY,
+           P.DETAIL,
+           P.STATUS,
+           P.QUANTITY,
+           P.SELLER_ID,
+           P.SELL_START_DATETIME,
+           P.SELL_END_DATETIME,
+           P.DISPLAY_NAME,
+           P.UNIT_PRICE,
+           P.BRAND,
+           P.DELIVERY_FEE_TYPE,
+           P.DELIVERY_METHOD,
+           P.DELIVERY_DEFAULT_FEE,
+           P.FREE_SHIP_OVER_AMOUNT,
+           P.RETURN_CENTER_CODE,
+           P.CREATED_DATE,
+           P.UPDATED_DATE
+    FROM PRODUCT P
+           LEFT JOIN ORDERS_PRODUCT_RELATION OPR ON OPR.PRODUCT_ID = P.ID
+    WHERE OPR.GROUP_ID = #{orderId}
+  </select>
+
+  <update id="updateProduct">
+    UPDATE PRODUCT
+    SET QUANTITY = #{quantity}
+    WHERE ID = #{id}
+  </update>
 
   <insert id="addProduct" useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
     INSERT INTO product (NAME, CATEGORY, DETAIL, STATUS, SELLER_ID,
@@ -54,62 +204,4 @@
       (#{image.productId}, #{image.imgUrl}, now(), now())
     </foreach>
   </insert>
-
-  <select id="findProductsByIds" parameterType="list" resultType="list"
-    resultMap="productResultMapXml">
-    SELECT ID,
-    NAME,
-    CATEGORY,
-    DETAIL,
-    STATUS,
-    QUANTITY,
-    SELLER_ID,
-    SELL_START_DATETIME,
-    SELL_END_DATETIME,
-    DISPLAY_NAME,
-    UNIT_PRICE,
-    BRAND,
-    DELIVERY_FEE_TYPE,
-    DELIVERY_METHOD,
-    DELIVERY_DEFAULT_FEE,
-    FREE_SHIP_OVER_AMOUNT,
-    RETURN_CENTER_CODE,
-    CREATED_DATE,
-    UPDATED_DATE
-    FROM PRODUCT
-    WHERE ID IN
-    <foreach item="id" index="index" collection="productIds" open="(" separator="," close=")">
-      #{id}
-    </foreach>
-  </select>
-
-  <select id="lockAndFindProductsByIds" parameterType="list" resultType="list"
-    resultMap="productResultMapXml">
-    SELECT ID,
-    NAME,
-    CATEGORY,
-    DETAIL,
-    STATUS,
-    QUANTITY,
-    SELLER_ID,
-    SELL_START_DATETIME,
-    SELL_END_DATETIME,
-    DISPLAY_NAME,
-    UNIT_PRICE,
-    BRAND,
-    DELIVERY_FEE_TYPE,
-    DELIVERY_METHOD,
-    DELIVERY_DEFAULT_FEE,
-    FREE_SHIP_OVER_AMOUNT,
-    RETURN_CENTER_CODE,
-    CREATED_DATE,
-    UPDATED_DATE
-    FROM PRODUCT
-    WHERE ID IN
-    <foreach item=" id" index="index" collection="productIds" open="(" separator="," close=")">
-      #{id}
-    </foreach>
-    FOR
-    UPDATE
-  </select>
 </mapper>

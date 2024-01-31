@@ -17,45 +17,45 @@ public class ProductRequestDTO {
 
     @NotBlank
     @Length(min = 1, max = 100, message = "The product name must be at least 1 character and less than 100 characters.")
-    String name;
+    private String name;
 
-    Integer category;
+    private Integer category;
 
     @NotBlank
     @Length(min = 10, max = 1000, message = "The product detail must be at least 10 character and less than 1000 characters.")
-    String detail;
+    private String detail;
 
-    ProductStatus status;
+    private ProductStatus status;
 
     @Min(value = 0, message = "Quantity must be greater than 0.")
-    Integer quantity;
+    private Integer quantity;
 
     @Min(value = 0, message = "Price must be greater than 0.")
-    Integer unitPrice;
+    private Integer unitPrice;
 
-    String sellerId;
+    private String sellerId;
 
     @FutureOrPresent(message = "The sales start date must be present or in the future")
-    LocalDateTime sellStartDatetime;
+    private LocalDateTime sellStartDatetime;
 
     @FutureOrPresent(message = "The sales end date must be present or in the future")
-    LocalDateTime sellEndDatetime;
+    private LocalDateTime sellEndDatetime;
 
-    String displayName;
+    private String displayName;
 
-    String brand;
+    private String brand;
 
-    String deliveryFeeType;
+    private String deliveryFeeType;
 
-    String deliveryMethod;
+    private String deliveryMethod;
 
-    Integer deliveryDefaultFee;
+    private Integer deliveryDefaultFee;
 
-    Integer freeShipOverAmount;
+    private Integer freeShipOverAmount;
 
-    String returnCenterCode;
+    private String returnCenterCode;
 
     @Size(min = 3, max = 10, message = "Images must be at least 3 and not more than 10.")
     @Valid
-    List<ProductImage> productImages;
+    private List<ProductImage> productImages;
 }

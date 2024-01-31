@@ -26,16 +26,16 @@ public enum ErrorCode {
     CART_PRODUCT_UPDATE_FAIL(HttpStatus.BAD_REQUEST, "CART_005", "Fail to update Cart Product"),
     CART_PRODUCT_DELETE_FAIL(HttpStatus.BAD_REQUEST, "CART_006", "Fail to delete Cart Product"),
     CART_PRODUCT_QUANTITY_NOT_POSITIVE(HttpStatus.BAD_REQUEST, "CART_007", "Quantity must be positive"),
-    
+
     // Order
     ORDER_DELETE_FAIL(HttpStatus.BAD_REQUEST, "ORDER_001", "Fail to delete Order"),
     ORDER_RELATION_DELETE_FAIL(HttpStatus.BAD_REQUEST, "ORDER_002", "Fail to delete Order Relation"),
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "ORDER_003", "Not Found Order"),
     ORDER_NOT_CANCELABLE(HttpStatus.BAD_REQUEST, "ORDER_004", "Order is not cancelable"),
-    
+
     // common
     COMMON_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON_001", "Internal Server Error"),
-    
+
     // Member
     NOT_FOUND_MEMBER(HttpStatus.NOT_FOUND, "MEMBER_001", "Not Found Member"),
     MEMBER_INSERT_FAIL(HttpStatus.BAD_REQUEST, "MEMBER_002", "Fail to insert Member"),
@@ -45,14 +45,14 @@ public enum ErrorCode {
     PRODUCT_INSERT_FAIL(HttpStatus.BAD_REQUEST, "PRODUCT_002", "Fail to insert to product"),
     PRODUCT_UPDATE_FAIL(HttpStatus.BAD_REQUEST, "PRODUCT_003", "Fail to update to product"),
     PRODUCT_DELETE_FAIL(HttpStatus.BAD_REQUEST, "PRODUCT_004", "Fail to delete to product"),
-    PRODUCT_VALIDATE_FAIL(HttpStatus.BAD_REQUEST, "PRODUCT_004","Validation Error"),
-    
+    PRODUCT_VALIDATION_FAIL(HttpStatus.BAD_REQUEST, "PRODUCT_005", "Validation Error"),
+
     //Token
     ACCESS_TOKEN_NOT_GENERATED(HttpStatus.UNAUTHORIZED, "TOKEN_001", "Fail to generate Access Token"),
     REFRESH_TOKEN_NOT_GENERATED(HttpStatus.UNAUTHORIZED, "TOKEN_002", "Fail to generate Refresh Token"),
     TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "TOKEN_003", "Not Found Token"),
     ;
-    
+
     private final HttpStatus status;
     private final String code;
     private final String message;
