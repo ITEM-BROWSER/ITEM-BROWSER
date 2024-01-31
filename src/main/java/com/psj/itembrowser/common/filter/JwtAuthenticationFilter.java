@@ -1,13 +1,13 @@
 package com.psj.itembrowser.common.filter;
 
-import com.psj.itembrowser.common.config.jwt.JwtProvider;
 import java.io.IOException;
 import java.util.Objects;
+
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,6 +16,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.psj.itembrowser.common.config.jwt.JwtProvider;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * packageName    : com.psj.itembrowser.common.filter
@@ -47,10 +51,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 String email = jwtProvider.extractUserEmail(atk);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-                Authentication token = new UsernamePasswordAuthenticationToken(userDetails, "",
+                Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, "",
                     userDetails.getAuthorities());
                 SecurityContextHolder.getContext()
-                    .setAuthentication(token);
+                    .setAuthentication(authentication);
             } catch (JwtException e) {
                 request.setAttribute("exception", e.getMessage());
             }
