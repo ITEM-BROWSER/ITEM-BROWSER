@@ -37,8 +37,8 @@ gantt
     title 프로젝트 일정
 dateformat YYYY-MM-DD 
   section 개발일정
-Mybatis 개발일정: active, mybatis001,  2024-01-21, 2024-02-04
-JPA 개발일정: active, jpa001, 2024-02-05, 2024-02-18
+Mybatis 개발일정: active, mybatis001,  2024-01-21, 2024-02-19
+JPA 개발일정: active, jpa001, 2024-02-20, 2024-03-05
 
 ```
 
