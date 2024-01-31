@@ -12,12 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.psj.itembrowser.common.config.jwt.JwtProvider;
+import com.psj.itembrowser.security.service.impl.UserDetailsServiceImpl;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -50,8 +50,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			String atk = authorization.substring(7);
 			try {
 				String email = jwtProvider.extractUserEmail(atk);
-				UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-				Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, "",
+				UserDetailsServiceImpl.CustomUserDetails userDetails = (UserDetailsServiceImpl.CustomUserDetails)userDetailsService.loadUserByUsername(email);
+				Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, atk,
 					userDetails.getAuthorities());
 				SecurityContextHolder.getContext()
 					.setAuthentication(authentication);

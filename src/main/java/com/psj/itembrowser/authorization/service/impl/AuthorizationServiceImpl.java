@@ -7,32 +7,42 @@ import org.springframework.stereotype.Service;
 import com.psj.itembrowser.authorization.service.AuthorizationService;
 import com.psj.itembrowser.common.exception.ErrorCode;
 import com.psj.itembrowser.common.exception.NotAuthorizedException;
+import com.psj.itembrowser.member.domain.dto.response.MemberResponseDTO;
 import com.psj.itembrowser.member.domain.vo.Member;
 import com.psj.itembrowser.order.domain.vo.Order;
 import com.psj.itembrowser.security.service.impl.UserDetailsServiceImpl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class AuthorizationServiceImpl implements AuthorizationService {
 	
-	private final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	private final UserDetailsServiceImpl userDetailsService;
 	
 	@Override
 	public void authorizeOrder(Order order) {
-		UserDetailsServiceImpl.CustomUserDetails principal = getPrincipal();
-		Member member = Member.from(principal.getMemberResponseDTO());
+		MemberResponseDTO principal = getPrincipal();
 		
-		if (principal.hasRole(Member.Role.ROLE_STORE_SELLER)) {
+		if (principal == null) {
+			log.error("principal is null");
+			
+			throw new NotAuthorizedException(ErrorCode.PRINCIPAL_NOT_FOUND);
+		}
+		
+		Member member = Member.from(principal);
+		
+		if (member.hasRole(Member.Role.ROLE_STORE_SELLER)) {
 			throw new NotAuthorizedException(ErrorCode.SELLER_NOT_AUTHORIZED);
 		}
 		
-		if (principal.hasRole(Member.Role.ROLE_ADMIN)) {
+		if (member.hasRole(Member.Role.ROLE_ADMIN)) {
 			return;
 		}
 		
-		if (principal.hasRole(Member.Role.ROLE_CUSTOMER)) {
+		if (member.hasRole(Member.Role.ROLE_CUSTOMER)) {
 			if (member.isSame(order.getMember())) {
 				return;
 			}
@@ -41,13 +51,17 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 		}
 	}
 	
-	private UserDetailsServiceImpl.CustomUserDetails getPrincipal() {
-		UserDetailsServiceImpl.CustomUserDetails principal = (UserDetailsServiceImpl.CustomUserDetails)authentication.getPrincipal();
-		
-		if (principal == null) {
+	private MemberResponseDTO getPrincipal() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication == null) {
+			log.error("authentication is null");
+			
 			throw new NotAuthorizedException(ErrorCode.PRINCIPAL_NOT_FOUND);
 		}
 		
-		return principal;
+		UserDetailsServiceImpl.CustomUserDetails details = (UserDetailsServiceImpl.CustomUserDetails)userDetailsService.loadUserByUsername(
+			authentication.getName());
+		
+		return details.getMemberResponseDTO();
 	}
 }

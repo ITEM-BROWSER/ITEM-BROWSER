@@ -17,7 +17,6 @@ import com.psj.itembrowser.member.domain.vo.Member;
 import com.psj.itembrowser.member.persistence.MemberPersistance;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,9 +31,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		log.info("loadUserByUsername : {}", email);
 		MemberResponseDTO memberResponseDTO = this.memberPersistance.findByEmail(email);
+		
 		if (memberResponseDTO == null) {
 			throw new UsernameNotFoundException("username " + email + " is not found");
 		}
+		
 		return new CustomUserDetails(memberResponseDTO);
 	}
 	
@@ -56,15 +57,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 						.toArray(String[]::new)
 				)
 			);
-		
-		//getAuthorities 는 인증된 사용자의 권한을 리턴한다.
-		public boolean hasRole(@NonNull Member.Role role) {
-			if (memberResponseDTO.getRole() == null) {
-				return false;
-			}
-			
-			return memberResponseDTO.getRole() == role;
-		}
 		
 		@Override
 		public Collection<? extends GrantedAuthority> getAuthorities() {
