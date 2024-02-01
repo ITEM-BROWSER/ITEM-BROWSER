@@ -1,7 +1,6 @@
 package com.psj.itembrowser.product.mapper;
 
 import com.psj.itembrowser.product.domain.dto.request.ProductQuantityUpdateRequestDTO;
-import com.psj.itembrowser.product.domain.dto.request.ProductRequestDTO;
 import com.psj.itembrowser.product.domain.vo.Product;
 import com.psj.itembrowser.product.domain.vo.ProductImage;
 import org.apache.ibatis.annotations.*;
@@ -36,7 +35,7 @@ public interface ProductMapper {
 
     boolean updateProduct(ProductQuantityUpdateRequestDTO product);
 
-    void addProduct(Product product);
+    void insertProduct(Product product);
 
-    boolean addProductImages(List<ProductImage> productImages);
+    boolean insertProductImages(List<ProductImage> productImages);
 }

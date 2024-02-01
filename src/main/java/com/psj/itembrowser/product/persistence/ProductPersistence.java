@@ -1,7 +1,6 @@
 package com.psj.itembrowser.product.persistence;
 
 import com.psj.itembrowser.common.exception.NotFoundException;
-import com.psj.itembrowser.product.domain.dto.request.ProductRequestDTO;
 import com.psj.itembrowser.product.domain.dto.response.ProductResponseDTO;
 import com.psj.itembrowser.product.domain.vo.Product;
 import com.psj.itembrowser.product.domain.vo.ProductImage;
@@ -52,12 +51,12 @@ public class ProductPersistence {
     }
 
     @Transactional(readOnly = false)
-    public void addProduct(Product product) {
-        productMapper.addProduct(product);
+    public void createProduct(Product product) {
+        productMapper.insertProduct(product);
     }
 
     @Transactional(readOnly = false)
-    public void addProductImages(List<ProductImage> productImages) {
-        productMapper.addProductImages(productImages);
+    public void createProductImages(List<ProductImage> productImages) {
+        productMapper.insertProductImages(productImages);
     }
 }

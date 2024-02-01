@@ -50,17 +50,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = false)
-    public void addProduct(ProductRequestDTO productRequestDTO) {
+    public void createProduct(ProductRequestDTO productRequestDTO) {
         Product product = productRequestDTO.toProduct();
         product.validateSellDates();
-        List<ProductImage> productImages = productRequestDTO.getProductImages();
+        List<ProductImage> productImages = productRequestDTO.getFiles();
 
         if (productRequestDTO.getSellStartDatetime()
             .isBefore(productRequestDTO.getSellEndDatetime())) {
             throw new BadRequestException(PRODUCT_VALIDATION_FAIL);
         }
 
-        productPersistence.addProduct(product);
-        productPersistence.addProductImages(productImages);
+        productPersistence.createProduct(product);
+        productPersistence.createProductImages(productImages);
     }
 }

@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 public class ProductRequestDTO {
@@ -61,8 +62,7 @@ public class ProductRequestDTO {
     private String returnCenterCode;
 
     @Size(min = 3, max = 10, message = "Images must be at least 3 and not more than 10.")
-    @Valid
-    private List<ProductImage> productImages;
+    private List<MultipartFile> files;
 
     public Product toProduct() {
         return Product.builder().name(this.name)
@@ -81,7 +81,6 @@ public class ProductRequestDTO {
             .deliveryDefaultFee(this.deliveryDefaultFee)
             .freeShipOverAmount(this.freeShipOverAmount)
             .returnCenterCode(this.returnCenterCode)
-            .productImages(this.productImages)
             .build();
     }
 

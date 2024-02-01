@@ -4,7 +4,6 @@ import com.psj.itembrowser.product.domain.dto.request.ProductQuantityUpdateReque
 import com.psj.itembrowser.product.domain.dto.request.ProductRequestDTO;
 import com.psj.itembrowser.product.domain.dto.response.ProductResponseDTO;
 import com.psj.itembrowser.product.domain.vo.Product;
-import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,5 +28,5 @@ public interface ProductService {
 
     List<Product> getProducts(Long orderId);
 
-    void addProduct(ProductRequestDTO productRequestDTO);
+    void createProduct(ProductRequestDTO productRequestDTO);
 }
