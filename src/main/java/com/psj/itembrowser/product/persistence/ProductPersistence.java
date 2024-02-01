@@ -14,14 +14,10 @@ import java.util.stream.Collectors;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * packageName    : com.psj.itembrowser.product.domain.persistence
- * fileName       :
- * ProductPersistence author         : ipeac date           : 2023-10-09
- * description    :
- * ===========================================================
- * DATE              AUTHOR
- * NOTE -----------------------------------------------------------
- * 2023-10-09        ipeac       최초 생성
+ * packageName    : com.psj.itembrowser.product.domain.persistence fileName       :
+ * ProductPersistence author         : ipeac date           : 2023-10-09 description    :
+ * =========================================================== DATE              AUTHOR NOTE
+ * ----------------------------------------------------------- 2023-10-09        ipeac       최초 생성
  */
 @Component
 @RequiredArgsConstructor
@@ -56,8 +52,8 @@ public class ProductPersistence {
     }
 
     @Transactional(readOnly = false)
-    public void addProduct(ProductRequestDTO productRequestDTO) {
-        productMapper.addProduct(productRequestDTO);
+    public void addProduct(Product product) {
+        productMapper.addProduct(product);
     }
 
     @Transactional(readOnly = false)

@@ -18,14 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * packageName    : com.psj.itembrowser.product.service.impl
- * fileName       : ProductServiceImpl
- * author         : ipeac date           : 2023-10-09
- * description    :
- * ===========================================================
- * DATE              AUTHOR NOTE
- * -----------------------------------------------------------
- * 2023-10-09        ipeac       최초 생성
+ * packageName    : com.psj.itembrowser.product.service.impl fileName       : ProductServiceImpl
+ * author         : ipeac date           : 2023-10-09 description    :
+ * =========================================================== DATE              AUTHOR NOTE
+ * ----------------------------------------------------------- 2023-10-09        ipeac       최초 생성
  */
 @Service
 @RequiredArgsConstructor
@@ -55,6 +51,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional(readOnly = false)
     public void addProduct(ProductRequestDTO productRequestDTO) {
+        Product product = productRequestDTO.toProduct();
+        product.validateSellDates();
         List<ProductImage> productImages = productRequestDTO.getProductImages();
 
         if (productRequestDTO.getSellStartDatetime()
@@ -62,7 +60,7 @@ public class ProductServiceImpl implements ProductService {
             throw new BadRequestException(PRODUCT_VALIDATION_FAIL);
         }
 
-        productPersistence.addProduct(productRequestDTO);
+        productPersistence.addProduct(product);
         productPersistence.addProductImages(productImages);
     }
 }

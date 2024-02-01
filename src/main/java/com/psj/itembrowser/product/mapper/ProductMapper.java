@@ -36,7 +36,7 @@ public interface ProductMapper {
 
     boolean updateProduct(ProductQuantityUpdateRequestDTO product);
 
-    void addProduct(ProductRequestDTO productRequestDTO);
+    void addProduct(Product product);
 
     boolean addProductImages(List<ProductImage> productImages);
 }
