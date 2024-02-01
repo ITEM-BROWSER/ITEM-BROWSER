@@ -34,10 +34,6 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 		
 		Member member = Member.from(principal);
 		
-		if (member.hasRole(Member.Role.ROLE_STORE_SELLER)) {
-			throw new NotAuthorizedException(ErrorCode.SELLER_NOT_AUTHORIZED);
-		}
-		
 		if (member.hasRole(Member.Role.ROLE_ADMIN)) {
 			return;
 		}
