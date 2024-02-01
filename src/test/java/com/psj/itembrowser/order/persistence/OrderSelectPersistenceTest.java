@@ -21,7 +21,6 @@ import com.psj.itembrowser.member.domain.vo.Credentials;
 import com.psj.itembrowser.member.domain.vo.Member;
 import com.psj.itembrowser.member.domain.vo.MemberNo;
 import com.psj.itembrowser.member.domain.vo.Name;
-import com.psj.itembrowser.order.domain.dto.request.OrderRequestDTO;
 import com.psj.itembrowser.order.domain.vo.Order;
 import com.psj.itembrowser.order.domain.vo.OrderStatus;
 import com.psj.itembrowser.order.domain.vo.OrdersProductRelation;
@@ -96,11 +95,10 @@ public class OrderSelectPersistenceTest {
 	@DisplayName("주문에 대한 단건 조회의 경우 메서드가 정상적으로 Order 를 반환하는지")
 	void When_GetOrder_Expect_ReturnOrder() {
 		//given
-		OrderRequestDTO orderRequestDTO = OrderRequestDTO.forActiveOrder(1L);
-		given(orderMapper.selectOrder(orderRequestDTO)).willReturn(expectedOrder);
+		given(orderMapper.selectOrderWithNotDeleted(1L)).willReturn(expectedOrder);
 		
 		//when
-		Order foundOrder = orderPersistence.getOrder(orderRequestDTO);
+		Order foundOrder = orderPersistence.getOrderWithNotDeleted(1L);
 		//then
 		assertThat(foundOrder).isNotNull();
 		assertThat(foundOrder).isEqualTo(expectedOrder);
@@ -110,12 +108,11 @@ public class OrderSelectPersistenceTest {
 	@DisplayName("주문에 대한 단건 조회의 경우 메서드가 정상적으로 NotFoundException 을 반환하는지")
 	void When_GetOrder_Expect_ThrowNotFoundException() {
 		//given
-		OrderRequestDTO orderRequestDTO = OrderRequestDTO.forActiveOrder(1L);
-		given(orderMapper.selectOrder(orderRequestDTO)).willReturn(null);
+		given(orderMapper.selectOrderWithNotDeleted(1L)).willReturn(null);
 		
 		//when
 		//then
-		assertThatThrownBy(() -> orderPersistence.getOrder(orderRequestDTO))
+		assertThatThrownBy(() -> orderPersistence.getOrderWithNotDeleted(1L))
 			.isInstanceOf(NotFoundException.class)
 			.hasMessageContaining("Not Found Order");
 	}
