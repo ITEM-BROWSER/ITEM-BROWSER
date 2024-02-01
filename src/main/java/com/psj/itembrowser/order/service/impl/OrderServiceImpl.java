@@ -5,10 +5,8 @@ import static com.psj.itembrowser.common.exception.ErrorCode.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.psj.itembrowser.authorization.service.AuthorizationService;
 import com.psj.itembrowser.common.exception.BadRequestException;
 import com.psj.itembrowser.order.domain.dto.OrderResponseDTO;
-import com.psj.itembrowser.order.domain.dto.request.OrderRequestDTO;
 import com.psj.itembrowser.order.domain.vo.Order;
 import com.psj.itembrowser.order.persistence.OrderPersistence;
 import com.psj.itembrowser.order.service.OrderService;
@@ -21,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 public class OrderServiceImpl implements OrderService {
 	
 	private final OrderPersistence orderPersistence;
-	private final AuthorizationService authorizationService;
 	
 	@Override
 	@Transactional(readOnly = false, timeout = 4)
@@ -38,10 +35,15 @@ public class OrderServiceImpl implements OrderService {
 	}
 	
 	@Override
-	public OrderResponseDTO getOrder(OrderRequestDTO orderRequestDTO) {
-		Order findOrder = orderPersistence.getOrder(orderRequestDTO);
+	public OrderResponseDTO getOrderWithNotDeleted(Long id) {
+		Order findOrder = orderPersistence.getOrderWithNotDeleted(id);
 		
-		authorizationService.authorizeOrder(findOrder);
+		return OrderResponseDTO.fromOrder(findOrder);
+	}
+	
+	@Override
+	public OrderResponseDTO getOrderWithNoCondition(Long id) {
+		Order findOrder = orderPersistence.getOrderWithNoConditiojn(id);
 		
 		return OrderResponseDTO.fromOrder(findOrder);
 	}

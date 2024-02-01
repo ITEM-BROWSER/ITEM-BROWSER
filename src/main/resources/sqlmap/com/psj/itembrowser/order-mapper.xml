@@ -28,16 +28,24 @@
         O.DELETED_DATE
     </sql>
 
-    <select id="selectOrder" resultMap="orderResultMap"
-            parameterType="com.psj.itembrowser.order.domain.dto.request.OrderRequestDTO">
+    <select id="selectOrderWithNoCondition" resultMap="orderResultMap" parameterType="long">
         SELECT
         <include refid="orderColumns"/>
         FROM ORDERS O
         <where>
-            AND id = #{orderRequestDTO.id}
-            <if test="orderRequestDTO.shownDeletedOrder == false">
-                AND O.DELETED_DATE IS NULL
-            </if>
+            O.id = #{id}
         </where>
+        Limit 1;
+    </select>
+
+    <select id="selectOrderWithNotDeleted" resultMap="orderResultMap" parameterType="long">
+        SELECT
+        <include refid="orderColumns"/>
+        FROM ORDERS O
+        <where>
+            O.id = #{id}
+            AND O.DELETED_DATE IS NULL
+        </where>
+        LIMIT 1;
     </select>
 </mapper>
