@@ -6,6 +6,7 @@ import java.util.List;
 import com.psj.itembrowser.member.domain.vo.Member;
 import com.psj.itembrowser.shippingInfos.domain.vo.ShippingInfo;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = {"id", "ordererNumber", "orderStatus"})
 @ToString
 public class Order implements Cancelable {
