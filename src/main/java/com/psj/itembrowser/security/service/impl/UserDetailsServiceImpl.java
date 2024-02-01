@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -40,8 +41,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	}
 	
 	@Getter
-	@RequiredArgsConstructor
-	public static final class CustomUserDetails implements UserDetails {
+	public static final class CustomUserDetails extends User {
 		
 		private final MemberResponseDTO memberResponseDTO;
 		
@@ -58,8 +58,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 				)
 			);
 		
+		public CustomUserDetails(MemberResponseDTO memberResponseDTO) {
+			super(memberResponseDTO.getEmail(), memberResponseDTO.getPassword(), AUTHORITIES);
+			this.memberResponseDTO = memberResponseDTO;
+		}
+		
 		@Override
-		public Collection<? extends GrantedAuthority> getAuthorities() {
+		public Collection<GrantedAuthority> getAuthorities() {
 			return AUTHORITIES;
 		}
 		
