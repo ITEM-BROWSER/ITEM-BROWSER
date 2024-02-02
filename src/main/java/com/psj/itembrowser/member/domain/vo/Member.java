@@ -68,31 +68,6 @@ public class Member extends BaseDateTimeEntity {
 	 */
 	private LocalDateTime lastLoginDate;
 	
-	public MemberResponseDTO toResponseDTO() {
-		MemberResponseDTO dto = new MemberResponseDTO();
-		dto.setMemberNo(this.getNo().getMemberNo());
-		dto.setEmail(this.getCredentials().getEmail());
-		dto.setPassword(this.getCredentials().getPassword());
-		dto.setFirstName(this.getName().getFirstName());
-		dto.setLastName(this.getName().getLastName());
-		dto.setPhoneNumber(this.getPhoneNumber());
-		if (this.getAddress() != null) {
-			dto.setAddressMain(this.getAddress().getAddressMain());
-			dto.setAddressSub(this.getAddress().getAddressSub());
-			dto.setZipCode(this.getAddress().getZipCode());
-		}
-		dto.setGender(this.getGender());
-		dto.setRole(this.getRole());
-		dto.setStatus(this.getStatus());
-		dto.setBirthday(this.getBirthday());
-		dto.setLastLoginDate(this.getLastLoginDate());
-		dto.setCreatedDate(this.getCreatedDate());
-		dto.setUpdatedDate(this.getUpdatedDate());
-		dto.setDeletedDate(this.getDeletedDate());
-		
-		return dto;
-	}
-	
 	public static Member from(MemberRequestDTO dto) {
 		Member member = new Member();
 		member.credentials = new Credentials(dto.getMemberId(), dto.getPassword());

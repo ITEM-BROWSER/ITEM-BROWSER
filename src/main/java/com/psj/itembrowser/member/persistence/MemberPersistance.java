@@ -1,5 +1,7 @@
 package com.psj.itembrowser.member.persistence;
 
+import org.springframework.stereotype.Component;
+
 import com.psj.itembrowser.common.exception.BadRequestException;
 import com.psj.itembrowser.common.exception.ErrorCode;
 import com.psj.itembrowser.common.exception.NotFoundException;
@@ -7,9 +9,9 @@ import com.psj.itembrowser.member.domain.dto.request.MemberSignUpRequestDTO;
 import com.psj.itembrowser.member.domain.dto.response.MemberResponseDTO;
 import com.psj.itembrowser.member.domain.vo.Member;
 import com.psj.itembrowser.member.mapper.MemberMapper;
+
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 /**
  * packageName    : com.psj.itembrowser.common.security.model.service.impl
@@ -33,7 +35,7 @@ public class MemberPersistance {
             throw new NotFoundException(ErrorCode.NOT_FOUND_MEMBER);
         }
         
-        return member.toResponseDTO();
+        return MemberResponseDTO.from(member);
     }
     
     public MemberResponseDTO findById(@NonNull Long id) {
@@ -42,7 +44,7 @@ public class MemberPersistance {
             throw new NotFoundException(ErrorCode.NOT_FOUND_MEMBER);
         }
         
-        return member.toResponseDTO();
+        return MemberResponseDTO.from(member);
     }
     
     public Long insertMember(MemberSignUpRequestDTO requestDTO) {
