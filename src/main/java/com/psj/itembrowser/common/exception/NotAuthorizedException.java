@@ -1,23 +1,21 @@
 package com.psj.itembrowser.common.exception;
 
-import lombok.Getter;
 import lombok.NonNull;
 
 /**
  * packageName    : com.psj.itembrowser.common.exception
- * fileName       : DatabaseOperationException
+ * fileName       : NotAuthorizedException
  * author         : ipeac
- * date           : 2023-11-05
+ * date           : 2024-01-30
  * description    :
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
- * 2023-11-05        ipeac       최초 생성
+ * 2024-01-30        ipeac       최초 생성
  */
-@Getter
-public class BadRequestException extends CustomIllegalStateException {
+public class NotAuthorizedException extends CustomAuthenticationException {
 	
-	public BadRequestException(@NonNull ErrorCode e) {
+	public NotAuthorizedException(@NonNull ErrorCode e) {
 		super(e);
 	}
 }

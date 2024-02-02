@@ -1,30 +1,11 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<!--
-    @Results(id = "orderResultMap", value = {
-        @Result(property = "id", column = "id"),
-        @Result(property = "ordererId", column = "orderer_id"),
-        @Result(property = "orderStatus", column = "order_status", typeHandler = OrderStatusTypeHandler.class),
-        @Result(property = "paidDate", column = "paid_date"),
-        @Result(property = "shippingInfoId", column = "shipping_info_id"),
-        @Result(property = "createdDate", column = "created_date"),
-        @Result(property = "updatedDate", column = "updated_date"),
-        @Result(property = "deletedDate", column = "deleted_date")
-        // @Result(property = "ordersProductRelations", column = "id", many = @Many(select = "com.psj.itembrowser.order.mapper.OrdersProductRelationMapper.selectOrdersProductRelationsByOrderId")),
-        // @Result(property = "member", column = "orderer_id", one = @One(select = "com.psj.itembrowser.member.mapper.MemberMapper.selectMember")),
-        // @Result(property = "shippingInfo", column = "shipping_info_id", one = @One(select = "com.psj.itembrowser.shippingInfos.mapper.ShippingInfoMapper.selectShippingInfo"))
-    })
-    @Select("SELECT  O.id, O.ORDERER_ID , O.ORDER_STATUS, O.PAID_DATE , O.SHIPPING_INFO_ID , O.CREATED_DATE , O.UPDATED_DATE, O.DELETED_DATE " +
-        "FROM ORDERS O " +
-        "WHERE id = #{orderRequestDTO.id} " +
-        "AND O.DELETED_DATE IS NULL")
-    Order selectOrder(@Param("orderRequestDTO") OrderRequestDTO orderRequestDTO);
--->
+
 <mapper namespace="com.psj.itembrowser.order.mapper.OrderMapper">
     <resultMap id="orderResultMap" type="com.psj.itembrowser.order.domain.vo.Order">
         <id property="id" column="id"/>
-        <result property="ordererId" column="orderer_id"/>
+        <result property="ordererNumber" column="ORDERER_NUMBER"/>
         <result property="orderStatus" column="order_status"
                 typeHandler="com.psj.itembrowser.common.handler.OrderStatusTypeHandler"/>
         <result property="paidDate" column="paid_date"/>
@@ -32,24 +13,39 @@
         <result property="createdDate" column="created_date"/>
         <result property="updatedDate" column="updated_date"/>
         <result property="deletedDate" column="deleted_date"/>
+        <association property="member" javaType="com.psj.itembrowser.member.domain.vo.Member"
+                     column="ORDERER_NUMBER" select="com.psj.itembrowser.member.mapper.MemberMapper.findById"/>
     </resultMap>
 
-    <select id="selectOrder" resultMap="orderResultMap"
-            parameterType="com.psj.itembrowser.order.domain.dto.request.OrderRequestDTO">
-        SELECT O.id,
-        O.ORDERER_ID,
+    <sql id="orderColumns">
+        O.id,
+        O.ORDERER_NUMBER,
         O.ORDER_STATUS,
         O.PAID_DATE,
         O.SHIPPING_INFO_ID,
         O.CREATED_DATE,
         O.UPDATED_DATE,
         O.DELETED_DATE
+    </sql>
+
+    <select id="selectOrderWithNoCondition" resultMap="orderResultMap" parameterType="long">
+        SELECT
+        <include refid="orderColumns"/>
         FROM ORDERS O
         <where>
-            AND id = #{orderRequestDTO.id}
-            <if test="orderRequestDTO.shownDeletedOrder == false">
-                AND O.DELETED_DATE IS NULL
-            </if>
+            O.id = #{id}
         </where>
+        Limit 1;
+    </select>
+
+    <select id="selectOrderWithNotDeleted" resultMap="orderResultMap" parameterType="long">
+        SELECT
+        <include refid="orderColumns"/>
+        FROM ORDERS O
+        <where>
+            O.id = #{id}
+            AND O.DELETED_DATE IS NULL
+        </where>
+        LIMIT 1;
     </select>
 </mapper>

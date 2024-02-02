@@ -225,7 +225,7 @@ CREATE TABLE center
 CREATE TABLE orders
 (
     `ID`               bigint       NOT NULL AUTO_INCREMENT COMMENT '주문ID. 주문번호',
-    `ORDERER_ID`       varchar(200) NULL DEFAULT NULL COMMENT '주문자. 주문자 ( 현재 사용자 정보 호출)',
+    ORDERER_NUMBER       varchar(200) NULL DEFAULT NULL COMMENT '주문자. 주문자 ( 현재 사용자 정보 호출)',
     `ORDER_STATUS`     varchar(200) NULL DEFAULT NULL COMMENT '주문상태. ACCEPT 결제완료 | INSTRUCT 상품준비중 | DEPARTURE 배송지시 | DELIVERING 배송중 | FINAL_DELIVERY 배송완료 | NONE_TRACKING 업체 직접 배송(배송 추적X)',
     `PAID_DATE`        timestamp    NULL DEFAULT NULL COMMENT '결제일시',
     `SHIPPING_INFO_ID` bigint       NULL DEFAULT NULL COMMENT '배송지정보ID. 배송정보 ID',

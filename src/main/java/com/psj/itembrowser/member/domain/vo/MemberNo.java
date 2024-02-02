@@ -1,6 +1,10 @@
 package com.psj.itembrowser.member.domain.vo;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * packageName    : com.psj.itembrowser.member.domain.vo
@@ -19,8 +23,12 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberNo {
-    /**
-     * 회원번호
-     */
-    private Long memberNo;
+	/**
+	 * 회원번호
+	 */
+	private Long memberNo;
+	
+	public static MemberNo create(Long memberNo) {
+		return new MemberNo(memberNo);
+	}
 }

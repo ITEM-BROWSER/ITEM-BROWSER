@@ -1,5 +1,5 @@
 insert into ORDERS( ID
-                  , ORDERER_ID
+                  , ORDERER_NUMBER
                   , ORDER_STATUS
                   , PAID_DATE
                   , SHIPPING_INFO_ID
