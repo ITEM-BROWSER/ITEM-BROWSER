@@ -50,3 +50,7 @@ pagehelper:
   auto-runtime-dialect: false
   close-conn: true
   default-count: true
+
+server:
+  error:
+    include-stacktrace: never
