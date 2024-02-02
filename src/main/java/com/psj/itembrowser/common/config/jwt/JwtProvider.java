@@ -89,4 +89,8 @@ public class JwtProvider {
 		return new UsernamePasswordAuthenticationToken(currentUserDetails.getMemberResponseDTO(), token,
 			currentUserDetails.getAuthorities());
 	}
+	
+	public Jwt decodeJwt(String token) {
+		return jwtDecoder.decode(token);
+	}
 }

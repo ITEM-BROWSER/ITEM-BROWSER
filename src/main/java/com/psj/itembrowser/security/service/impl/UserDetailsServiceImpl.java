@@ -4,20 +4,24 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
+import com.psj.itembrowser.common.exception.ErrorCode;
+import com.psj.itembrowser.common.exception.TokenException;
 import com.psj.itembrowser.member.domain.dto.response.MemberResponseDTO;
 import com.psj.itembrowser.member.domain.vo.Member;
 import com.psj.itembrowser.member.persistence.MemberPersistance;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,6 +35,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		log.info("loadUserByUsername : {}", email);
+		
 		MemberResponseDTO memberResponseDTO = this.memberPersistance.findByEmail(email);
 		
 		if (memberResponseDTO == null) {
@@ -40,8 +45,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		return new CustomUserDetails(memberResponseDTO);
 	}
 	
+	public CustomUserDetails loadUserByJwt(@NonNull Jwt jwt) {
+		if (Objects.isNull(jwt.getSubject())) {
+			throw new TokenException(ErrorCode.NOT_FOUND_SUBJECT);
+		}
+		
+		return (CustomUserDetails)this.loadUserByUsername(jwt.getSubject());
+	}
+	
 	@Getter
-	public static final class CustomUserDetails extends User {
+	@RequiredArgsConstructor
+	public static final class CustomUserDetails implements UserDetails {
 		
 		private final MemberResponseDTO memberResponseDTO;
 		
@@ -57,11 +71,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 						.toArray(String[]::new)
 				)
 			);
-		
-		public CustomUserDetails(MemberResponseDTO memberResponseDTO) {
-			super(memberResponseDTO.getEmail(), memberResponseDTO.getPassword(), AUTHORITIES);
-			this.memberResponseDTO = memberResponseDTO;
-		}
 		
 		@Override
 		public Collection<GrantedAuthority> getAuthorities() {

@@ -45,6 +45,7 @@ public enum ErrorCode {
 	ACCESS_TOKEN_NOT_GENERATED(HttpStatus.UNAUTHORIZED, "TOKEN_001", "Fail to generate Access Token"),
 	REFRESH_TOKEN_NOT_GENERATED(HttpStatus.UNAUTHORIZED, "TOKEN_002", "Fail to generate Refresh Token"),
 	TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "TOKEN_003", "Not Found Token"),
+	NOT_FOUND_SUBJECT(HttpStatus.NOT_FOUND, "TOKEN_004,", "Not Found Subject"),
 	
 	//Auth
 	SELLER_NOT_AUTHORIZED(HttpStatus.UNAUTHORIZED, "AUTH_001", "Seller is not authorized"),

@@ -9,11 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtException;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.psj.itembrowser.common.config.jwt.JwtProvider;
@@ -46,19 +46,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		FilterChain filterChain) throws ServletException, IOException {
 		
 		String authorization = request.getHeader("Authorization");
-		if (Objects.nonNull(authorization)) {
+		
+		if (Objects.nonNull(authorization) && authorization.startsWith("Bearer ")) {
 			String atk = authorization.substring(7);
+			
 			try {
-				String email = jwtProvider.extractUserEmail(atk);
-				UserDetailsServiceImpl.CustomUserDetails userDetails = (UserDetailsServiceImpl.CustomUserDetails)userDetailsService.loadUserByUsername(email);
-				Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, atk,
-					userDetails.getAuthorities());
-				SecurityContextHolder.getContext()
-					.setAuthentication(authentication);
+				Jwt jwt = jwtProvider.decodeJwt(atk);
+				
+				String email = jwt.getSubject();
+				
+				UserDetailsServiceImpl.CustomUserDetails details = (UserDetailsServiceImpl.CustomUserDetails)userDetailsService.loadUserByUsername(
+					email);
+				
+				JwtAuthenticationToken authentication = new JwtAuthenticationToken(jwt, details.getAuthorities());
+				
+				SecurityContext context = org.springframework.security.core.context.SecurityContextHolder.createEmptyContext();
+				
+				context.setAuthentication(authentication);
+				
 			} catch (JwtException e) {
 				request.setAttribute("exception", e.getMessage());
 			}
 		}
+		
 		filterChain.doFilter(request, response);
 	}
 }

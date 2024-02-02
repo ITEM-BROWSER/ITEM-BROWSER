@@ -5,13 +5,14 @@ import static java.text.MessageFormat.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.psj.itembrowser.common.message.MessageDTO;
+import com.psj.itembrowser.member.annotation.CurrentUser;
 import com.psj.itembrowser.member.domain.vo.Member;
 import com.psj.itembrowser.order.domain.dto.OrderResponseDTO;
 import com.psj.itembrowser.order.service.OrderService;
@@ -26,16 +27,18 @@ import lombok.extern.slf4j.Slf4j;
 public class OrderApiController {
 	
 	private final OrderService orderService;
+	private final UserDetailsServiceImpl userDetailsService;
 	
 	@PreAuthorize("hasAnyRole('ROLE_CUSTOMER', 'ROLE_ADMIN')")
 	@PostAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_CUSTOMER') and returnObject.body.member.email == principal.username)")
 	@GetMapping("/v1/api/orders/{orderId}")
 	public ResponseEntity<OrderResponseDTO> getOrder(@PathVariable Long orderId,
-		@AuthenticationPrincipal UserDetailsServiceImpl.CustomUserDetails userDetails) {
+		@CurrentUser Jwt jwt) {
 		log.info("getOrder : {}", orderId);
-		log.info("userDetails : {}", userDetails);
 		
-		Member member = Member.from(userDetails.getMemberResponseDTO());
+		UserDetailsServiceImpl.CustomUserDetails customUserDetails = userDetailsService.loadUserByJwt(jwt);
+		
+		Member member = Member.from(customUserDetails.getMemberResponseDTO());
 		
 		OrderResponseDTO dto = null;
 		
