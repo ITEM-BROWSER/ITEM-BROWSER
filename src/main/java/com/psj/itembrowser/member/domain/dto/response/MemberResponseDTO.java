@@ -3,6 +3,7 @@ package com.psj.itembrowser.member.domain.dto.response;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.psj.itembrowser.member.domain.vo.Member;
 
 import lombok.AllArgsConstructor;
@@ -18,6 +19,7 @@ import lombok.NoArgsConstructor;
 public class MemberResponseDTO {
 	private Long memberNo;
 	private String email;
+	@JsonIgnore
 	private String password;
 	private String firstName;
 	private String lastName;
