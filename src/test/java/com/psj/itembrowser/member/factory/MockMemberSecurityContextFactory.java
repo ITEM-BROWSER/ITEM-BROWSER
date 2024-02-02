@@ -1,20 +1,11 @@
 package com.psj.itembrowser.member.factory;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
 
 import com.psj.itembrowser.member.annotation.MockMember;
-import com.psj.itembrowser.member.domain.dto.response.MemberResponseDTO;
-import com.psj.itembrowser.member.domain.vo.Address;
-import com.psj.itembrowser.member.domain.vo.Credentials;
-import com.psj.itembrowser.member.domain.vo.Member;
-import com.psj.itembrowser.member.domain.vo.MemberNo;
-import com.psj.itembrowser.member.domain.vo.Name;
-import com.psj.itembrowser.security.service.impl.UserDetailsServiceImpl;
 
 /**
  * packageName    : com.psj.itembrowser.member.annotation
@@ -31,23 +22,12 @@ public class MockMemberSecurityContextFactory implements WithSecurityContextFact
 	
 	@Override
 	public SecurityContext createSecurityContext(MockMember annotation) {
-		Member mockMember = new Member(MemberNo.create(annotation.memberNo()),
-			Credentials.create(annotation.email(), annotation.password()),
-			Name.create(annotation.firstName(), annotation.lastName()),
-			annotation.phoneNumber(),
-			annotation.gender(),
-			annotation.role(),
-			annotation.status(),
-			Address.create(annotation.addressMain(), annotation.addressSub(), annotation.zipCode()),
-			LocalDate.now(),
-			LocalDateTime.now()
-		);
+		Jwt jwt = Jwt.withTokenValue("token")
+			.header("alg", "hs-256")
+			.claim("sub", annotation.email())
+			.build();
 		
-		UserDetailsServiceImpl.CustomUserDetails customUserDetails = new UserDetailsServiceImpl.CustomUserDetails(
-			MemberResponseDTO.from(mockMember));
-		
-		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-			customUserDetails, null, customUserDetails.getAuthorities());
+		JwtAuthenticationToken authentication = new JwtAuthenticationToken(jwt, null, null);
 		
 		SecurityContext context = org.springframework.security.core.context.SecurityContextHolder.createEmptyContext();
 		

@@ -35,6 +35,7 @@ import com.epages.restdocs.apispec.ResourceDocumentation;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.psj.itembrowser.common.exception.NotFoundException;
 import com.psj.itembrowser.member.annotation.MockMember;
+import com.psj.itembrowser.member.domain.dto.response.MemberResponseDTO;
 import com.psj.itembrowser.member.domain.vo.Address;
 import com.psj.itembrowser.member.domain.vo.Credentials;
 import com.psj.itembrowser.member.domain.vo.Member;
@@ -46,6 +47,7 @@ import com.psj.itembrowser.order.domain.vo.OrderStatus;
 import com.psj.itembrowser.order.domain.vo.OrdersProductRelation;
 import com.psj.itembrowser.order.service.OrderService;
 import com.psj.itembrowser.product.domain.vo.Product;
+import com.psj.itembrowser.security.service.impl.UserDetailsServiceImpl;
 import com.psj.itembrowser.shippingInfos.domain.vo.ShippingInfo;
 
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
@@ -58,8 +60,11 @@ public class OrderSelectApiControllerTest {
 	@MockBean
 	private OrderService orderService;
 	
+	@MockBean
+	private UserDetailsServiceImpl userDetailsService;
+	
 	private Order expectedOrderWithADMINUser;
-	private Order expecteOrderWithCUSTOMERUser;
+	private Order expectedOrderWithCUSTOMERUser;
 	
 	@BeforeEach
 	public void setUp(WebApplicationContext webApplicationContext,
@@ -122,7 +127,7 @@ public class OrderSelectApiControllerTest {
 			expectedAdminMember,
 			expectedShppingInfo);
 		
-		this.expecteOrderWithCUSTOMERUser = Order.createOrder(
+		this.expectedOrderWithCUSTOMERUser = Order.createOrder(
 			1L,
 			1L,
 			OrderStatus.ACCEPT,
@@ -145,8 +150,10 @@ public class OrderSelectApiControllerTest {
 	void When_GetOrderWithCustomer_Expect_Status200() throws Exception {
 		// given
 		long orderId = 1L;
-		OrderResponseDTO expectedOrderResponseDTO = OrderResponseDTO.fromOrder(expecteOrderWithCUSTOMERUser);
+		OrderResponseDTO expectedOrderResponseDTO = OrderResponseDTO.fromOrder(expectedOrderWithCUSTOMERUser);
 		given(orderService.getOrderWithNotDeleted(orderId)).willReturn(expectedOrderResponseDTO);
+		given(userDetailsService.loadUserByJwt(any())).willReturn(
+			new UserDetailsServiceImpl.CustomUserDetails(expectedOrderResponseDTO.getMember()));
 		
 		// when - then
 		ResultActions response = mockMvc.perform(get("/v1/api/orders/{orderId}", orderId)
@@ -211,6 +218,8 @@ public class OrderSelectApiControllerTest {
 		long orderId = 1L;
 		OrderResponseDTO expectedOrderResponseDTO = OrderResponseDTO.fromOrder(expectedOrderWithADMINUser);
 		given(orderService.getOrderWithNoCondition(orderId)).willReturn(expectedOrderResponseDTO);
+		given(userDetailsService.loadUserByJwt(any())).willReturn(
+			new UserDetailsServiceImpl.CustomUserDetails(expectedOrderResponseDTO.getMember()));
 		
 		// when - then
 		ResultActions response = mockMvc.perform(get("/v1/api/orders/{orderId}", orderId)
@@ -274,6 +283,9 @@ public class OrderSelectApiControllerTest {
 		// given
 		long orderId = 1L;
 		given(orderService.getOrderWithNotDeleted(orderId)).willThrow(new NotFoundException(ORDER_NOT_FOUND));
+		given(userDetailsService.loadUserByJwt(any())).willReturn(
+			new UserDetailsServiceImpl.CustomUserDetails(
+				MemberResponseDTO.from(expectedOrderWithCUSTOMERUser.getMember())));
 		
 		// when - then
 		ResultActions response = mockMvc.perform(get("/v1/api/orders/{orderId}", orderId)
@@ -311,6 +323,9 @@ public class OrderSelectApiControllerTest {
 		// given
 		long orderId = 1L;
 		given(orderService.getOrderWithNoCondition(orderId)).willThrow(new NotFoundException(ORDER_NOT_FOUND));
+		given(userDetailsService.loadUserByJwt(any())).willReturn(
+			new UserDetailsServiceImpl.CustomUserDetails(
+				MemberResponseDTO.from(expectedOrderWithADMINUser.getMember())));
 		
 		// when - then
 		ResultActions response = mockMvc.perform(get("/v1/api/orders/{orderId}", orderId)
