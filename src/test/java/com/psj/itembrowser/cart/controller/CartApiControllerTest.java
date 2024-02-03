@@ -3,10 +3,9 @@ package com.psj.itembrowser.cart.controller;
 import static com.psj.itembrowser.common.exception.ErrorCode.CART_PRODUCT_DELETE_FAIL;
 import static com.psj.itembrowser.common.exception.ErrorCode.CART_PRODUCT_INSERT_FAIL;
 import static com.psj.itembrowser.common.exception.ErrorCode.CART_PRODUCT_UPDATE_FAIL;
-import static com.psj.itembrowser.common.generator.cart.CartMockDataGenerator.createCartResponseDTO;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -89,16 +88,13 @@ class CartApiControllerTest {
         
         @Test
         @DisplayName("장바구니 목록 조회 API 테스트 -> 정상 조회 테스트")
-        void When_GetCart_Expect_Success() throws Exception {
+        void given_GetCart_Expect_Success() throws Exception {
             // given
-            CartResponseDTO mock = createCartResponseDTO(
-                USER_EMAIL,
-                List.of(
-                    new CartProductRelationResponseDTO(),
-                    new CartProductRelationResponseDTO()
-                )
-            );
-            when(cartService.getCart(anyString())).thenReturn(mock);
+            CartResponseDTO cartResponseDTO = new CartResponseDTO();
+            cartResponseDTO.setUserId(USER_EMAIL);
+            cartResponseDTO.setProducts(List.of(new CartProductRelationResponseDTO()));
+            
+            given(cartService.getCart(anyString())).willReturn(cartResponseDTO);
             
             // when + then
             mockMvc
@@ -107,11 +103,10 @@ class CartApiControllerTest {
                         .get(BASE_URL + "/{userId}/carts", USER_EMAIL)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.userId").value(mock.getUserId()))
+                .andExpect(jsonPath("$.userId").value(cartResponseDTO.getUserId()))
                 .andExpect(jsonPath("$.products").isArray())
-                .andExpect(jsonPath("$.products.length()").value(mock
-                    .getProducts()
-                    .size()))
+                .andExpect(
+                    jsonPath("$.products.length()").value(cartResponseDTO.getProducts().size()))
                 .andDo(MockMvcRestDocumentationWrapper.document(
                     "get-cart",
                     preprocessRequest(prettyPrint()),
@@ -145,12 +140,12 @@ class CartApiControllerTest {
         
         @Test
         @DisplayName("장바구니 빈값 조회시 API 오류 발생")
-        void When_CartIsNull_Expect_Exception() throws Exception {
+        void given_CartIsNull_Expect_Exception() throws Exception {
             // given
-            when(cartService.getCart(anyString())).thenThrow(
+            given(cartService.getCart(anyString())).willThrow(
                 new NotFoundException(ErrorCode.CART_NOT_FOUND));
             
-            // when + then
+            // given + then
             mockMvc
                 .perform(RestDocumentationRequestBuilders
                     .get(BASE_URL + "/{userId}/carts", USER_EMAIL)
@@ -201,8 +196,8 @@ class CartApiControllerTest {
         
         @Test
         @DisplayName("장바구니에 상품을 올바르게 삽입시, 정상 응답 테스트")
-        void When_CorrectInsertProductInCart_Expect_Success() throws Exception {
-            // when + then
+        void given_CorrectInsertProductInCart_Expect_Success() throws Exception {
+            // given + then
             mockMvc
                 .perform(RestDocumentationRequestBuilders
                     .post(BASE_URL + "/add")
@@ -236,8 +231,8 @@ class CartApiControllerTest {
         
         @Test
         @DisplayName("장바구니에 상품을 잘못 삽입시, 오류 응답 테스트")
-        void When_IncorrectInsertProductInCart_Expect_Exception() throws Exception {
-            // when + then
+        void given_IncorrectInsertProductInCart_Expect_Exception() throws Exception {
+            // given + then
             doThrow(new DatabaseOperationException(CART_PRODUCT_INSERT_FAIL))
                 .when(cartService)
                 .addCartProduct(mock);
@@ -295,8 +290,8 @@ class CartApiControllerTest {
         
         @Test
         @DisplayName("장바구니 상품 수정 API -> 정상 응답 테스트")
-        void When_UpdateProductInCart_Expect_Success() throws Exception {
-            // when + then
+        void given_UpdateProductInCart_Expect_Success() throws Exception {
+            // given + then
             mockMvc
                 .perform(RestDocumentationRequestBuilders
                     .put(BASE_URL + "/update")
@@ -329,8 +324,8 @@ class CartApiControllerTest {
         
         @Test
         @DisplayName("장바구니 상품 수정 API -> 장바구니 상품이 존재하지 않을 경우 오류 발생")
-        void When_UpdateProductInCart_Expect_Exception() throws Exception {
-            // when + then
+        void given_UpdateProductInCart_Expect_Exception() throws Exception {
+            // given + then
             doThrow(new NotFoundException(CART_PRODUCT_UPDATE_FAIL))
                 .when(cartService)
                 .modifyCartProduct(mock);
@@ -387,8 +382,8 @@ class CartApiControllerTest {
         
         @Test
         @DisplayName("장바구니에서 상품 삭제 API -> 정상 응답 테스트")
-        void When_DeleteProductInCart_Expect_Success() throws Exception {
-            // when + then
+        void given_DeleteProductInCart_Expect_Success() throws Exception {
+            // given + then
             mockMvc
                 .perform(RestDocumentationRequestBuilders
                     .delete(BASE_URL + "/delete")
@@ -420,8 +415,8 @@ class CartApiControllerTest {
         
         @Test
         @DisplayName("장바구니 상품 삭제 API -> 장바구니 상품이 존재하지 않을 경우 오류 발생")
-        void When_DeleteProductInCart_Expect_Exception() throws Exception {
-            // when + then
+        void given_DeleteProductInCart_Expect_Exception() throws Exception {
+            // given + then
             doThrow(new NotFoundException(CART_PRODUCT_DELETE_FAIL))
                 .when(cartService)
                 .removeCart(mock);

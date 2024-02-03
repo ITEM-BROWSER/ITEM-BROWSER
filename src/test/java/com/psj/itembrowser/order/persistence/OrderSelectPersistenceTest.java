@@ -1,19 +1,8 @@
 package com.psj.itembrowser.order.persistence;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.BDDMockito.*;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.BDDMockito.given;
 
 import com.psj.itembrowser.common.exception.NotFoundException;
 import com.psj.itembrowser.member.domain.vo.Address;
@@ -27,6 +16,16 @@ import com.psj.itembrowser.order.domain.vo.OrdersProductRelation;
 import com.psj.itembrowser.order.mapper.OrderMapper;
 import com.psj.itembrowser.product.domain.vo.Product;
 import com.psj.itembrowser.shippingInfos.domain.vo.ShippingInfo;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
  * packageName    : com.psj.itembrowser.order.persistence
@@ -99,6 +98,7 @@ public class OrderSelectPersistenceTest {
 		
 		//when
 		Order foundOrder = orderPersistence.getOrderWithNotDeleted(1L);
+		
 		//then
 		assertThat(foundOrder).isNotNull();
 		assertThat(foundOrder).isEqualTo(expectedOrder);

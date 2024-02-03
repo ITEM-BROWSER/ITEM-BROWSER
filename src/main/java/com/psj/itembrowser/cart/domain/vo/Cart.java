@@ -6,6 +6,7 @@ import com.psj.itembrowser.common.BaseDateTimeEntity;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @EqualsAndHashCode(of = {"id", "userId"}, callSuper = false)
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Cart extends BaseDateTimeEntity {
     

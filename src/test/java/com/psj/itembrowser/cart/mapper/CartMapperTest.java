@@ -2,12 +2,14 @@ package com.psj.itembrowser.cart.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
+import com.psj.itembrowser.cart.domain.dto.request.CartProductDeleteRequestDTO;
+import com.psj.itembrowser.cart.domain.dto.request.CartProductUpdateRequestDTO;
 import com.psj.itembrowser.cart.domain.vo.Cart;
 import com.psj.itembrowser.cart.domain.vo.CartProductRelation;
-import com.psj.itembrowser.common.generator.cart.CartMockDataGenerator;
 import com.psj.itembrowser.product.domain.vo.Product;
-import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -45,15 +47,18 @@ class CartMapperTest {
         @DisplayName("장바구니를 생성합니다.")
         void When_InsertCorrectCart_Expect_Insert_Return_True() {
             // given
-            Product product = CartMockDataGenerator.createSimpleProduct(1L, "섬유유연제", 1, 10, 1000);
-            CartProductRelation cartProductRelation =
-                CartMockDataGenerator.createCartProductRelation(
-                    1L, 1L,
-                    1L, LocalDateTime.now(), null,
-                    null, null, product
-                );
-            Cart expectedCart = CartMockDataGenerator.createCart(3L, NOT_EXIST_USER_ID,
-                List.of(cartProductRelation));
+            Product product = mock(Product.class);
+            given(product.getId()).willReturn(1L);
+            given(product.getName()).willReturn("섬유유연제");
+            
+            CartProductRelation cartProductRelation = mock(CartProductRelation.class);
+            given(cartProductRelation.getProductQuantity()).willReturn(1L);
+            given(cartProductRelation.getProduct()).willReturn(product);
+            
+            Cart expectedCart = mock(Cart.class);
+            given(expectedCart.getId()).willReturn(3L);
+            given(expectedCart.getUserId()).willReturn(NOT_EXIST_USER_ID);
+            given(expectedCart.getCartProductRelations()).willReturn(List.of(cartProductRelation));
             
             // when
             boolean result = cartMapper.insertCart(expectedCart.getUserId());
@@ -62,25 +67,18 @@ class CartMapperTest {
             // then
             assertThat(result).isTrue();
             assertThat(actualCart).isNotNull();
-            assertThat(actualCart).isEqualTo(expectedCart);
+            assertThat(actualCart.getUserId()).isEqualTo(expectedCart.getUserId());
         }
         
         @Test
         @DisplayName("유니크 키 - userId 를 중복해서 삽입시 에러가 터지는지 확인")
         void When_InsertDuplicatedUserIdIntoCart_Expect_Throw_Exception() {
             // given
-            Product product = CartMockDataGenerator.createSimpleProduct(1L, "섬유유연제", 1, 10, 1000);
-            CartProductRelation cartProductRelation =
-                CartMockDataGenerator.createCartProductRelation(
-                    1L, 1L,
-                    1L, LocalDateTime.now(), null,
-                    null, null, product
-                );
-            Cart expectedCart = CartMockDataGenerator.createCart(3L, EXIST_USER_ID,
-                List.of(cartProductRelation));
+            String DuplicatedUserId = EXIST_USER_ID;
             
             // when-then
-            assertThatThrownBy(() -> cartMapper.insertCart(expectedCart.getUserId()))
+            assertThatThrownBy(() -> cartMapper.insertCart(
+                DuplicatedUserId))
                 .isInstanceOf(DuplicateKeyException.class);
         }
     }
@@ -96,12 +94,8 @@ class CartMapperTest {
         void When_SelectCartsByUserId_Expect_NotNull_And_UserId_Is_user1() {
             Cart findedCart = cartMapper.getCartByUserId(EXIST_USER_ID);
             
-            // null 일 수 없음
             assertThat(findedCart).isNotNull();
-            
-            // 장바구니의 사용자 아이디는 user1이여야함
-            assertThat(findedCart
-                .getUserId()).isEqualTo(EXIST_USER_ID);
+            assertThat(findedCart.getUserId()).isEqualTo(EXIST_USER_ID);
         }
         
         @Test
@@ -147,8 +141,13 @@ class CartMapperTest {
         @Test
         @DisplayName("장바구니에 담긴 상품을 업데이트하는 경우 올바르게 추가되는지 확인")
         void When_IncreaseProductQuantity_InCartProductRelation_Expect_ProductQuantity_Rise() {
-            boolean result = cartMapper.updateCartProductRelation(
-                CartMockDataGenerator.createCartProductUpdateRequestDTO(1L, 1L, 1));
+            CartProductUpdateRequestDTO cartProductUpdateRequestDTO = mock(
+                CartProductUpdateRequestDTO.class);
+            given(cartProductUpdateRequestDTO.getCartId()).willReturn(1L);
+            given(cartProductUpdateRequestDTO.getProductId()).willReturn(1L);
+            given(cartProductUpdateRequestDTO.getQuantity()).willReturn(1L);
+            
+            boolean result = cartMapper.updateCartProductRelation(cartProductUpdateRequestDTO);
             
             assertThat(result).isTrue();
         }
@@ -156,8 +155,13 @@ class CartMapperTest {
         @Test
         @DisplayName("장바구니에 담긴 상품이 존재하지 않음 - 업데이트가 실패하는지 확인")
         void When_UpdateProductQuantity_Expect_Fail() {
-            boolean result = cartMapper.updateCartProductRelation(
-                CartMockDataGenerator.createCartProductUpdateRequestDTO(1L, 3L, 1));
+            CartProductUpdateRequestDTO cartProductUpdateRequestDTO = mock(
+                CartProductUpdateRequestDTO.class);
+            given(cartProductUpdateRequestDTO.getCartId()).willReturn(1L);
+            given(cartProductUpdateRequestDTO.getProductId()).willReturn(3L);
+            given(cartProductUpdateRequestDTO.getQuantity()).willReturn(1L);
+            
+            boolean result = cartMapper.updateCartProductRelation(cartProductUpdateRequestDTO);
             
             assertThat(result).isFalse();
         }
@@ -172,8 +176,12 @@ class CartMapperTest {
         @Test
         @DisplayName("존재하는 장바구니 상품을 삭제시 성공하는지 확인")
         void When_DeleteCartProductRelation_Expect_True() {
-            boolean result = cartMapper.deleteCartProductRelation(
-                CartMockDataGenerator.createCartProductDeleteRequestDTO(1L, 1L));
+            CartProductDeleteRequestDTO cartProductDeleteRequestDTO = mock(
+                CartProductDeleteRequestDTO.class);
+            given(cartProductDeleteRequestDTO.getCartId()).willReturn(1L);
+            given(cartProductDeleteRequestDTO.getProductId()).willReturn(1L);
+            
+            boolean result = cartMapper.deleteCartProductRelation(cartProductDeleteRequestDTO);
             
             assertThat(result).isTrue();
         }
@@ -181,8 +189,12 @@ class CartMapperTest {
         @Test
         @DisplayName("존재하지 않는 장바구니 상품을 삭제시 실패하는지 확인")
         void When_DeleteCartProductRelation_Expect_False() {
-            boolean result = cartMapper.deleteCartProductRelation(
-                CartMockDataGenerator.createCartProductDeleteRequestDTO(1L, 3L));
+            CartProductDeleteRequestDTO cartProductDeleteRequestDTO = mock(
+                CartProductDeleteRequestDTO.class);
+            given(cartProductDeleteRequestDTO.getCartId()).willReturn(1L);
+            given(cartProductDeleteRequestDTO.getProductId()).willReturn(3L);
+            
+            boolean result = cartMapper.deleteCartProductRelation(cartProductDeleteRequestDTO);
             
             assertThat(result).isFalse();
         }

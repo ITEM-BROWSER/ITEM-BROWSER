@@ -2,6 +2,7 @@ package com.psj.itembrowser.cart.domain.dto.response;
 
 import com.psj.itembrowser.cart.domain.vo.Cart;
 import com.psj.itembrowser.product.domain.dto.response.ProductResponseDTO;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,15 +10,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * DTO for {@link Cart}
  */
 @Data
 @Builder
+@NoArgsConstructor
 @EqualsAndHashCode(of = {"userId"})
 @AllArgsConstructor
-public class CartResponseDTO {
+public class CartResponseDTO implements Serializable {
     
     String userId;
     
@@ -27,7 +30,7 @@ public class CartResponseDTO {
     
     List<CartProductRelationResponseDTO> products;
     
-    public static CartResponseDTO of(Cart cart) {
+    public static CartResponseDTO create(Cart cart) {
         if (cart == null) {
             return null;
         }
