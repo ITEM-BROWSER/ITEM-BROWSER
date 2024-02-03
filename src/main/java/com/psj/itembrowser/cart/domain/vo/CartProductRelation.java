@@ -3,10 +3,12 @@ package com.psj.itembrowser.cart.domain.vo;
 import static com.psj.itembrowser.common.exception.ErrorCode.CART_PRODUCT_QUANTITY_NOT_POSITIVE;
 
 import com.psj.itembrowser.cart.domain.dto.request.CartProductUpdateRequestDTO;
+import com.psj.itembrowser.cart.domain.dto.response.CartProductRelationResponseDTO;
 import com.psj.itembrowser.common.BaseDateTimeEntity;
 import com.psj.itembrowser.common.exception.DatabaseOperationException;
 import com.psj.itembrowser.product.domain.vo.Product;
 import java.time.LocalDateTime;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -20,7 +22,7 @@ import lombok.ToString;
  * ----------------------------------------------------------- 2023-10-22        ipeac       최초 생성
  */
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"cartId", "productId"}, callSuper = false)
 @ToString
@@ -49,6 +51,18 @@ public class CartProductRelation extends BaseDateTimeEntity {
         this.productQuantity = productQuantity;
         this.cart = cart;
         this.product = product;
+    }
+    
+    public static CartProductRelation create(CartProductRelationResponseDTO dto) {
+        CartProductRelation cartProductRelation = new CartProductRelation();
+        
+        cartProductRelation.cartId = dto.getCartId();
+        cartProductRelation.productId = dto.getProductId();
+        cartProductRelation.productQuantity = dto.getProductQuantity();
+        //TODO 추후 변환하여 사용
+        cartProductRelation.product = null;
+        
+        return cartProductRelation;
     }
     
     public void addProductQuantity(long quantity) {
