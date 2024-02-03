@@ -37,7 +37,7 @@ public class CartPersistence {
         if (cart == null) {
             throw new NotFoundException(CART_NOT_FOUND);
         }
-        return CartResponseDTO.of(cart);
+        return CartResponseDTO.create(cart);
     }
     
     public CartResponseDTO getCart(@NonNull Long cartId) {
@@ -45,7 +45,7 @@ public class CartPersistence {
         if (cart == null) {
             throw new NotFoundException(CART_PRODUCT_NOT_FOUND);
         }
-        return CartResponseDTO.of(cart);
+        return CartResponseDTO.create(cart);
     }
     
     public void insertCartProduct(@NonNull CartProductRequestDTO cartProductRequestDTO) {

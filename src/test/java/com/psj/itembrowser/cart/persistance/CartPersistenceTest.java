@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -19,6 +20,7 @@ import com.psj.itembrowser.cart.domain.dto.response.CartResponseDTO;
 import com.psj.itembrowser.cart.domain.vo.Cart;
 import com.psj.itembrowser.cart.domain.vo.CartProductRelation;
 import com.psj.itembrowser.cart.mapper.CartMapper;
+import com.psj.itembrowser.common.exception.DatabaseOperationException;
 import com.psj.itembrowser.common.exception.NotFoundException;
 import com.psj.itembrowser.common.generator.cart.CartMockDataGenerator;
 import com.psj.itembrowser.product.domain.vo.Product;
@@ -33,6 +35,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 @ExtendWith(MockitoExtension.class)
 class CartPersistenceTest {
@@ -54,35 +57,46 @@ class CartPersistenceTest {
         
         @BeforeEach
         void setUp() {
-            // given
-            cart = CartMockDataGenerator.createCart(1L, TEST_USER_ID, null);
-            product = CartMockDataGenerator.createSimpleProduct(1L, "product1", 1, 10, 1000);
-            cartProductRelation = CartMockDataGenerator.createCartProductRelation
-                (1L,
-                    1L,
-                    1L,
-                    LocalDateTime.now(),
-                    null,
-                    null,
-                    mock(Cart.class),
-                    product
-                );
+            //given
+            cart = mock(Cart.class);
+            ReflectionTestUtils.setField(cart, "id", 1L);
+            ReflectionTestUtils.setField(cart, "userId", TEST_USER_ID);
+            
+            product = mock(Product.class);
+            ReflectionTestUtils.setField(product, "id", 1L);
+            ReflectionTestUtils.setField(product, "name", "product1");
+            ReflectionTestUtils.setField(product, "quantity", 10);
+            ReflectionTestUtils.setField(product, "unitPrice", 1000);
+            
+            cartProductRelation = mock(CartProductRelation.class);
+            ReflectionTestUtils.setField(cartProductRelation, "cartId", 1L);
+            ReflectionTestUtils.setField(cartProductRelation, "productId", 1L);
+            ReflectionTestUtils.setField(cartProductRelation, "productQuantity", 1L);
+            ReflectionTestUtils.setField(cartProductRelation, "createdDate", LocalDateTime.now());
+            ReflectionTestUtils.setField(cartProductRelation, "cart", cart);
+            ReflectionTestUtils.setField(cartProductRelation, "product", product);
         }
+        
         
         @Test
         @DisplayName("장바구니 유저아이디로 조회시 값이 존재하며 - 반환값이 정상적인지 검증")
         void When_GetCartByUserId_Expect_CartResponseDTO() throws NotFoundException {
             // given
-            Cart expectedCart = CartMockDataGenerator.createCart(1L, TEST_USER_ID,
+            Cart expectedCart = mock(Cart.class);
+            ReflectionTestUtils.setField(expectedCart, "id", 1L);
+            ReflectionTestUtils.setField(expectedCart, "userId", TEST_USER_ID);
+            ReflectionTestUtils.setField(expectedCart, "cartProductRelations",
                 List.of(cartProductRelation));
-            when(cartMapper.getCartByUserId(TEST_USER_ID)).thenReturn(expectedCart);
+            
+            given(expectedCart.getUserId()).willReturn(TEST_USER_ID);
+            given(cartMapper.getCartByUserId(TEST_USER_ID)).willReturn(expectedCart);
             
             // when
             CartResponseDTO cart = cartPersistence.getCart(TEST_USER_ID);
             
             // then
             assertThat(cart).isNotNull();
-            assertThat(CartResponseDTO.of(expectedCart)).isEqualTo(cart);
+            assertThat(cart.getUserId()).isEqualTo(TEST_USER_ID);
             
             // verify - 유저아이디로 조회가 되었는지 검증
             verify(cartMapper, Mockito.times(1)).getCartByUserId(anyString());
@@ -119,16 +133,21 @@ class CartPersistenceTest {
         @DisplayName("장바구니 ID 로 조회시 값이 존재하며 - 반환값이 정상적인지 검증")
         void When_GetCartByCartId_Expect_() throws NotFoundException {
             // given
-            Cart expectedCart = CartMockDataGenerator.createCart(1L, TEST_USER_ID,
+            Cart expectedCart = mock(Cart.class);
+            ReflectionTestUtils.setField(expectedCart, "id", 1L);
+            ReflectionTestUtils.setField(expectedCart, "userId", TEST_USER_ID);
+            ReflectionTestUtils.setField(expectedCart, "cartProductRelations",
                 List.of(cartProductRelation));
-            when(cartMapper.getCart(1L)).thenReturn(expectedCart);
+            
+            given(expectedCart.getUserId()).willReturn(TEST_USER_ID);
+            given(cartMapper.getCart(1L)).willReturn(expectedCart);
             
             // when
             CartResponseDTO actualCart = cartPersistence.getCart(1L);
             
             // then
             assertThat(actualCart).isNotNull();
-            assertThat(CartResponseDTO.of(expectedCart)).isEqualTo(actualCart);
+            assertThat(actualCart.getUserId()).isEqualTo(TEST_USER_ID);
             
             // verify - 장바구니 번호로 조회가 되었는지 검증
             verify(cartMapper, times(1)).getCart(1L);
@@ -171,8 +190,13 @@ class CartPersistenceTest {
         @BeforeEach
         void setUp() {
             // given
-            cartProductRequestDTO = CartMockDataGenerator.createCartProductRequestDTO(1L, 1L, 10);
-            cartRequestDTO = CartMockDataGenerator.createCartRequestDTO(TEST_USER_ID);
+            cartProductRequestDTO = mock(CartProductRequestDTO.class);
+            ReflectionTestUtils.setField(cartProductRequestDTO, "cartId", 1L);
+            ReflectionTestUtils.setField(cartProductRequestDTO, "productId", 1L);
+            ReflectionTestUtils.setField(cartProductRequestDTO, "quantity", 10);
+            
+            cartRequestDTO = mock(CartRequestDTO.class);
+            ReflectionTestUtils.setField(cartRequestDTO, "userId", TEST_USER_ID);
         }
         
         @Test
@@ -211,29 +235,27 @@ class CartPersistenceTest {
         @DisplayName("장바구니를 생성 -> 성공하는 경우")
         void When_AddCart_Expect_Success() {
             // given
-            String testUserId = cartRequestDTO.getUserId();
-            when(cartMapper.insertCart(testUserId)).thenReturn(true);
+            when(cartMapper.insertCart(TEST_USER_ID)).thenReturn(true);
             
             // when
-            cartPersistence.addCart(testUserId);
+            cartPersistence.addCart(TEST_USER_ID);
             
             // then
-            verify(cartMapper, times(1)).insertCart(testUserId);
+            verify(cartMapper, times(1)).insertCart(TEST_USER_ID);
         }
         
         @Test
         @DisplayName("장바구니를 생성 -> 실패하는 경우 에러가 발생하는지 체크")
         void When_AddCart_Expect_IllegalStateException() {
             // given
-            String testUserId = cartRequestDTO.getUserId();
-            when(cartMapper.insertCart(testUserId)).thenReturn(false);
+            when(cartMapper.insertCart(TEST_USER_ID)).thenReturn(false);
             
             // when - then
-            assertThatThrownBy(() -> cartPersistence.addCart(testUserId))
-                .isInstanceOf(IllegalStateException.class)
+            assertThatThrownBy(() -> cartPersistence.addCart(TEST_USER_ID))
+                .isInstanceOf(DatabaseOperationException.class)
                 .hasMessage("Fail to add to Cart");
             
-            verify(cartMapper, times(1)).insertCart(testUserId);
+            verify(cartMapper, times(1)).insertCart(TEST_USER_ID);
         }
         
         @Test

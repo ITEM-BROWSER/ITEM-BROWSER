@@ -27,7 +27,7 @@ public class CartResponseDTO {
     
     List<CartProductRelationResponseDTO> products;
     
-    public static CartResponseDTO of(Cart cart) {
+    public static CartResponseDTO create(Cart cart) {
         if (cart == null) {
             return null;
         }
