@@ -19,7 +19,6 @@ import com.psj.itembrowser.cart.domain.vo.CartProductRelation;
 import com.psj.itembrowser.cart.mapper.CartMapper;
 import com.psj.itembrowser.cart.persistance.CartPersistence;
 import com.psj.itembrowser.common.exception.NotFoundException;
-import com.psj.itembrowser.common.generator.cart.CartMockDataGenerator;
 import com.psj.itembrowser.product.domain.vo.Product;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -169,10 +168,16 @@ class CartServiceImplTest {
         @DisplayName("존재하는 장바구니에 상품을 추가시 insert 를 호출하지 않고 update 를 호출하는지 체크")
         void given_AddExistCart_Expect_CallUpdateCart() {
             // given
-            CartProductRelation existData = CartMockDataGenerator.createCartProductRelation(1L, 1L,
-                10L, LocalDateTime.now(), null, null, null, null);
-            CartProductRequestDTO cartProductRequestDTO = CartMockDataGenerator.createCartProductRequestDTO(
-                1L, 1L, 1);
+            CartProductRelation existData = mock(CartProductRelation.class);
+            given(existData.getCartId()).willReturn(1L);
+            given(existData.getProductId()).willReturn(1L);
+            given(existData.getProductQuantity()).willReturn(10L);
+            given(existData.getCreatedDate()).willReturn(LocalDateTime.now());
+            
+            CartProductRequestDTO cartProductRequestDTO = mock(CartProductRequestDTO.class);
+            given(cartProductRequestDTO.getCartId()).willReturn(1L);
+            given(cartProductRequestDTO.getProductId()).willReturn(1L);
+            given(cartProductRequestDTO.getQuantity()).willReturn(1L);
             
             given(cartMapper.getCartProductRelation(cartProductRequestDTO.getCartId(),
                 cartProductRequestDTO.getProductId())).willReturn(existData);
@@ -192,8 +197,10 @@ class CartServiceImplTest {
         @DisplayName("존재하지 않는 장바구니에 상품을 추가하는 경우 insert 를 호출하는지 체크")
         void given_AddNotExistCartProduct_Expect_CallInsertCart() {
             // given
-            CartProductRequestDTO cartProductRequestDTO = CartMockDataGenerator.createCartProductRequestDTO(
-                1L, 1L, 1);
+            CartProductRequestDTO cartProductRequestDTO = mock(CartProductRequestDTO.class);
+            given(cartProductRequestDTO.getCartId()).willReturn(1L);
+            given(cartProductRequestDTO.getProductId()).willReturn(1L);
+            given(cartProductRequestDTO.getQuantity()).willReturn(1L);
             
             given(cartMapper.getCartProductRelation(cartProductRequestDTO.getCartId(),
                 cartProductRequestDTO.getProductId())).willReturn(null);
