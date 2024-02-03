@@ -2,11 +2,13 @@ package com.psj.itembrowser.order.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 import com.psj.itembrowser.order.domain.vo.Order;
 import com.psj.itembrowser.order.domain.vo.OrderStatus;
 import com.psj.itembrowser.order.domain.vo.OrdersProductRelation;
+import com.psj.itembrowser.product.domain.vo.Product;
 import java.util.List;
 import java.util.Objects;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
@@ -85,21 +87,16 @@ public class OrderDeleteMapperTest {
         // given as @Sql
         long orderId = 1L;
         OrdersProductRelation expectedOrderProductRelation = mock(OrdersProductRelation.class);
+        given(expectedOrderProductRelation.getGroupId()).willReturn(orderId);
+        given(expectedOrderProductRelation.getProductId()).willReturn(1L);
+        given(expectedOrderProductRelation.getProductQuantity()).willReturn(10);
+        given(expectedOrderProductRelation.getProduct()).willReturn(mock(Product.class));
         
         OrdersProductRelation expectedOrderProductRelation2 = mock(OrdersProductRelation.class);
-        /*OrdersProductRelation expectedOrderProductRelation = OrderMockDataGenerator.createOrdersProductRelation(
-            orderId,
-            1L,
-            10,
-            mock(Product.class)
-        );
-        
-        OrdersProductRelation expectedOrderProductRelation2 = OrderMockDataGenerator.createOrdersProductRelation(
-            orderId,
-            2L,
-            20,
-            mock(Product.class)
-        );*/
+        given(expectedOrderProductRelation2.getGroupId()).willReturn(orderId);
+        given(expectedOrderProductRelation2.getProductId()).willReturn(2L);
+        given(expectedOrderProductRelation2.getProductQuantity()).willReturn(20);
+        given(expectedOrderProductRelation2.getProduct()).willReturn(mock(Product.class));
         
         // when
         orderMapper.deleteSoftlyOrderProducts(orderId);
@@ -110,8 +107,13 @@ public class OrderDeleteMapperTest {
         assertThat(ordersProductRelations).isNotNull();
         assertThat(ordersProductRelations).isNotEmpty();
         assertThat(ordersProductRelations.size()).isEqualTo(2);
-        assertThat(List.of(expectedOrderProductRelation, expectedOrderProductRelation2)).isEqualTo(
-            ordersProductRelations);
+        
+        assertThat(ordersProductRelations.get(0).getProductId()).isEqualTo(1L);
+        assertThat(ordersProductRelations.get(0).getProductQuantity()).isEqualTo(10);
+        
+        assertThat(ordersProductRelations.get(1).getProductId()).isEqualTo(2L);
+        assertThat(ordersProductRelations.get(1).getProductQuantity()).isEqualTo(20);
+        
         assertThat(ordersProductRelations.stream()
             .map(OrdersProductRelation::getDeletedDate)
             .allMatch(Objects::nonNull)).isTrue();

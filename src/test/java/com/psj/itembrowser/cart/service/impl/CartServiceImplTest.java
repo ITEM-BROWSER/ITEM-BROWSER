@@ -7,6 +7,7 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -20,7 +21,6 @@ import com.psj.itembrowser.cart.mapper.CartMapper;
 import com.psj.itembrowser.cart.persistance.CartPersistence;
 import com.psj.itembrowser.common.exception.NotFoundException;
 import com.psj.itembrowser.product.domain.vo.Product;
-import java.time.LocalDateTime;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,6 +43,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class CartServiceImplTest {
     
+    private static final String EXIST_USER_ID = "stubbing@gmail.com";
+    
     @InjectMocks
     private CartServiceImpl cartService;
     @Mock
@@ -57,16 +59,14 @@ class CartServiceImplTest {
         
         @BeforeEach
         void setUp() {
-            Cart cart = mock(Cart.class);
-            
             Product product = mock(Product.class);
             given(product.getId()).willReturn(3L);
-            given(product.getName()).willReturn("product3");
+            given(product.getName()).willReturn("섬유유연제");
             given(product.getQuantity()).willReturn(10);
             
             Product product2 = mock(Product.class);
             given(product2.getId()).willReturn(4L);
-            given(product2.getName()).willReturn("product4");
+            given(product2.getName()).willReturn("김밥");
             given(product2.getQuantity()).willReturn(10);
             
             CartProductRelation cartProductRelation = mock(CartProductRelation.class);
@@ -85,7 +85,7 @@ class CartServiceImplTest {
                 cartProductRelation2);
             
             Cart mockCart = mock(Cart.class);
-            given(mockCart.getUserId()).willReturn("user1");
+            given(mockCart.getUserId()).willReturn(EXIST_USER_ID);
             given(mockCart.getCartProductRelations()).willReturn(cartProductRelations);
             
             mockCartResponseDTO = CartResponseDTO.create(mockCart);
@@ -95,14 +95,14 @@ class CartServiceImplTest {
         @DisplayName("특정 유저의 장바구니 조회시 존재하는값이면 장바구니 값 정확하게 반환하는지 체크")
         void given_GetExistCart_Expect_NotNull_And_SameAsMockData() {
             // given
-            given(cartPersistence.getCart("user1")).willReturn(mockCartResponseDTO);
+            given(cartPersistence.getCart(EXIST_USER_ID)).willReturn(mockCartResponseDTO);
             
             // given
             CartResponseDTO realCart = cartService
-                .getCart("user1");
+                .getCart(EXIST_USER_ID);
             
             // then
-            verify(cartPersistence, times(1)).getCart("user1");
+            verify(cartPersistence, times(1)).getCart(EXIST_USER_ID);
             
             Assertions
                 .assertThat(realCart)
@@ -169,28 +169,28 @@ class CartServiceImplTest {
         void given_AddExistCart_Expect_CallUpdateCart() {
             // given
             CartProductRelation existData = mock(CartProductRelation.class);
-            given(existData.getCartId()).willReturn(1L);
-            given(existData.getProductId()).willReturn(1L);
-            given(existData.getProductQuantity()).willReturn(10L);
-            given(existData.getCreatedDate()).willReturn(LocalDateTime.now());
             
             CartProductRequestDTO cartProductRequestDTO = mock(CartProductRequestDTO.class);
             given(cartProductRequestDTO.getCartId()).willReturn(1L);
+            given(cartProductRequestDTO.getUserId()).willReturn(EXIST_USER_ID);
             given(cartProductRequestDTO.getProductId()).willReturn(1L);
             given(cartProductRequestDTO.getQuantity()).willReturn(1L);
             
+            CartResponseDTO cartResponseDTO = new CartResponseDTO();
+            
             given(cartMapper.getCartProductRelation(cartProductRequestDTO.getCartId(),
                 cartProductRequestDTO.getProductId())).willReturn(existData);
+            given(cartPersistence.getCart(EXIST_USER_ID)).willReturn(
+                cartResponseDTO);
             
             // given
             cartService.addCartProduct(cartProductRequestDTO);
             
             // then
             // 인서트가 수행이 되면 안됨
-            verify(cartPersistence, times(0)).insertCartProduct(any(CartProductRequestDTO.class));
+            verify(cartPersistence, never()).insertCartProduct(any(CartProductRequestDTO.class));
             // 업데이트가 수행되어야하며
-            verify(cartPersistence, times(1)).modifyCartProduct(
-                any(CartProductUpdateRequestDTO.class));
+            verify(cartPersistence).modifyCartProduct(any());
         }
         
         @Test
@@ -199,9 +199,8 @@ class CartServiceImplTest {
             // given
             CartProductRequestDTO cartProductRequestDTO = mock(CartProductRequestDTO.class);
             given(cartProductRequestDTO.getCartId()).willReturn(1L);
+            given(cartProductRequestDTO.getUserId()).willReturn(EXIST_USER_ID);
             given(cartProductRequestDTO.getProductId()).willReturn(1L);
-            given(cartProductRequestDTO.getQuantity()).willReturn(1L);
-            
             given(cartMapper.getCartProductRelation(cartProductRequestDTO.getCartId(),
                 cartProductRequestDTO.getProductId())).willReturn(null);
             
