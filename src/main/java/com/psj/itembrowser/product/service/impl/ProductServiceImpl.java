@@ -1,8 +1,5 @@
 package com.psj.itembrowser.product.service.impl;
 
-import static com.psj.itembrowser.common.exception.ErrorCode.PRODUCT_VALIDATION_FAIL;
-
-import com.psj.itembrowser.common.exception.BadRequestException;
 import com.psj.itembrowser.product.domain.dto.request.ProductQuantityUpdateRequestDTO;
 import com.psj.itembrowser.product.domain.dto.request.ProductRequestDTO;
 import com.psj.itembrowser.product.domain.dto.response.ProductResponseDTO;
@@ -11,11 +8,14 @@ import com.psj.itembrowser.product.domain.vo.ProductImage;
 import com.psj.itembrowser.product.mapper.ProductMapper;
 import com.psj.itembrowser.product.persistence.ProductPersistence;
 import com.psj.itembrowser.product.service.ProductService;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * packageName    : com.psj.itembrowser.product.service.impl fileName       : ProductServiceImpl
@@ -30,6 +30,8 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductMapper productMapper;
     private final ProductPersistence productPersistence;
+    @Value("${file.upload-dir}")
+    private String uploadDir;
 
     @Override
     @Transactional(readOnly = false)
@@ -52,15 +54,21 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(readOnly = false)
     public void createProduct(ProductRequestDTO productRequestDTO) {
         Product product = productRequestDTO.toProduct();
+        List<MultipartFile> files = productRequestDTO.getFiles();
         product.validateSellDates();
-        List<ProductImage> productImages = productRequestDTO.getFiles();
 
-        if (productRequestDTO.getSellStartDatetime()
-            .isBefore(productRequestDTO.getSellEndDatetime())) {
-            throw new BadRequestException(PRODUCT_VALIDATION_FAIL);
+        for (MultipartFile file : files) {
+            FileUtil.isImageFile(file);
         }
 
         productPersistence.createProduct(product);
+
+        Long productId = product.getId();
+
+        List<ProductImage> productImages = files.stream()
+            .map(file -> ProductImage.from(file, productId, uploadDir))
+            .collect(Collectors.toList());
+
         productPersistence.createProductImages(productImages);
     }
 }

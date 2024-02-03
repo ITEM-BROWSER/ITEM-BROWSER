@@ -9,6 +9,7 @@
     <result property="category" column="CATEGORY"/>
     <result property="detail" column="DETAIL"/>
     <result property="status" column="STATUS"/>
+    <result property="quantity" column="QUANTITY"/>
     <result property="sellerId" column="SELLER_ID"/>
     <result property="sellStartDatetime" column="SELL_START_DATETIME"/>
     <result property="sellEndDatetime" column="SELL_END_DATETIME"/>
@@ -27,7 +28,10 @@
       ofType="com.psj.itembrowser.product.domain.vo.ProductImage">
       <id property="id" column="IMG_ID"/>
       <result property="productId" column="PRODUCT_ID"/>
-      <result property="imgUrl" column="IMG_URL"/>
+      <result property="fileName" column="FILE_NAME"/>
+      <result property="filePath" column="FILE_PATH"/>
+      <result property="type" column="TYPE"/>
+      <result property="size" column="SIZE"/>
       <result property="createdDate" column="IMG_CREATED_DATE"/>
       <result property="updatedDate" column="IMG_UPDATED_DATE"/>
       <result property="deleteDate" column="IMG_DELETE_DATE"/>
@@ -55,7 +59,10 @@
            P.CREATED_DATE,
            P.UPDATED_DATE,
            I.ID           AS IMG_ID,
-           I.IMG_URL      AS IMG_URL,
+           I.FILE_NAME,
+           I.FILE_PATH,
+           I.TYPE,
+           I.SIZE,
            I.CREATED_DATE AS IMG_CREATED_DATE,
            I.UPDATED_DATE AS IMG_UPDATED_DATE
     FROM PRODUCT P
@@ -111,16 +118,20 @@
     P.RETURN_CENTER_CODE,
     P.CREATED_DATE,
     P.UPDATED_DATE,
-    I.ID           AS IMG_ID,
-    I.IMG_URL      AS IMG_URL,
+    I.ID AS IMG_ID,
+    I.FILE_NAME,
+    I.FILE_PATH,
+    I.TYPE,
+    I.SIZE,
     I.CREATED_DATE AS IMG_CREATED_DATE,
     I.UPDATED_DATE AS IMG_UPDATED_DATE
     FROM PRODUCT P
     LEFT JOIN PRODUCT_IMAGE I ON P.ID = I.PRODUCT_ID
     WHERE P.ID IN
-    <foreach collection="productIds" item="id" index="index" separator=",">
-      (#{id})
+    (
+    <foreach collection="productIds" item="id" index="index" separator=",">#{id}
     </foreach>
+    )
   </select>
 
   <select id="lockAndFindProductsByIds" parameterType="list" resultType="list"
@@ -184,7 +195,7 @@
     WHERE ID = #{id}
   </update>
 
-  <insert id="addProduct" useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
+  <insert id="insertProduct" useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
     INSERT INTO product (NAME, CATEGORY, DETAIL, STATUS, SELLER_ID,
                          SELL_START_DATETIME, SELL_END_DATETIME, DISPLAY_NAME,
                          UNIT_PRICE, BRAND, DELIVERY_FEE_TYPE, DELIVERY_METHOD,
@@ -197,11 +208,11 @@
             now(), now())
   </insert>
 
-  <insert id="addProductImages">
-    INSERT INTO product_image (PRODUCT_ID, IMG_URL, CREATED_DATE, UPDATED_DATE)
+  <insert id="insertProductImages">
+    INSERT INTO product_image (PRODUCT_ID, FILE_NAME, FILE_PATH, TYPE, SIZE)
     VALUES
     <foreach collection="productImages" item="image" separator=",">
-      (#{image.productId}, #{image.imgUrl}, now(), now())
+      (#{image.productId}, #{image.fileName}, #{image.filePath}, #{image.type}, #{image.size})
     </foreach>
   </insert>
 </mapper>

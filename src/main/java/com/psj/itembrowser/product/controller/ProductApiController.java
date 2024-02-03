@@ -5,7 +5,8 @@ import com.psj.itembrowser.product.domain.dto.request.ProductRequestDTO;
 import com.psj.itembrowser.product.service.ProductService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,9 +18,9 @@ public class ProductApiController {
 
     private final ProductService productService;
 
-    @PostMapping("/v1/api/products")
-    public MessageDTO addProduct(@Valid @RequestBody ProductRequestDTO productRequestDTO) {
-        productService.addProduct(productRequestDTO);
+    @PostMapping(value = "/v1/api/products", consumes =  {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public MessageDTO addProduct(@Valid @ModelAttribute ProductRequestDTO productRequestDTO) {
+        productService.createProduct(productRequestDTO);
         return new MessageDTO("Insert Success");
     }
 
