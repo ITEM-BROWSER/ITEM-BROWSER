@@ -110,8 +110,8 @@ public class Product extends BaseDateTimeEntity {
     private List<ProductImage> productImages;
 
     public void validateSellDates() {
-        if (this.sellStartDatetime.isBefore(this.sellEndDatetime)) {
-            throw new BadRequestException(PRODUCT_VALIDATION_FAIL);
+        if (this.sellStartDatetime != null && this.sellEndDatetime != null && this.sellEndDatetime.isBefore(this.sellStartDatetime)) {
+            throw new IllegalArgumentException("The sell start datetime must not be before the sell end datetime.");
         }
     }
 

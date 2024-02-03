@@ -29,4 +29,6 @@ public interface ProductService {
     List<Product> getProducts(Long orderId);
 
     void createProduct(ProductRequestDTO productRequestDTO);
+
+    void updateProduct(ProductRequestDTO productRequestDTO);
 }

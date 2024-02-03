@@ -34,30 +34,13 @@ public class ProductImage extends BaseDateTimeEntity{
 
     private Long size;
 
-    public static ProductImage from(MultipartFile file, Long productId, String uploadDir) {
-        String originalFilename = file.getOriginalFilename();
-        String savedName = UUID.randomUUID() + "_" + originalFilename;
-
-        Path uploadPath = Paths.get(uploadDir);
-
-        try {
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
-
-            Path savePath = uploadPath.resolve(savedName);
-            file.transferTo(savePath);
-
+    public static ProductImage from(MultipartFile file, Long productId, Path savePath) {
             return ProductImage.builder()
                 .productId(productId)
-                .fileName(savedName)
+                .fileName(savePath.getFileName().toString())
                 .filePath(savePath.toString())
                 .type(file.getContentType())
                 .size(file.getSize())
                 .build();
-
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to store file " + originalFilename, e);
-        }
     }
 }

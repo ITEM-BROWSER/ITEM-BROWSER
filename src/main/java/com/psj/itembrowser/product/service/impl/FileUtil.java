@@ -13,7 +13,22 @@ public class FileUtil {
         Arrays.asList("image/png", "image/jpg", "image/gif", "image/bmp", "image/jpeg")
     );
 
-    public void isImageFile(MultipartFile file) {
+    public void validateImageFile(MultipartFile file) {
+        validateMimeType(file);
+        validateFileName(file.getOriginalFilename());
+    }
+
+    private void validateFileName(String fileName) {
+        if (fileName == null || fileName.contains("..")) {
+            throw new IllegalArgumentException("Filename is invalid.");
+        }
+
+        if (!fileName.matches("^[a-zA-Z0-9._-가-힣]+$")) {
+            throw new IllegalArgumentException("Filename contains invalid characters.");
+        }
+    }
+
+    private void validateMimeType(MultipartFile file) {
         String contentType = file.getContentType();
         if (contentType == null || !ALLOWED_IMAGE_MIME_TYPES.contains(contentType.toLowerCase())) {
             throw new IllegalArgumentException("Invalid file type, only image files are allowed.");
