@@ -3,9 +3,9 @@ package com.psj.itembrowser.cart.controller;
 import static com.psj.itembrowser.common.exception.ErrorCode.CART_PRODUCT_DELETE_FAIL;
 import static com.psj.itembrowser.common.exception.ErrorCode.CART_PRODUCT_INSERT_FAIL;
 import static com.psj.itembrowser.common.exception.ErrorCode.CART_PRODUCT_UPDATE_FAIL;
-import static com.psj.itembrowser.common.generator.cart.CartMockDataGenerator.createCartResponseDTO;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
@@ -91,8 +91,9 @@ class CartApiControllerTest {
         @DisplayName("장바구니 목록 조회 API 테스트 -> 정상 조회 테스트")
         void When_GetCart_Expect_Success() throws Exception {
             // given
-            CartResponseDTO mock = createCartResponseDTO(
-                USER_EMAIL,
+            CartResponseDTO mock = mock(CartResponseDTO.class);
+            when(mock.getUserId()).thenReturn(USER_EMAIL);
+            when(mock.getProducts()).thenReturn(
                 List.of(
                     new CartProductRelationResponseDTO(),
                     new CartProductRelationResponseDTO()

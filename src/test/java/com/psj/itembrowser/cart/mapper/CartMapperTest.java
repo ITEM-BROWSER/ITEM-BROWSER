@@ -2,11 +2,13 @@ package com.psj.itembrowser.cart.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
+import com.psj.itembrowser.cart.domain.dto.request.CartProductDeleteRequestDTO;
+import com.psj.itembrowser.cart.domain.dto.request.CartProductUpdateRequestDTO;
 import com.psj.itembrowser.cart.domain.vo.Cart;
 import com.psj.itembrowser.cart.domain.vo.CartProductRelation;
-import com.psj.itembrowser.common.generator.cart.CartMockDataGenerator;
 import com.psj.itembrowser.product.domain.vo.Product;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -17,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.util.ReflectionTestUtils;
 
 /**
  * packageName    : com.psj.itembrowser.cart.mapper fileName       : CartMapperTest author         :
@@ -47,29 +48,26 @@ class CartMapperTest {
         void When_InsertCorrectCart_Expect_Insert_Return_True() {
             // given
             Product product = mock(Product.class);
-            ReflectionTestUtils.setField(product, "id", 1L);
-            ReflectionTestUtils.setField(product, "name", "섬유유연제");
+            given(product.getId()).willReturn(1L);
+            given(product.getName()).willReturn("섬유유연제");
             
             CartProductRelation cartProductRelation = mock(CartProductRelation.class);
-            ReflectionTestUtils.setField(cartProductRelation, "productQuantity", 1L);
-            ReflectionTestUtils.setField(cartProductRelation, "product", product);
+            given(cartProductRelation.getProductQuantity()).willReturn(1L);
+            given(cartProductRelation.getProduct()).willReturn(product);
             
             Cart expectedCart = mock(Cart.class);
-            ReflectionTestUtils.setField(expectedCart, "id", 3L);
-            ReflectionTestUtils.setField(expectedCart, "userId", NOT_EXIST_USER_ID);
-            ReflectionTestUtils.setField(expectedCart, "cartProductRelations",
-                List.of(cartProductRelation));
+            given(expectedCart.getId()).willReturn(3L);
+            given(expectedCart.getUserId()).willReturn(NOT_EXIST_USER_ID);
+            given(expectedCart.getCartProductRelations()).willReturn(List.of(cartProductRelation));
             
             // when
-            boolean result = cartMapper.insertCart(
-                (String) ReflectionTestUtils.getField(expectedCart, "userId"));
+            boolean result = cartMapper.insertCart(expectedCart.getUserId());
             Cart actualCart = cartMapper.getCartByUserId(NOT_EXIST_USER_ID);
             
             // then
             assertThat(result).isTrue();
             assertThat(actualCart).isNotNull();
-            assertThat(actualCart.getUserId()).isEqualTo(
-                ReflectionTestUtils.getField(expectedCart, "userId"));
+            assertThat(actualCart.getUserId()).isEqualTo(expectedCart.getUserId());
         }
         
         @Test
@@ -143,8 +141,13 @@ class CartMapperTest {
         @Test
         @DisplayName("장바구니에 담긴 상품을 업데이트하는 경우 올바르게 추가되는지 확인")
         void When_IncreaseProductQuantity_InCartProductRelation_Expect_ProductQuantity_Rise() {
-            boolean result = cartMapper.updateCartProductRelation(
-                CartMockDataGenerator.createCartProductUpdateRequestDTO(1L, 1L, 1));
+            CartProductUpdateRequestDTO cartProductUpdateRequestDTO = mock(
+                CartProductUpdateRequestDTO.class);
+            given(cartProductUpdateRequestDTO.getCartId()).willReturn(1L);
+            given(cartProductUpdateRequestDTO.getProductId()).willReturn(1L);
+            given(cartProductUpdateRequestDTO.getQuantity()).willReturn(1L);
+            
+            boolean result = cartMapper.updateCartProductRelation(cartProductUpdateRequestDTO);
             
             assertThat(result).isTrue();
         }
@@ -152,8 +155,13 @@ class CartMapperTest {
         @Test
         @DisplayName("장바구니에 담긴 상품이 존재하지 않음 - 업데이트가 실패하는지 확인")
         void When_UpdateProductQuantity_Expect_Fail() {
-            boolean result = cartMapper.updateCartProductRelation(
-                CartMockDataGenerator.createCartProductUpdateRequestDTO(1L, 3L, 1));
+            CartProductUpdateRequestDTO cartProductUpdateRequestDTO = mock(
+                CartProductUpdateRequestDTO.class);
+            given(cartProductUpdateRequestDTO.getCartId()).willReturn(1L);
+            given(cartProductUpdateRequestDTO.getProductId()).willReturn(3L);
+            given(cartProductUpdateRequestDTO.getQuantity()).willReturn(1L);
+            
+            boolean result = cartMapper.updateCartProductRelation(cartProductUpdateRequestDTO);
             
             assertThat(result).isFalse();
         }
@@ -168,8 +176,12 @@ class CartMapperTest {
         @Test
         @DisplayName("존재하는 장바구니 상품을 삭제시 성공하는지 확인")
         void When_DeleteCartProductRelation_Expect_True() {
-            boolean result = cartMapper.deleteCartProductRelation(
-                CartMockDataGenerator.createCartProductDeleteRequestDTO(1L, 1L));
+            CartProductDeleteRequestDTO cartProductDeleteRequestDTO = mock(
+                CartProductDeleteRequestDTO.class);
+            given(cartProductDeleteRequestDTO.getCartId()).willReturn(1L);
+            given(cartProductDeleteRequestDTO.getProductId()).willReturn(1L);
+            
+            boolean result = cartMapper.deleteCartProductRelation(cartProductDeleteRequestDTO);
             
             assertThat(result).isTrue();
         }
@@ -177,8 +189,12 @@ class CartMapperTest {
         @Test
         @DisplayName("존재하지 않는 장바구니 상품을 삭제시 실패하는지 확인")
         void When_DeleteCartProductRelation_Expect_False() {
-            boolean result = cartMapper.deleteCartProductRelation(
-                CartMockDataGenerator.createCartProductDeleteRequestDTO(1L, 3L));
+            CartProductDeleteRequestDTO cartProductDeleteRequestDTO = mock(
+                CartProductDeleteRequestDTO.class);
+            given(cartProductDeleteRequestDTO.getCartId()).willReturn(1L);
+            given(cartProductDeleteRequestDTO.getProductId()).willReturn(3L);
+            
+            boolean result = cartMapper.deleteCartProductRelation(cartProductDeleteRequestDTO);
             
             assertThat(result).isFalse();
         }
