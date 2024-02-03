@@ -22,9 +22,7 @@ import com.psj.itembrowser.cart.domain.vo.CartProductRelation;
 import com.psj.itembrowser.cart.mapper.CartMapper;
 import com.psj.itembrowser.common.exception.DatabaseOperationException;
 import com.psj.itembrowser.common.exception.NotFoundException;
-import com.psj.itembrowser.common.generator.cart.CartMockDataGenerator;
 import com.psj.itembrowser.product.domain.vo.Product;
-import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,7 +33,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
 
 @ExtendWith(MockitoExtension.class)
 class CartPersistenceTest {
@@ -59,22 +56,10 @@ class CartPersistenceTest {
         void setUp() {
             //given
             cart = mock(Cart.class);
-            ReflectionTestUtils.setField(cart, "id", 1L);
-            ReflectionTestUtils.setField(cart, "userId", TEST_USER_ID);
             
             product = mock(Product.class);
-            ReflectionTestUtils.setField(product, "id", 1L);
-            ReflectionTestUtils.setField(product, "name", "product1");
-            ReflectionTestUtils.setField(product, "quantity", 10);
-            ReflectionTestUtils.setField(product, "unitPrice", 1000);
             
             cartProductRelation = mock(CartProductRelation.class);
-            ReflectionTestUtils.setField(cartProductRelation, "cartId", 1L);
-            ReflectionTestUtils.setField(cartProductRelation, "productId", 1L);
-            ReflectionTestUtils.setField(cartProductRelation, "productQuantity", 1L);
-            ReflectionTestUtils.setField(cartProductRelation, "createdDate", LocalDateTime.now());
-            ReflectionTestUtils.setField(cartProductRelation, "cart", cart);
-            ReflectionTestUtils.setField(cartProductRelation, "product", product);
         }
         
         
@@ -83,10 +68,8 @@ class CartPersistenceTest {
         void When_GetCartByUserId_Expect_CartResponseDTO() throws NotFoundException {
             // given
             Cart expectedCart = mock(Cart.class);
-            ReflectionTestUtils.setField(expectedCart, "id", 1L);
-            ReflectionTestUtils.setField(expectedCart, "userId", TEST_USER_ID);
-            ReflectionTestUtils.setField(expectedCart, "cartProductRelations",
-                List.of(cartProductRelation));
+            given(expectedCart.getUserId()).willReturn(TEST_USER_ID);
+            given(expectedCart.getCartProductRelations()).willReturn(List.of(cartProductRelation));
             
             given(expectedCart.getUserId()).willReturn(TEST_USER_ID);
             given(cartMapper.getCartByUserId(TEST_USER_ID)).willReturn(expectedCart);
@@ -134,10 +117,8 @@ class CartPersistenceTest {
         void When_GetCartByCartId_Expect_() throws NotFoundException {
             // given
             Cart expectedCart = mock(Cart.class);
-            ReflectionTestUtils.setField(expectedCart, "id", 1L);
-            ReflectionTestUtils.setField(expectedCart, "userId", TEST_USER_ID);
-            ReflectionTestUtils.setField(expectedCart, "cartProductRelations",
-                List.of(cartProductRelation));
+            given(expectedCart.getUserId()).willReturn(TEST_USER_ID);
+            given(expectedCart.getCartProductRelations()).willReturn(List.of(cartProductRelation));
             
             given(expectedCart.getUserId()).willReturn(TEST_USER_ID);
             given(cartMapper.getCart(1L)).willReturn(expectedCart);
@@ -191,12 +172,8 @@ class CartPersistenceTest {
         void setUp() {
             // given
             cartProductRequestDTO = mock(CartProductRequestDTO.class);
-            ReflectionTestUtils.setField(cartProductRequestDTO, "cartId", 1L);
-            ReflectionTestUtils.setField(cartProductRequestDTO, "productId", 1L);
-            ReflectionTestUtils.setField(cartProductRequestDTO, "quantity", 10);
             
             cartRequestDTO = mock(CartRequestDTO.class);
-            ReflectionTestUtils.setField(cartRequestDTO, "userId", TEST_USER_ID);
         }
         
         @Test
@@ -274,8 +251,7 @@ class CartPersistenceTest {
         @BeforeEach
         void setUp() {
             // given
-            cartProductUpdateRequestDTO = CartMockDataGenerator.createCartProductUpdateRequestDTO(
-                1L, 1L, 10);
+            cartProductUpdateRequestDTO = mock(CartProductUpdateRequestDTO.class);
         }
         
         @Test
@@ -322,8 +298,7 @@ class CartPersistenceTest {
         @BeforeEach
         void setUp() {
             // given
-            cartProductDeleteRequestDTO = CartMockDataGenerator.createCartProductDeleteRequestDTO(
-                1L, 1L);
+            cartProductDeleteRequestDTO = mock(CartProductDeleteRequestDTO.class);
         }
         
         @Test
