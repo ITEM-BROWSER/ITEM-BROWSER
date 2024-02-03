@@ -1,11 +1,11 @@
 package com.psj.itembrowser.cart.persistance;
 
-import static com.psj.itembrowser.common.exception.ErrorCode.CART_INSERT_FAIL;
-import static com.psj.itembrowser.common.exception.ErrorCode.CART_NOT_FOUND;
-import static com.psj.itembrowser.common.exception.ErrorCode.CART_PRODUCT_DELETE_FAIL;
-import static com.psj.itembrowser.common.exception.ErrorCode.CART_PRODUCT_INSERT_FAIL;
-import static com.psj.itembrowser.common.exception.ErrorCode.CART_PRODUCT_NOT_FOUND;
-import static com.psj.itembrowser.common.exception.ErrorCode.CART_PRODUCT_UPDATE_FAIL;
+import static com.psj.itembrowser.security.common.exception.ErrorCode.CART_INSERT_FAIL;
+import static com.psj.itembrowser.security.common.exception.ErrorCode.CART_NOT_FOUND;
+import static com.psj.itembrowser.security.common.exception.ErrorCode.CART_PRODUCT_DELETE_FAIL;
+import static com.psj.itembrowser.security.common.exception.ErrorCode.CART_PRODUCT_INSERT_FAIL;
+import static com.psj.itembrowser.security.common.exception.ErrorCode.CART_PRODUCT_NOT_FOUND;
+import static com.psj.itembrowser.security.common.exception.ErrorCode.CART_PRODUCT_UPDATE_FAIL;
 
 import com.psj.itembrowser.cart.domain.dto.request.CartProductDeleteRequestDTO;
 import com.psj.itembrowser.cart.domain.dto.request.CartProductRequestDTO;
@@ -13,8 +13,8 @@ import com.psj.itembrowser.cart.domain.dto.request.CartProductUpdateRequestDTO;
 import com.psj.itembrowser.cart.domain.dto.response.CartResponseDTO;
 import com.psj.itembrowser.cart.domain.vo.Cart;
 import com.psj.itembrowser.cart.mapper.CartMapper;
-import com.psj.itembrowser.common.exception.DatabaseOperationException;
-import com.psj.itembrowser.common.exception.NotFoundException;
+import com.psj.itembrowser.security.common.exception.DatabaseOperationException;
+import com.psj.itembrowser.security.common.exception.NotFoundException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

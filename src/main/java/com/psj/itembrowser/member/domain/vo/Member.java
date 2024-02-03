@@ -1,13 +1,11 @@
 package com.psj.itembrowser.member.domain.vo;
 
+import com.psj.itembrowser.member.domain.dto.request.MemberRequestDTO;
+import com.psj.itembrowser.member.domain.dto.response.MemberResponseDTO;
+import com.psj.itembrowser.security.common.BaseDateTimeEntity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
-
-import com.psj.itembrowser.common.BaseDateTimeEntity;
-import com.psj.itembrowser.member.domain.dto.request.MemberRequestDTO;
-import com.psj.itembrowser.member.domain.dto.response.MemberResponseDTO;
-
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

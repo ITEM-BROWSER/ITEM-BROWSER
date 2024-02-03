@@ -1,12 +1,12 @@
 package com.psj.itembrowser.cart.domain.vo;
 
-import static com.psj.itembrowser.common.exception.ErrorCode.CART_PRODUCT_QUANTITY_NOT_POSITIVE;
+import static com.psj.itembrowser.security.common.exception.ErrorCode.CART_PRODUCT_QUANTITY_NOT_POSITIVE;
 
 import com.psj.itembrowser.cart.domain.dto.request.CartProductUpdateRequestDTO;
 import com.psj.itembrowser.cart.domain.dto.response.CartProductRelationResponseDTO;
-import com.psj.itembrowser.common.BaseDateTimeEntity;
-import com.psj.itembrowser.common.exception.DatabaseOperationException;
 import com.psj.itembrowser.product.domain.vo.Product;
+import com.psj.itembrowser.security.common.BaseDateTimeEntity;
+import com.psj.itembrowser.security.common.exception.DatabaseOperationException;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

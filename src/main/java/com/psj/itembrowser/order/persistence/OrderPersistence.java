@@ -1,16 +1,14 @@
 package com.psj.itembrowser.order.persistence;
 
-import static com.psj.itembrowser.common.exception.ErrorCode.*;
-import static com.psj.itembrowser.order.domain.vo.OrderStatus.*;
+import static com.psj.itembrowser.order.domain.vo.OrderStatus.CANCELED;
+import static com.psj.itembrowser.security.common.exception.ErrorCode.ORDER_NOT_FOUND;
 
-import org.springframework.stereotype.Component;
-
-import com.psj.itembrowser.common.exception.NotFoundException;
 import com.psj.itembrowser.order.domain.vo.Order;
 import com.psj.itembrowser.order.mapper.OrderDeleteRequestDTO;
 import com.psj.itembrowser.order.mapper.OrderMapper;
-
+import com.psj.itembrowser.security.common.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 /**
  * packageName    : com.psj.itembrowser.order.persistence fileName       : OrderPersistence author
