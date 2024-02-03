@@ -1,17 +1,17 @@
 -- PRODUCT_IMAGE-data.sql
-INSERT INTO product_image ( PRODUCT_ID
-                    , IMG_URL
-                    , CREATED_DATE
-                    , UPDATED_DATE)
+INSERT INTO product_image (PRODUCT_ID, FILE_NAME, FILE_PATH, TYPE, SIZE)
 VALUES ( 1
-       , 'https://cdn.imweb.me/upload/S201910012ff964777e0e3/62f9a36ea3cea.jpg'
-       , NOW()
-       , NOW()),
+       , 'image1.jpg'
+       , '/path/to/image1.jpg'
+       , 'image/jpeg'
+       , 1024),
        ( 1
-       , 'https://cdn.imweb.me/upload/S201910012ff964777e0e3/01550b0ce363b.jpg'
-       , NOW()
-       , NOW()),
+       , 'image2.jpg'
+       , '/path/to/image2.jpg'
+       , 'image/jpeg'
+       , 2048),
        ( 1
-       , 'https://www.fitpetmall.com/wp-content/uploads/2022/11/shutterstock_196467692-1024x819.jpg'
-       , NOW()
-       , NOW());
+        , 'image3.jpg'
+        , '/path/to/image3.jpg'
+        , 'image/jpeg'
+        , 2048);
