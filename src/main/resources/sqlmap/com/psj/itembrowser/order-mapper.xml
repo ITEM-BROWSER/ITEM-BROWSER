@@ -7,7 +7,7 @@
         <id property="id" column="id"/>
         <result property="ordererNumber" column="ORDERER_NUMBER"/>
         <result property="orderStatus" column="order_status"
-                typeHandler="com.psj.itembrowser.common.handler.OrderStatusTypeHandler"/>
+            typeHandler="com.psj.itembrowser.security.common.handler.OrderStatusTypeHandler"/>
         <result property="paidDate" column="paid_date"/>
         <result property="shippingInfoId" column="shipping_info_id"/>
         <result property="createdDate" column="created_date"/>

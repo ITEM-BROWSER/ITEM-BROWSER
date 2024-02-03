@@ -1,11 +1,19 @@
 package com.psj.itembrowser.security.service.impl;
 
+import com.psj.itembrowser.member.domain.dto.response.MemberResponseDTO;
+import com.psj.itembrowser.member.domain.vo.Member;
+import com.psj.itembrowser.member.persistence.MemberPersistance;
+import com.psj.itembrowser.security.common.exception.ErrorCode;
+import com.psj.itembrowser.security.common.exception.TokenException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,17 +21,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
-
-import com.psj.itembrowser.common.exception.ErrorCode;
-import com.psj.itembrowser.common.exception.TokenException;
-import com.psj.itembrowser.member.domain.dto.response.MemberResponseDTO;
-import com.psj.itembrowser.member.domain.vo.Member;
-import com.psj.itembrowser.member.persistence.MemberPersistance;
-
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor

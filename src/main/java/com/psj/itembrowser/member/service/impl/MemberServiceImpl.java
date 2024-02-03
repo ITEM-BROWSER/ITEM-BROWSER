@@ -1,18 +1,17 @@
 package com.psj.itembrowser.member.service.impl;
 
-import com.psj.itembrowser.common.exception.BadRequestException;
 import com.psj.itembrowser.member.domain.dto.request.MemberSignUpRequestDTO;
 import com.psj.itembrowser.member.domain.dto.response.MemberResponseDTO;
 import com.psj.itembrowser.member.mapper.MemberMapper;
 import com.psj.itembrowser.member.persistence.MemberPersistance;
 import com.psj.itembrowser.member.service.MemberService;
+import com.psj.itembrowser.security.common.exception.BadRequestException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 /**
  * packageName    : com.psj.itembrowser.member.service.impl

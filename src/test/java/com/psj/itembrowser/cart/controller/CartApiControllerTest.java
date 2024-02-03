@@ -1,8 +1,8 @@
 package com.psj.itembrowser.cart.controller;
 
-import static com.psj.itembrowser.common.exception.ErrorCode.CART_PRODUCT_DELETE_FAIL;
-import static com.psj.itembrowser.common.exception.ErrorCode.CART_PRODUCT_INSERT_FAIL;
-import static com.psj.itembrowser.common.exception.ErrorCode.CART_PRODUCT_UPDATE_FAIL;
+import static com.psj.itembrowser.security.common.exception.ErrorCode.CART_PRODUCT_DELETE_FAIL;
+import static com.psj.itembrowser.security.common.exception.ErrorCode.CART_PRODUCT_INSERT_FAIL;
+import static com.psj.itembrowser.security.common.exception.ErrorCode.CART_PRODUCT_UPDATE_FAIL;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
@@ -24,9 +24,9 @@ import com.psj.itembrowser.cart.domain.dto.request.CartProductUpdateRequestDTO;
 import com.psj.itembrowser.cart.domain.dto.response.CartProductRelationResponseDTO;
 import com.psj.itembrowser.cart.domain.dto.response.CartResponseDTO;
 import com.psj.itembrowser.cart.service.CartService;
-import com.psj.itembrowser.common.exception.DatabaseOperationException;
-import com.psj.itembrowser.common.exception.ErrorCode;
-import com.psj.itembrowser.common.exception.NotFoundException;
+import com.psj.itembrowser.security.common.exception.DatabaseOperationException;
+import com.psj.itembrowser.security.common.exception.ErrorCode;
+import com.psj.itembrowser.security.common.exception.NotFoundException;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

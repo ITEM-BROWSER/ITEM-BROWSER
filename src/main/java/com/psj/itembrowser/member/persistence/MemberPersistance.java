@@ -1,17 +1,15 @@
 package com.psj.itembrowser.member.persistence;
 
-import org.springframework.stereotype.Component;
-
-import com.psj.itembrowser.common.exception.BadRequestException;
-import com.psj.itembrowser.common.exception.ErrorCode;
-import com.psj.itembrowser.common.exception.NotFoundException;
 import com.psj.itembrowser.member.domain.dto.request.MemberSignUpRequestDTO;
 import com.psj.itembrowser.member.domain.dto.response.MemberResponseDTO;
 import com.psj.itembrowser.member.domain.vo.Member;
 import com.psj.itembrowser.member.mapper.MemberMapper;
-
+import com.psj.itembrowser.security.common.exception.BadRequestException;
+import com.psj.itembrowser.security.common.exception.ErrorCode;
+import com.psj.itembrowser.security.common.exception.NotFoundException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 /**
  * packageName    : com.psj.itembrowser.common.security.model.service.impl

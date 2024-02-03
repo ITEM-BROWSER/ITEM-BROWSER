@@ -2,7 +2,7 @@ package com.psj.itembrowser.cart.domain.vo;
 
 import com.psj.itembrowser.cart.domain.dto.request.CartRequestDTO;
 import com.psj.itembrowser.cart.domain.dto.response.CartSimpleResponseDTO;
-import com.psj.itembrowser.common.BaseDateTimeEntity;
+import com.psj.itembrowser.security.common.BaseDateTimeEntity;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;

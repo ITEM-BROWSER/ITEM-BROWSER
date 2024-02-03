@@ -1,16 +1,15 @@
 package com.psj.itembrowser.member.controller;
 
-import com.psj.itembrowser.common.message.MessageDTO;
 import com.psj.itembrowser.member.domain.dto.request.MemberSignUpRequestDTO;
 import com.psj.itembrowser.member.domain.dto.response.MemberResponseDTO;
 import com.psj.itembrowser.member.service.MemberService;
+import com.psj.itembrowser.security.common.message.MessageDTO;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
 
 /**
  * packageName    : com.psj.itembrowser.member.web

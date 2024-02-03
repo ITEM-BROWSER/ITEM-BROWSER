@@ -4,9 +4,9 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
-import com.psj.itembrowser.common.exception.BadRequestException;
-import com.psj.itembrowser.common.exception.ErrorCode;
 import com.psj.itembrowser.order.service.OrderService;
+import com.psj.itembrowser.security.common.exception.BadRequestException;
+import com.psj.itembrowser.security.common.exception.ErrorCode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
