@@ -189,19 +189,19 @@
     WHERE OPR.GROUP_ID = #{orderId}
   </select>
 
-  <update id="updateProduct">
+  <update id="updateProductQuantity">
     UPDATE PRODUCT
     SET QUANTITY = #{quantity}
     WHERE ID = #{id}
   </update>
 
   <insert id="insertProduct" useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
-    INSERT INTO product (NAME, CATEGORY, DETAIL, STATUS, SELLER_ID,
+    INSERT INTO product (NAME, CATEGORY, DETAIL, STATUS, QUANTITY, SELLER_ID,
                          SELL_START_DATETIME, SELL_END_DATETIME, DISPLAY_NAME,
                          UNIT_PRICE, BRAND, DELIVERY_FEE_TYPE, DELIVERY_METHOD,
                          DELIVERY_DEFAULT_FEE, FREE_SHIP_OVER_AMOUNT, RETURN_CENTER_CODE,
                          CREATED_DATE, UPDATED_DATE)
-    VALUES (#{name}, #{category}, #{detail}, #{status}, #{sellerId},
+    VALUES (#{name}, #{category}, #{detail}, #{status}, #{quantity}, #{sellerId},
             #{sellStartDatetime}, #{sellEndDatetime}, #{displayName},
             #{unitPrice}, #{brand}, #{deliveryFeeType}, #{deliveryMethod},
             #{deliveryDefaultFee}, #{freeShipOverAmount}, #{returnCenterCode},

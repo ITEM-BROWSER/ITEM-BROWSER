@@ -33,7 +33,7 @@ public interface ProductMapper {
 
     List<Product> findProductsByOrderId(@Param("orderId") Long orderId);
 
-    boolean updateProduct(ProductQuantityUpdateRequestDTO product);
+    boolean updateProductQuantity(ProductQuantityUpdateRequestDTO product);
 
     void insertProduct(Product product);
 

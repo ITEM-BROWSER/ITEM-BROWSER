@@ -9,7 +9,6 @@ import com.psj.itembrowser.product.domain.vo.Product;
 import com.psj.itembrowser.product.domain.vo.ProductImage;
 import com.psj.itembrowser.product.domain.vo.ProductStatus;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -17,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -89,7 +87,7 @@ class ProductMapperTest {
             10);
 
         // when
-        boolean updated = productMapper.updateProduct(updateDTO);
+        boolean updated = productMapper.updateProductQuantity(updateDTO);
 
         // then
         assertThat(updated).isTrue();
@@ -129,6 +127,7 @@ class ProductMapperTest {
         assertThat(insertedProduct.getCategory()).isEqualTo(1);
         assertThat(insertedProduct.getDetail()).isEqualTo("This is a test product");
         assertThat(insertedProduct.getStatus()).isEqualTo(ProductStatus.UNDER_REVIEW);
+        assertThat(insertedProduct.getQuantity()).isEqualTo(100);
         assertThat(insertedProduct.getUnitPrice()).isEqualTo(20000);
         assertThat(insertedProduct.getSellerId()).isEqualTo("seller123");
         assertThat(insertedProduct.getSellStartDatetime()).isEqualTo(
