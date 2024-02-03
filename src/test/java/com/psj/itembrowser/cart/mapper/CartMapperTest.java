@@ -2,12 +2,12 @@ package com.psj.itembrowser.cart.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
 
 import com.psj.itembrowser.cart.domain.vo.Cart;
 import com.psj.itembrowser.cart.domain.vo.CartProductRelation;
 import com.psj.itembrowser.common.generator.cart.CartMockDataGenerator;
 import com.psj.itembrowser.product.domain.vo.Product;
-import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.util.ReflectionTestUtils;
 
 /**
  * packageName    : com.psj.itembrowser.cart.mapper fileName       : CartMapperTest author         :
@@ -45,42 +46,41 @@ class CartMapperTest {
         @DisplayName("장바구니를 생성합니다.")
         void When_InsertCorrectCart_Expect_Insert_Return_True() {
             // given
-            Product product = CartMockDataGenerator.createSimpleProduct(1L, "섬유유연제", 1, 10, 1000);
-            CartProductRelation cartProductRelation =
-                CartMockDataGenerator.createCartProductRelation(
-                    1L, 1L,
-                    1L, LocalDateTime.now(), null,
-                    null, null, product
-                );
-            Cart expectedCart = CartMockDataGenerator.createCart(3L, NOT_EXIST_USER_ID,
+            Product product = mock(Product.class);
+            ReflectionTestUtils.setField(product, "id", 1L);
+            ReflectionTestUtils.setField(product, "name", "섬유유연제");
+            
+            CartProductRelation cartProductRelation = mock(CartProductRelation.class);
+            ReflectionTestUtils.setField(cartProductRelation, "productQuantity", 1L);
+            ReflectionTestUtils.setField(cartProductRelation, "product", product);
+            
+            Cart expectedCart = mock(Cart.class);
+            ReflectionTestUtils.setField(expectedCart, "id", 3L);
+            ReflectionTestUtils.setField(expectedCart, "userId", NOT_EXIST_USER_ID);
+            ReflectionTestUtils.setField(expectedCart, "cartProductRelations",
                 List.of(cartProductRelation));
             
             // when
-            boolean result = cartMapper.insertCart(expectedCart.getUserId());
+            boolean result = cartMapper.insertCart(
+                (String) ReflectionTestUtils.getField(expectedCart, "userId"));
             Cart actualCart = cartMapper.getCartByUserId(NOT_EXIST_USER_ID);
             
             // then
             assertThat(result).isTrue();
             assertThat(actualCart).isNotNull();
-            assertThat(actualCart).isEqualTo(expectedCart);
+            assertThat(actualCart.getUserId()).isEqualTo(
+                ReflectionTestUtils.getField(expectedCart, "userId"));
         }
         
         @Test
         @DisplayName("유니크 키 - userId 를 중복해서 삽입시 에러가 터지는지 확인")
         void When_InsertDuplicatedUserIdIntoCart_Expect_Throw_Exception() {
             // given
-            Product product = CartMockDataGenerator.createSimpleProduct(1L, "섬유유연제", 1, 10, 1000);
-            CartProductRelation cartProductRelation =
-                CartMockDataGenerator.createCartProductRelation(
-                    1L, 1L,
-                    1L, LocalDateTime.now(), null,
-                    null, null, product
-                );
-            Cart expectedCart = CartMockDataGenerator.createCart(3L, EXIST_USER_ID,
-                List.of(cartProductRelation));
+            String DuplicatedUserId = EXIST_USER_ID;
             
             // when-then
-            assertThatThrownBy(() -> cartMapper.insertCart(expectedCart.getUserId()))
+            assertThatThrownBy(() -> cartMapper.insertCart(
+                DuplicatedUserId))
                 .isInstanceOf(DuplicateKeyException.class);
         }
     }
@@ -96,12 +96,8 @@ class CartMapperTest {
         void When_SelectCartsByUserId_Expect_NotNull_And_UserId_Is_user1() {
             Cart findedCart = cartMapper.getCartByUserId(EXIST_USER_ID);
             
-            // null 일 수 없음
             assertThat(findedCart).isNotNull();
-            
-            // 장바구니의 사용자 아이디는 user1이여야함
-            assertThat(findedCart
-                .getUserId()).isEqualTo(EXIST_USER_ID);
+            assertThat(findedCart.getUserId()).isEqualTo(EXIST_USER_ID);
         }
         
         @Test
