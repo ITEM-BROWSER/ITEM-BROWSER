@@ -39,6 +39,13 @@ public enum ErrorCode {
 	// Member
 	NOT_FOUND_MEMBER(HttpStatus.NOT_FOUND, "MEMBER_001", "Not Found Member"),
 	MEMBER_INSERT_FAIL(HttpStatus.BAD_REQUEST, "MEMBER_002", "Fail to insert Member"),
+
+	// Product
+	PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "PRODUCT_001", "Not Found Product"),
+	PRODUCT_INSERT_FAIL(HttpStatus.BAD_REQUEST, "PRODUCT_002", "Fail to insert to product"),
+	PRODUCT_UPDATE_FAIL(HttpStatus.BAD_REQUEST, "PRODUCT_003", "Fail to update to product"),
+	PRODUCT_DELETE_FAIL(HttpStatus.BAD_REQUEST, "PRODUCT_004", "Fail to delete to product"),
+	PRODUCT_VALIDATION_FAIL(HttpStatus.BAD_REQUEST, "PRODUCT_005", "Validation Error"),
 	
 	//Token
 	ACCESS_TOKEN_NOT_GENERATED(HttpStatus.UNAUTHORIZED, "TOKEN_001", "Fail to generate Access Token"),

@@ -1,12 +1,9 @@
 package com.psj.itembrowser.product.domain.vo;
 
-import static com.psj.itembrowser.common.exception.ErrorCode.PRODUCT_VALIDATION_FAIL;
-
 import com.psj.itembrowser.cart.domain.vo.CartProductRelation;
-import com.psj.itembrowser.common.BaseDateTimeEntity;
-import com.psj.itembrowser.common.exception.BadRequestException;
 import com.psj.itembrowser.product.domain.dto.request.ProductQuantityUpdateRequestDTO;
 import com.psj.itembrowser.product.domain.dto.response.ProductResponseDTO;
+import com.psj.itembrowser.security.common.BaseDateTimeEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -110,8 +107,10 @@ public class Product extends BaseDateTimeEntity {
     private List<ProductImage> productImages;
 
     public void validateSellDates() {
-        if (this.sellStartDatetime != null && this.sellEndDatetime != null && this.sellEndDatetime.isBefore(this.sellStartDatetime)) {
-            throw new IllegalArgumentException("The sell start datetime must not be before the sell end datetime.");
+        if (this.sellStartDatetime != null && this.sellEndDatetime != null
+            && this.sellEndDatetime.isBefore(this.sellStartDatetime)) {
+            throw new IllegalArgumentException(
+                "The sell start datetime must not be before the sell end datetime.");
         }
     }
 

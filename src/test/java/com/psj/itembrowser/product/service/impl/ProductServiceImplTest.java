@@ -11,9 +11,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.psj.itembrowser.common.exception.NotFoundException;
 import com.psj.itembrowser.product.domain.dto.request.ProductUpdateDTO;
 import com.psj.itembrowser.product.service.FileService;
+import com.psj.itembrowser.security.common.exception.ErrorCode;
+import com.psj.itembrowser.security.common.exception.NotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -113,7 +114,7 @@ class ProductServiceImplTest {
             Long productId = 1L;
 
             when(productPersistence.findProductById(productId)).thenThrow(
-                new NotFoundException("Product not found"));
+                new NotFoundException(ErrorCode.PRODUCT_NOT_FOUND));
 
             // when & then
             assertThrows(NotFoundException.class,

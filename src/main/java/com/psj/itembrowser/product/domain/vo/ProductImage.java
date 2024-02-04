@@ -1,18 +1,12 @@
 package com.psj.itembrowser.product.domain.vo;
 
-import com.psj.itembrowser.common.BaseDateTimeEntity;
-import java.io.IOException;
-import java.nio.file.Files;
+import com.psj.itembrowser.security.common.BaseDateTimeEntity;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.validator.constraints.URL;
 import org.springframework.web.multipart.MultipartFile;
 
 @Getter
@@ -20,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 @Builder
 @ToString
-public class ProductImage extends BaseDateTimeEntity{
+public class ProductImage extends BaseDateTimeEntity {
 
     private Long id;
 

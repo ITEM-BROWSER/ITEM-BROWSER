@@ -1,11 +1,12 @@
 package com.psj.itembrowser.product.persistence;
 
-import com.psj.itembrowser.common.exception.NotFoundException;
 import com.psj.itembrowser.product.domain.dto.request.ProductQuantityUpdateRequestDTO;
 import com.psj.itembrowser.product.domain.dto.response.ProductResponseDTO;
 import com.psj.itembrowser.product.domain.vo.Product;
 import com.psj.itembrowser.product.domain.vo.ProductImage;
 import com.psj.itembrowser.product.mapper.ProductMapper;
+import com.psj.itembrowser.security.common.exception.ErrorCode;
+import com.psj.itembrowser.security.common.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +29,7 @@ public class ProductPersistence {
     public ProductResponseDTO findProductById(Long productId) {
         Product productById = productMapper.findProductById(productId);
         if (productById == null) {
-            throw new NotFoundException("product is null");
+            throw new NotFoundException(ErrorCode.PRODUCT_NOT_FOUND);
         }
 
         return productById.toProductResponseDTO();
@@ -37,7 +38,7 @@ public class ProductPersistence {
     public List<ProductResponseDTO> findProductsByIds(List<Long> productIds) {
         List<Product> productsByIds = productMapper.findProductsByIds(productIds);
         if (productsByIds == null || productsByIds.isEmpty()) {
-            throw new NotFoundException("products is null");
+            throw new NotFoundException(ErrorCode.PRODUCT_NOT_FOUND);
         }
 
         return productsByIds
