@@ -38,7 +38,7 @@ class ProductMapperTest {
     private ProductMapper productMapper;
 
     @Test
-    @DisplayName("ID로 상품을 찾을 수 있어야 한다")
+    @DisplayName("ID로 상품 조회 성공")
     void findProductById() {
         // given
         Long productId = 1L;
@@ -52,7 +52,7 @@ class ProductMapperTest {
     }
 
     @Test
-    @DisplayName("상품을 잠금 모드로 조회할 수 있어야 한다")
+    @DisplayName("상품 Lock 조회 성공")
     void lockProductById() {
         // given
         Long productId = 1L;
@@ -66,7 +66,7 @@ class ProductMapperTest {
     }
 
     @Test
-    @DisplayName("여러 ID로 상품 목록을 조회할 수 있어야 한다")
+    @DisplayName("여러 ID로 상품 목록 조회 성공")
     void findProductsByIds() {
         // given
         List<Long> productIds = Arrays.asList(1L, 2L);
@@ -80,8 +80,8 @@ class ProductMapperTest {
     }
 
     @Test
-    @DisplayName("상품을 업데이트 할 수 있어야 한다")
-    void updateProduct() {
+    @DisplayName("재고를 업데이트 성공")
+    void updateProductQuantity() {
         // given
         ProductQuantityUpdateRequestDTO updateDTO = new ProductQuantityUpdateRequestDTO(1L,
             10);
@@ -94,7 +94,7 @@ class ProductMapperTest {
     }
 
     @Test
-    @DisplayName("상품을 추가할 수 있어야 한다")
+    @DisplayName("상품을 저장 성공")
     public void insertProductTest() {
         // given
         LocalDateTime now = LocalDateTime.now().withNano(0);
@@ -145,7 +145,7 @@ class ProductMapperTest {
     }
 
     @Test
-    @DisplayName("상품 이미지를 추가할 수 있어야 한다")
+    @DisplayName("이미지 저장 성공")
     void insertProductImages() {
         // given
         Long productId = 1L; // 가정
@@ -161,5 +161,79 @@ class ProductMapperTest {
 
         // then
         assertThat(inserted).isTrue();
+    }
+
+    @Test
+    @DisplayName("여러 이미지 ID로 조회 성공")
+    void findProductImagesByImageIds() {
+        // given
+        List<Long> imageIds = Arrays.asList(1L, 3L);
+
+        // when
+        List<ProductImage> images = productMapper.findProductImagesByImageIds(imageIds);
+
+        // then
+        assertNotNull(images);
+        assertThat(images.size()).isGreaterThanOrEqualTo(2);
+    }
+
+    @Test
+    @DisplayName("이미지 수정 성공")
+    void updateProduct() {
+        // given
+        Product product = Product.builder()
+            .id(1L)
+            .name("Updated Product")
+            .category(2)
+            .detail("This is an updated product")
+            .status(ProductStatus.COMPLETED)
+            .quantity(200)
+            .unitPrice(30000)
+            .sellerId("seller456")
+            .sellStartDatetime(LocalDateTime.now())
+            .sellEndDatetime(LocalDateTime.now().plusDays(30))
+            .displayName("Updated Product Display Name")
+            .brand("Updated Brand")
+            .deliveryFeeType(DeliveryFeeType.FREE)
+            .deliveryMethod("SEQUENCIAL")
+            .deliveryDefaultFee(0)
+            .freeShipOverAmount(50000)
+            .returnCenterCode("RETURN456")
+            .build();
+
+        // when
+        productMapper.updateProduct(product);
+        Product updatedProduct = productMapper.findProductById(product.getId());
+
+        // then
+        assertThat(updatedProduct).isNotNull();
+        assertThat(updatedProduct.getName()).isEqualTo("Updated Product");
+        assertThat(updatedProduct.getCategory()).isEqualTo(2);
+        assertThat(updatedProduct.getDetail()).isEqualTo("This is an updated product");
+        assertThat(updatedProduct.getStatus()).isEqualTo(ProductStatus.COMPLETED);
+        assertThat(updatedProduct.getQuantity()).isEqualTo(200);
+        assertThat(updatedProduct.getUnitPrice()).isEqualTo(30000);
+        assertThat(updatedProduct.getSellerId()).isEqualTo("seller456");
+        assertThat(updatedProduct.getDisplayName()).isEqualTo("Updated Product Display Name");
+        assertThat(updatedProduct.getBrand()).isEqualTo("Updated Brand");
+        assertThat(updatedProduct.getDeliveryFeeType()).isEqualTo(DeliveryFeeType.FREE);
+        assertThat(updatedProduct.getDeliveryMethod()).isEqualTo("SEQUENCIAL");
+        assertThat(updatedProduct.getDeliveryDefaultFee()).isEqualTo(0);
+        assertThat(updatedProduct.getFreeShipOverAmount()).isEqualTo(50000);
+        assertThat(updatedProduct.getReturnCenterCode()).isEqualTo("RETURN456");
+    }
+
+    @Test
+    @DisplayName("이미지 삭제 성공")
+    public void deleteProductImagesTest() {
+        // given
+        List<Long> deleteImageIds = Arrays.asList(1L, 2L, 3L);
+
+        // when
+        productMapper.deleteProductImages(deleteImageIds);
+
+        // then
+        List<ProductImage> images = productMapper.findProductImagesByImageIds(deleteImageIds);
+        assertThat(images.size()).isEqualTo(0);
     }
 }
