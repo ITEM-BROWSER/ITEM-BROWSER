@@ -66,16 +66,18 @@ public class FileServiceImpl implements FileService {
     @Transactional(readOnly = false)
     @Override
     public void createProductImages(List<MultipartFile> files, Long productId) {
-        FileUtil.validateNumberOfImageFiles(files);
-        files.forEach(FileUtil::validateImageFile);
+        if (files != null && !files.isEmpty()) {
+            FileUtil.validateNumberOfImageFiles(files);
+            files.forEach(FileUtil::validateImageFile);
 
-        List<ProductImage> productImages = files.stream()
-            .map(file -> {
-                Path savePath = storeFile(file);
-                return ProductImage.from(file, productId, savePath);
-            }).collect(Collectors.toList());
+            List<ProductImage> productImages = files.stream()
+                .map(file -> {
+                    Path savePath = storeFile(file);
+                    return ProductImage.from(file, productId, savePath);
+                }).collect(Collectors.toList());
 
-        productPersistence.createProductImages(productImages);
+            productPersistence.createProductImages(productImages);
+        }
     }
 
     @Transactional(readOnly = false)
