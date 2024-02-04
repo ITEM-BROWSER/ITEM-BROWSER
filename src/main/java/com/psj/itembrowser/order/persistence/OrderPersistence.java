@@ -69,17 +69,21 @@ public class OrderPersistence {
     
     public List<Order> getOrdersWithPaginationAndNoCondition(OrderPageRequestDTO requestDTO) {
         List<Order> orders = orderMapper.selectOrdersWithPaginationAndNoCondition(requestDTO);
+        
         if (orders.isEmpty()) {
             throw new NotFoundException(ORDER_NOT_FOUND);
         }
+        
         return orders;
     }
     
     public List<Order> getOrdersWithPaginationAndNotDeleted(OrderPageRequestDTO requestDTO) {
         List<Order> orders = orderMapper.selectOrdersWithPaginationAndNotDeleted(requestDTO);
+        
         if (orders.isEmpty()) {
             throw new NotFoundException(ORDER_NOT_FOUND);
         }
+        
         return orders;
     }
 }

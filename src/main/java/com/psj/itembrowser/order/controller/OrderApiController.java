@@ -56,7 +56,7 @@ public class OrderApiController {
     @PreAuthorize("hasAnyRole('ROLE_CUSTOMER', 'ROLE_ADMIN')")
     @PostAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_CUSTOMER') and returnObject.body.member.email == principal.username)")
     @GetMapping("/v1/api/orders/users/{userNumber}")
-    public ResponseEntity<PageInfo<OrderResponseDTO>> getorders(
+    public ResponseEntity<PageInfo<OrderResponseDTO>> getOrders(
         @PathVariable Long userNumber, @ModelAttribute OrderPageRequestDTO orderPageRequestDTO,
         @CurrentUser Jwt jwt) {
         log.info("getOrders userNumber : {}", userNumber);
