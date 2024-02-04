@@ -6,10 +6,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.psj.itembrowser.product.domain.dto.request.ProductUpdateDTO;
 import com.psj.itembrowser.product.persistence.ProductPersistence;
 import com.psj.itembrowser.product.service.FileService;
 import java.io.File;
@@ -136,10 +139,10 @@ class FileServiceImplTest {
         Path newFilePath = fileServiceImpl.replaceFileInStorage(newFile, originalFilePathString);
 
         // then
-        assertThat(Files.exists(originalFilePath)).isFalse(); // 기존 파일이 삭제되었는지 확인
-        assertThat(Files.exists(newFilePath)).isTrue(); // 새 파일이 저장되었는지 확인
+        assertThat(Files.exists(
+            originalFilePath)).isFalse();
+        assertThat(Files.exists(newFilePath)).isTrue();
 
-        // 새 파일의 내용이 예상과 일치하는지 확인
         String newFileContent = Files.readString(newFilePath);
         assertThat(newFileContent).isEqualTo("New content");
     }
@@ -151,7 +154,7 @@ class FileServiceImplTest {
         @DisplayName("상품 이미지 생성 성공")
         void createProductImagesSuccess() {
             // given
-            List<MultipartFile> files = List.of(file);
+            List<MultipartFile> files = List.of(file, file, file);
             Long productId = 1L;
 
             // when
@@ -162,12 +165,10 @@ class FileServiceImplTest {
         }
 
         @Test
-        @DisplayName("데이터베이스 저장 실패")
+        @DisplayName("데이터 베이스 저장 실패")
         void createProductImagesWhenDatabaseSaveFails() {
             // given
-            MultipartFile validFile = new MockMultipartFile("image", "test.jpg", "image/jpeg",
-                "Valid content".getBytes());
-            List<MultipartFile> files = List.of(validFile);
+            List<MultipartFile> files = List.of(file, file, file);
             Long productId = 1L;
 
             doThrow(RuntimeException.class).when(productPersistence).createProductImages(anyList());

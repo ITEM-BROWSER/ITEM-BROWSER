@@ -1,7 +1,9 @@
 package com.psj.itembrowser.product.service.impl;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockMultipartFile;
@@ -70,5 +72,17 @@ class FileUtilTest {
         assertThrows(IllegalArgumentException.class,
             () -> FileUtil.validateImageFile(invalidTypeFile),
             "Filename contains invalid characters.");
+    }
+
+    @Test
+    @DisplayName("이미지 파일이 3개 미만 검증 실패")
+    public void validateNumberOfImageFiles() {
+        // given
+        List<MultipartFile> files = List.of(new MockMultipartFile("file", "filename", "image/jpeg", new byte[]{1}));
+
+        // when & then
+        assertThatThrownBy(() -> FileUtil.validateNumberOfImageFiles(files))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Images must be at least 3 and not more than 10");
     }
 }
