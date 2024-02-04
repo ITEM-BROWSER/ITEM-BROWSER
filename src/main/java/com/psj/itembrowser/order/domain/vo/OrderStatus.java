@@ -1,13 +1,14 @@
 package com.psj.itembrowser.order.domain.vo;
 
 
+import java.util.Objects;
 import lombok.Getter;
 import lombok.NonNull;
 
-import java.util.Objects;
-
 @Getter
 public enum OrderStatus {
+    PENDING("PENDING"),
+    
     ACCEPT("ACCEPT"),
     
     INSTRUCT("INSTRUCT"),
@@ -23,16 +24,18 @@ public enum OrderStatus {
     CANCELED("CANCELED"),
     ;
     
+    private final String name;
     private final String value;
     
     OrderStatus(@NonNull String value) {
         this.value = value;
+        this.name = name();
     }
     
     public static OrderStatus of(@NonNull String value) {
         for (OrderStatus orderStatus : OrderStatus.values()) {
             if (Objects.equals(
-                    orderStatus.getValue(), value)) {
+                orderStatus.getValue(), value)) {
                 return orderStatus;
             }
         }
