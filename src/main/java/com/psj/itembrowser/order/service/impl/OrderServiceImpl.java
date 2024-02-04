@@ -9,6 +9,7 @@ import com.psj.itembrowser.order.domain.dto.response.OrderResponseDTO;
 import com.psj.itembrowser.order.domain.vo.Order;
 import com.psj.itembrowser.order.persistence.OrderPersistence;
 import com.psj.itembrowser.order.service.OrderService;
+import com.psj.itembrowser.security.auth.service.AuthenticationService;
 import com.psj.itembrowser.security.common.exception.BadRequestException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderServiceImpl implements OrderService {
     
     private final OrderPersistence orderPersistence;
+    private final AuthenticationService authenticationService;
     
     @Override
     @Transactional(readOnly = false, timeout = 4)
@@ -67,6 +69,8 @@ public class OrderServiceImpl implements OrderService {
     OrderPageRequestDTO requestDTO) {
         PageHelper.startPage(requestDTO.getPageNum(), requestDTO.getPageSize());
         List<Order> orders = orderPersistence.getOrdersWithPaginationAndNotDeleted(requestDTO);
+        
+        authenticationService.authorizeOrdersWhenCustomer(orders);
         
         return new PageInfo<>(
             orders.stream().map(OrderResponseDTO::create).collect(Collectors.toList()));
