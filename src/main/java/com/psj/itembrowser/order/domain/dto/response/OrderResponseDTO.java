@@ -33,7 +33,7 @@ public class OrderResponseDTO implements Serializable {
 	
 	private MemberResponseDTO member;
 	
-	public static OrderResponseDTO fromOrder(Order order) {
+	public static OrderResponseDTO create(Order order) {
 		OrderResponseDTO orderResponseDTO = new OrderResponseDTO();
 		
 		orderResponseDTO.setId(order.getId());
