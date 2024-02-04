@@ -65,4 +65,18 @@ public class ProductPersistence {
     public boolean updateProductQuantity(ProductQuantityUpdateRequestDTO productQuantityUpdateRequestDTO) {
         return productMapper.updateProductQuantity(productQuantityUpdateRequestDTO);
     }
+
+    @Transactional(readOnly = false)
+    public void deleteProductImages(List<Long> deleteImageIds) {
+        productMapper.deleteProductImages(deleteImageIds);
+    }
+
+    public List<ProductImage> findProductImagesByImageIds(List<Long> imageIds) {
+        return productMapper.findProductImagesByImageIds(imageIds);
+    }
+
+    @Transactional(readOnly = false)
+    public void updateProduct(Product product) {
+        productMapper.updateProduct(product);
+    }
 }

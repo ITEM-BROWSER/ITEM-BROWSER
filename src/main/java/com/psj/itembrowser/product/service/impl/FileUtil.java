@@ -2,6 +2,7 @@ package com.psj.itembrowser.product.service.impl;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import lombok.experimental.UtilityClass;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,13 +18,18 @@ public class FileUtil {
         validateMimeType(file);
         validateFileName(file.getOriginalFilename());
     }
+    public void validateNumberOfImageFiles(List<MultipartFile> files) {
+        if (files.size() < 3 || files.size() > 10) {
+            throw new IllegalArgumentException("Images must be at least 3 and not more than 10. NowSize : " + files.size());
+        }
+    }
 
     private void validateFileName(String fileName) {
         if (fileName == null || fileName.contains("..")) {
             throw new IllegalArgumentException("Filename is invalid.");
         }
 
-        if (!fileName.matches("^[a-zA-Z0-9._-가-힣]+$")) {
+        if (!fileName.matches("^[a-zA-Z0-9._가-힣-]+$")) {
             throw new IllegalArgumentException("Filename contains invalid characters.");
         }
     }

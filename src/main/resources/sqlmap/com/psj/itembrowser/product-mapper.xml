@@ -38,6 +38,18 @@
     </collection>
   </resultMap>
 
+  <resultMap id="imageResultMap" type="com.psj.itembrowser.product.domain.vo.ProductImage">
+    <id property="id" column="ID"/>
+    <result property="productId" column="PRODUCT_ID"/>
+    <result property="fileName" column="FILE_NAME"/>
+    <result property="filePath" column="FILE_PATH"/>
+    <result property="type" column="TYPE"/>
+    <result property="size" column="SIZE"/>
+    <result property="createdDate" column="CREATED_DATE"/>
+    <result property="updatedDate" column="UPDATED_DATE"/>
+    <result property="deleteDate" column="DELETE_DATE"/>
+  </resultMap>
+
   <select id="findProductById" resultMap="productResultMap">
     SELECT P.ID,
            P.NAME,
@@ -68,6 +80,8 @@
     FROM PRODUCT P
            LEFT JOIN PRODUCT_IMAGE I ON P.ID = I.PRODUCT_ID
     WHERE P.ID = #{productId}
+      AND P.DELETED_DATE IS NULL
+      AND I.DELETED_DATE IS NULL
   </select>
 
   <select id="lockProductById" resultMap="productResultMap">
@@ -129,9 +143,11 @@
     LEFT JOIN PRODUCT_IMAGE I ON P.ID = I.PRODUCT_ID
     WHERE P.ID IN
     (
-    <foreach collection="productIds" item="id" index="index" separator=",">#{id}
+    <foreach collection="productIds" item="id" index="index" separator=",">
+      #{id}
     </foreach>
     )
+    AND P.DELETED_DATE IS NULL
   </select>
 
   <select id="lockAndFindProductsByIds" parameterType="list" resultType="list"
@@ -160,6 +176,7 @@
     <foreach collection="productIds" item="id" index="index" separator=",">
       (#{id})
     </foreach>
+    AND DELETED_DATE IS NULL
     FOR
     UPDATE
   </select>
@@ -215,4 +232,56 @@
       (#{image.productId}, #{image.fileName}, #{image.filePath}, #{image.type}, #{image.size})
     </foreach>
   </insert>
+
+  <select id="findProductImagesByImageIds" parameterType="list" resultType="list"
+    resultMap="imageResultMap">
+    SELECT ID,
+    PRODUCT_ID,
+    FILE_NAME,
+    FILE_PATH,
+    TYPE,
+    SIZE
+    FROM PRODUCT_IMAGE
+    WHERE ID IN
+    (
+    <foreach collection="imageIds" item="id" index="index" separator=",">
+      #{id}
+    </foreach>
+    )
+    AND DELETED_DATE IS NULL
+  </select>
+
+  <update id="deleteProductImages">
+    UPDATE PRODUCT_IMAGE
+    SET DELETED_DATE = now()
+    WHERE ID IN
+    (
+    <foreach collection="deleteImageIds" item="id" index="index" separator=",">
+      #{id}
+    </foreach>
+    )
+  </update>
+
+  <update id="updateProduct" parameterType="com.psj.itembrowser.product.domain.vo.Product">
+    UPDATE PRODUCT P
+    SET NAME                  = #{name},
+        CATEGORY              = #{category},
+        DETAIL                = #{detail},
+        STATUS                = #{status},
+        QUANTITY              = #{quantity},
+        SELLER_ID             = #{sellerId},
+        SELL_START_DATETIME   = #{sellStartDatetime},
+        SELL_END_DATETIME     = #{sellEndDatetime},
+        DISPLAY_NAME          = #{displayName},
+        UNIT_PRICE            = #{unitPrice},
+        BRAND                 = #{brand},
+        DELIVERY_FEE_TYPE     = #{deliveryFeeType},
+        DELIVERY_METHOD       = #{deliveryMethod},
+        DELIVERY_DEFAULT_FEE  = #{deliveryDefaultFee},
+        FREE_SHIP_OVER_AMOUNT = #{freeShipOverAmount},
+        RETURN_CENTER_CODE    = #{returnCenterCode},
+        p.UPDATED_DATE          = now()
+    WHERE ID = #{id}
+      AND p.DELETED_DATE IS NULL
+  </update>
 </mapper>

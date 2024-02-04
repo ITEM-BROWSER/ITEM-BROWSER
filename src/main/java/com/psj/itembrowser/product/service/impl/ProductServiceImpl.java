@@ -2,13 +2,13 @@ package com.psj.itembrowser.product.service.impl;
 
 import com.psj.itembrowser.product.domain.dto.request.ProductQuantityUpdateRequestDTO;
 import com.psj.itembrowser.product.domain.dto.request.ProductRequestDTO;
+import com.psj.itembrowser.product.domain.dto.request.ProductUpdateDTO;
 import com.psj.itembrowser.product.domain.dto.response.ProductResponseDTO;
 import com.psj.itembrowser.product.domain.vo.Product;
 import com.psj.itembrowser.product.persistence.ProductPersistence;
 import com.psj.itembrowser.product.service.FileService;
 import com.psj.itembrowser.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(readOnly = false)
     public void createProduct(ProductRequestDTO productRequestDTO) {
         Product product = productRequestDTO.toProduct();
-        List<MultipartFile> files = productRequestDTO.getFiles();
+        List<MultipartFile> files = productRequestDTO.getMultipartFiles();
 
         product.validateSellDates();
 
@@ -61,7 +61,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void updateProduct(ProductRequestDTO productRequestDTO) {
+    @Transactional(readOnly = false)
+    public void updateProduct(ProductUpdateDTO productUpdateDTO, Long productId) {
+        productPersistence.findProductById(productId);
 
+        Product product = productUpdateDTO.toProduct(productId);
+
+        product.validateSellDates();
+
+        productPersistence.updateProduct(product);
+
+        fileService.updateProductImages(productUpdateDTO,productId);
     }
 }

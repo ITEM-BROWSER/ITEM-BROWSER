@@ -38,4 +38,10 @@ public interface ProductMapper {
     void insertProduct(Product product);
 
     boolean insertProductImages(List<ProductImage> productImages);
+
+    List<ProductImage> findProductImagesByImageIds(List<Long> imageIds);
+
+    void deleteProductImages(List<Long> deleteImageIds);
+
+    void updateProduct(Product product);
 }
