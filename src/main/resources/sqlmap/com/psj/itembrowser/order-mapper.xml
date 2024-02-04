@@ -55,11 +55,7 @@
     <include refid="orderColumns"/>
     FROM ORDERS O
     ORDER BY O.CREATED_DATE DESC
-    <where>
-      AND O.ORDER_STATUS = #{orderPageRequestDTO.orderStatus}
-    </where>
-      LIMIT #{orderPageRequestDTO.pageSize}
-    offset #{orderPageRequestDTO.pageNum};
+    LIMIT #{orderPageRequestDTO.pageSize} offset #{orderPageRequestDTO.pageNum};
   </select>
 
   <select id="selectOrdersWithPaginationAndNotDeleted" resultMap="orderResultMap"
@@ -71,7 +67,6 @@
       O.DELETED_DATE IS NULL
     </where>
     ORDER BY O.CREATED_DATE DESC
-      LIMIT #{orderPageRequestDTO.pageSize}
-    offset #{orderPageRequestDTO.pageNum};
+    LIMIT #{orderPageRequestDTO.pageSize} offset #{orderPageRequestDTO.pageNum};
   </select>
 </mapper>

@@ -12,6 +12,7 @@ import com.psj.itembrowser.order.service.OrderService;
 import com.psj.itembrowser.security.common.exception.BadRequestException;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,8 +53,8 @@ public class OrderServiceImpl implements OrderService {
     }
     
     @Override
-    public PageInfo<OrderResponseDTO> getOrdersWithPaginationAndNoCondition(
-        OrderPageRequestDTO requestDTO) {
+    public PageInfo<OrderResponseDTO> getOrdersWithPaginationAndNoCondition(@NonNull
+    OrderPageRequestDTO requestDTO) {
         PageHelper.startPage(requestDTO.getPageNum(), requestDTO.getPageSize());
         List<Order> orders = orderPersistence.getOrdersWithPaginationAndNoCondition(requestDTO);
         
@@ -62,8 +63,8 @@ public class OrderServiceImpl implements OrderService {
     }
     
     @Override
-    public PageInfo<OrderResponseDTO> getOrdersWithPaginationAndNotDeleted(
-        OrderPageRequestDTO requestDTO) {
+    public PageInfo<OrderResponseDTO> getOrdersWithPaginationAndNotDeleted(@NonNull
+    OrderPageRequestDTO requestDTO) {
         PageHelper.startPage(requestDTO.getPageNum(), requestDTO.getPageSize());
         List<Order> orders = orderPersistence.getOrdersWithPaginationAndNotDeleted(requestDTO);
         
