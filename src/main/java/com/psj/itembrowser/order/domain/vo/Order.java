@@ -1,11 +1,9 @@
 package com.psj.itembrowser.order.domain.vo;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 import com.psj.itembrowser.member.domain.vo.Member;
 import com.psj.itembrowser.shippingInfos.domain.vo.ShippingInfo;
-
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -55,7 +53,8 @@ public class Order implements Cancelable {
     
     @Override
     public boolean isNotCancelable() {
-        List<OrderStatus> cancelableStatus = List.of(OrderStatus.ACCEPT, OrderStatus.INSTRUCT);
+        List<OrderStatus> cancelableStatus = List.of(OrderStatus.PENDING, OrderStatus.ACCEPT,
+            OrderStatus.INSTRUCT);
         return cancelableStatus.stream()
                 .noneMatch(orderStatus::equals);
     }

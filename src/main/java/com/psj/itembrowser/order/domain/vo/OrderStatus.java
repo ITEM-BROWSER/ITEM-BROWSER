@@ -7,21 +7,21 @@ import lombok.NonNull;
 
 @Getter
 public enum OrderStatus {
-    PENDING("PENDING"),
+    PENDING("PENDING"), // 주문 대기중
     
-    ACCEPT("ACCEPT"),
+    ACCEPT("ACCEPT"), // 주문 접수됨
     
-    INSTRUCT("INSTRUCT"),
+    INSTRUCT("INSTRUCT"), // 	상품 준비중
     
-    DEPARTURE("DEPARTURE"),
+    DEPARTURE("DEPARTURE"), // 배송 지시
     
-    DELIVERING("DELIVERING"),
+    DELIVERING("DELIVERING"), // 배송중
     
-    FINAL_DELIVERY("FINAL_DELIVERY"),
+    FINAL_DELIVERY("FINAL_DELIVERY"), // 배송 완료
     
-    NONE_TRACKING("NONE_TRACKING"),
+    NONE_TRACKING("NONE_TRACKING"), // 업체 직접 배송
     
-    CANCELED("CANCELED"),
+    CANCELED("CANCELED"), // 주문 취소됨
     ;
     
     private final String name;
