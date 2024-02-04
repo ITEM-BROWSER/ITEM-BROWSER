@@ -29,6 +29,8 @@ public enum ErrorCode {
         "Fail to delete Order Relation"),
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "ORDER_003", "Not Found Order"),
     ORDER_NOT_CANCELABLE(HttpStatus.BAD_REQUEST, "ORDER_004", "Order is not cancelable"),
+    ORDER_IS_NOT_MATCH_CURRENT_MEMBER(HttpStatus.BAD_REQUEST, "ORDER_005",
+        "Order is not match current member"),
     
     // common
     COMMON_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON_001", "Internal Server Error"),
@@ -57,7 +59,10 @@ public enum ErrorCode {
     SELLER_NOT_AUTHORIZED(HttpStatus.UNAUTHORIZED, "AUTH_001", "Seller is not authorized"),
     ADMIN_NOT_AUTHORIZED(HttpStatus.UNAUTHORIZED, "AUTH_002", "Admin is not authorized"),
     CUSTOMER_NOT_AUTHORIZED(HttpStatus.UNAUTHORIZED, "AUTH_003", "Customer is not authorized"),
-    PRINCIPAL_NOT_FOUND(HttpStatus.UNAUTHORIZED, "AUTH_004", "Principal is not found");
+    PRINCIPAL_NOT_FOUND(HttpStatus.UNAUTHORIZED, "AUTH_004", "Principal is not found"),
+    INVALID_MEMBER_ROLE(HttpStatus.UNAUTHORIZED, "AUTH_005", "Invalid Member Role"),
+    ;
+    
     
     private final HttpStatus status;
     private final String code;
