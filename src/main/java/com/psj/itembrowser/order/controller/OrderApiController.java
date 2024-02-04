@@ -9,8 +9,8 @@ import com.psj.itembrowser.order.domain.dto.request.OrderPageRequestDTO;
 import com.psj.itembrowser.order.domain.dto.response.OrderResponseDTO;
 import com.psj.itembrowser.order.service.OrderService;
 import com.psj.itembrowser.security.common.message.MessageDTO;
+import com.psj.itembrowser.security.common.pagination.PageRequestDTO;
 import com.psj.itembrowser.security.service.impl.UserDetailsServiceImpl;
-import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -56,10 +56,16 @@ public class OrderApiController {
     
     @PreAuthorize("hasAnyRole('ROLE_CUSTOMER', 'ROLE_ADMIN')")
     @PostAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_CUSTOMER') and returnObject.body.member.email == principal.username)")
-    @GetMapping("/v1/api/orders")
+    @GetMapping("/v1/api/orders/{userNumber}")
     public ResponseEntity<PageInfo<OrderResponseDTO>> getorders(
-        @Valid @RequestBody OrderPageRequestDTO requestDTO, @CurrentUser Jwt jwt) {
-        log.info("getOrders requestDTO : {}", requestDTO);
+        @PathVariable Long userNumber,
+        @RequestParam(required = false) String requestYear,
+        @RequestParam(required = false) String orderType,
+        @RequestParam(required = false) int pageNum,
+        @RequestParam(required = false) int pageSize,
+        @CurrentUser Jwt jwt) {
+        log.info("getOrders requestYear : {}", requestYear);
+        log.info("getOrders orderType : {}", orderType);
         
         UserDetailsServiceImpl.CustomUserDetails customUserDetails = userDetailsService.loadUserByJwt(
             jwt);
@@ -68,11 +74,16 @@ public class OrderApiController {
         
         PageInfo<OrderResponseDTO> orderResponseDTOPageInfo = null;
         
+        PageRequestDTO pageRequestDTO = PageRequestDTO.create(pageNum, pageSize);
+        OrderPageRequestDTO requestDTO = OrderPageRequestDTO.create(pageRequestDTO, userNumber,
+            requestYear, orderType);
+        
         if (member.hasRole(Member.Role.ROLE_ADMIN)) {
             orderResponseDTOPageInfo = orderService.getOrdersWithPaginationAndNoCondition(
                 requestDTO);
         } else if (member.hasRole(Member.Role.ROLE_CUSTOMER)) {
-            orderResponseDTOPageInfo = orderService.getOrdersWithPaginationAndNotDeleted(requestDTO);
+            orderResponseDTOPageInfo = orderService.getOrdersWithPaginationAndNotDeleted(
+                requestDTO);
         }
         
         return ResponseEntity.ok(orderResponseDTOPageInfo);

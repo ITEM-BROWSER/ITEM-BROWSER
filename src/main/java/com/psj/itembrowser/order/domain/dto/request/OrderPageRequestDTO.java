@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -19,22 +20,23 @@ public class OrderPageRequestDTO extends PageRequestDTO {
     
     @NotNull(message = "userNumber must not be null")
     private Long userNumber;
-    @PastOrPresent(message = "startDate must be past or present")
-    private LocalDate startDate;
-    @PastOrPresent(message = "endDate must be past or present")
-    private LocalDate endDate;
+    
+    @PastOrPresent(message = "requestYear must be past or present date")
+    @DateTimeFormat(pattern = "yyyy")
+    private LocalDate requestYear;
+    
     private OrderStatus orderStatus;
     
     public static OrderPageRequestDTO create(PageRequestDTO pageRequestDTO, Long userNumber,
-        LocalDate startDate, LocalDate endDate, OrderStatus orderStatus) {
+        String requestYear, String orderStatus) {
         OrderPageRequestDTO orderPageRequestDTO = new OrderPageRequestDTO();
         
         orderPageRequestDTO.setPageNum(pageRequestDTO.getPageNum());
         orderPageRequestDTO.setPageSize(pageRequestDTO.getPageSize());
         orderPageRequestDTO.setUserNumber(userNumber);
-        orderPageRequestDTO.setStartDate(startDate);
-        orderPageRequestDTO.setEndDate(endDate);
-        orderPageRequestDTO.setOrderStatus(orderStatus);
+        orderPageRequestDTO.setRequestYear(LocalDate.parse(requestYear));
+        //TODO orderType 에 따른 조건 검색을 어떤식으로 할 것인지 고민해야한다.
+        orderPageRequestDTO.setOrderStatus(null);
         
         return orderPageRequestDTO;
     }
