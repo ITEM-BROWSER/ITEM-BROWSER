@@ -2,7 +2,7 @@ package com.psj.itembrowser.order.service.impl;
 
 import static com.psj.itembrowser.security.common.exception.ErrorCode.ORDER_NOT_CANCELABLE;
 
-import com.psj.itembrowser.order.domain.dto.OrderResponseDTO;
+import com.psj.itembrowser.order.domain.dto.response.OrderResponseDTO;
 import com.psj.itembrowser.order.domain.vo.Order;
 import com.psj.itembrowser.order.persistence.OrderPersistence;
 import com.psj.itembrowser.order.service.OrderService;

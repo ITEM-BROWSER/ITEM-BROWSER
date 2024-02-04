@@ -1,15 +1,13 @@
-package com.psj.itembrowser.order.domain.dto;
+package com.psj.itembrowser.order.domain.dto.response;
 
-import static lombok.AccessLevel.*;
-
-import java.io.Serializable;
-import java.time.LocalDateTime;
+import static lombok.AccessLevel.PROTECTED;
 
 import com.psj.itembrowser.member.domain.dto.response.MemberResponseDTO;
 import com.psj.itembrowser.member.domain.vo.Member;
 import com.psj.itembrowser.order.domain.vo.Order;
 import com.psj.itembrowser.order.domain.vo.OrderStatus;
-
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
