@@ -1,51 +1,77 @@
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.psj.itembrowser.order.mapper.OrderMapper">
-    <resultMap id="orderResultMap" type="com.psj.itembrowser.order.domain.vo.Order">
-        <id property="id" column="id"/>
-        <result property="ordererNumber" column="ORDERER_NUMBER"/>
-        <result property="orderStatus" column="order_status"
-            typeHandler="com.psj.itembrowser.security.common.handler.OrderStatusTypeHandler"/>
-        <result property="paidDate" column="paid_date"/>
-        <result property="shippingInfoId" column="shipping_info_id"/>
-        <result property="createdDate" column="created_date"/>
-        <result property="updatedDate" column="updated_date"/>
-        <result property="deletedDate" column="deleted_date"/>
-        <association property="member" javaType="com.psj.itembrowser.member.domain.vo.Member"
-                     column="ORDERER_NUMBER" select="com.psj.itembrowser.member.mapper.MemberMapper.findById"/>
-    </resultMap>
+  <resultMap id="orderResultMap" type="com.psj.itembrowser.order.domain.vo.Order">
+    <id property="id" column="id"/>
+    <result property="ordererNumber" column="ORDERER_NUMBER"/>
+    <result property="orderStatus" column="order_status"
+      typeHandler="com.psj.itembrowser.security.common.handler.OrderStatusTypeHandler"/>
+    <result property="paidDate" column="paid_date"/>
+    <result property="shippingInfoId" column="shipping_info_id"/>
+    <result property="createdDate" column="created_date"/>
+    <result property="updatedDate" column="updated_date"/>
+    <result property="deletedDate" column="deleted_date"/>
+    <association property="member" javaType="com.psj.itembrowser.member.domain.vo.Member"
+      column="ORDERER_NUMBER" select="com.psj.itembrowser.member.mapper.MemberMapper.findById"/>
+  </resultMap>
 
-    <sql id="orderColumns">
-        O.id,
-        O.ORDERER_NUMBER,
-        O.ORDER_STATUS,
-        O.PAID_DATE,
-        O.SHIPPING_INFO_ID,
-        O.CREATED_DATE,
-        O.UPDATED_DATE,
-        O.DELETED_DATE
-    </sql>
+  <sql id="orderColumns">
+    O.id,
+    O.ORDERER_NUMBER,
+    O.ORDER_STATUS,
+    O.PAID_DATE,
+    O.SHIPPING_INFO_ID,
+    O.CREATED_DATE,
+    O.UPDATED_DATE,
+    O.DELETED_DATE
+  </sql>
 
-    <select id="selectOrderWithNoCondition" resultMap="orderResultMap" parameterType="long">
-        SELECT
-        <include refid="orderColumns"/>
-        FROM ORDERS O
-        <where>
-            O.id = #{id}
-        </where>
-        Limit 1;
-    </select>
+  <select id="selectOrderWithNoCondition" resultMap="orderResultMap" parameterType="long">
+    SELECT
+    <include refid="orderColumns"/>
+    FROM ORDERS O
+    <where>
+      O.id = #{id}
+    </where>
+    Limit 1;
+  </select>
 
-    <select id="selectOrderWithNotDeleted" resultMap="orderResultMap" parameterType="long">
-        SELECT
-        <include refid="orderColumns"/>
-        FROM ORDERS O
-        <where>
-            O.id = #{id}
-            AND O.DELETED_DATE IS NULL
-        </where>
-        LIMIT 1;
-    </select>
+  <select id="selectOrderWithNotDeleted" resultMap="orderResultMap" parameterType="long">
+    SELECT
+    <include refid="orderColumns"/>
+    FROM ORDERS O
+    <where>
+      O.id = #{id}
+        AND O.DELETED_DATE IS NULL
+    </where>
+    LIMIT 1;
+  </select>
+
+  <select id="selectOrdersWithPaginationAndNoCondition" resultMap="orderResultMap"
+    parameterType="com.psj.itembrowser.order.domain.dto.request.OrderPageRequestDTO">
+    SELECT
+    <include refid="orderColumns"/>
+    FROM ORDERS O
+    ORDER BY O.CREATED_DATE DESC
+    <where>
+      AND O.ORDER_STATUS = #{orderPageRequestDTO.orderStatus}
+    </where>
+      LIMIT #{orderPageRequestDTO.pageSize}
+    offset #{orderPageRequestDTO.pageNum};
+  </select>
+
+  <select id="selectOrdersWithPaginationAndNotDeleted" resultMap="orderResultMap"
+    parameterType="com.psj.itembrowser.order.domain.dto.request.OrderPageRequestDTO">
+    SELECT
+    <include refid="orderColumns"/>
+    FROM ORDERS O
+    <where>
+      O.DELETED_DATE IS NULL
+    </where>
+    ORDER BY O.CREATED_DATE DESC
+      LIMIT #{orderPageRequestDTO.pageSize}
+    offset #{orderPageRequestDTO.pageNum};
+  </select>
 </mapper>
