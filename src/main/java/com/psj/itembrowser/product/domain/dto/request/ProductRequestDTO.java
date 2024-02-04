@@ -2,23 +2,27 @@ package com.psj.itembrowser.product.domain.dto.request;
 
 import com.psj.itembrowser.product.domain.vo.DeliveryFeeType;
 import com.psj.itembrowser.product.domain.vo.Product;
-import com.psj.itembrowser.product.domain.vo.ProductImage;
 import com.psj.itembrowser.product.domain.vo.ProductStatus;
 import java.time.LocalDateTime;
 import java.util.List;
-import javax.validation.Valid;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
-@Getter
 @Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProductRequestDTO {
 
     @NotBlank
@@ -42,10 +46,12 @@ public class ProductRequestDTO {
     private String sellerId;
 
     @NotNull(message = "Sell start date must not be null.")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @FutureOrPresent(message = "The sales start date must be present or in the future")
     private LocalDateTime sellStartDatetime;
 
     @NotNull(message = "Sell sell end date must not be null.")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @FutureOrPresent(message = "The sales end date must be present or in the future")
     private LocalDateTime sellEndDatetime;
 
@@ -63,8 +69,7 @@ public class ProductRequestDTO {
 
     private String returnCenterCode;
 
-    @Size(min = 3, max = 10, message = "Images must be at least 3 and not more than 10.")
-    private List<MultipartFile> files;
+    private List<MultipartFile> multipartFiles;
 
     public Product toProduct() {
         return Product.builder().name(this.name)
