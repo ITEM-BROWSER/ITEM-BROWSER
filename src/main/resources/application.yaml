@@ -8,6 +8,12 @@ spring:
       matching-strategy: ant_path_matcher
   profiles:
     active: local
+  servlet:
+    multipart:
+      # maximum file size
+      max-file-size: 10MB
+      # maximum request size
+      max-request-size: 100MB
 
 mybatis:
   mapper-locations: classpath:sqlmap/com/psj/itembrowser/*.xml
@@ -50,6 +56,9 @@ pagehelper:
   auto-runtime-dialect: false
   close-conn: true
   default-count: true
+
+file:
+  upload-dir: ./src/main/resources/static/uploads/
 
 server:
   error:

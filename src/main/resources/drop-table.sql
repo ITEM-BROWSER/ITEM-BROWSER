@@ -13,6 +13,8 @@ drop table if exists ORDERS;
 
 drop table if exists ORDERS_PRODUCT_RELATION;
 
+drop table if exists PRODUCT_IMAGE;
+
 drop table if exists PRODUCT;
 
 drop table if exists SHIPPING_INFOS;

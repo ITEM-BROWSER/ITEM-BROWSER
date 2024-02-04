@@ -1,6 +1,9 @@
 package com.psj.itembrowser.product.service;
 
 import com.psj.itembrowser.product.domain.dto.request.ProductQuantityUpdateRequestDTO;
+import com.psj.itembrowser.product.domain.dto.request.ProductRequestDTO;
+import com.psj.itembrowser.product.domain.dto.request.ProductUpdateDTO;
+import com.psj.itembrowser.product.domain.dto.response.ProductResponseDTO;
 import com.psj.itembrowser.product.domain.vo.Product;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +22,14 @@ import java.util.List;
  */
 @Service
 public interface ProductService {
-    
+
     boolean modifyProductQuantity(ProductQuantityUpdateRequestDTO productQuantityUpdateRequestDTO);
-    
-    Product getProduct(Long productId);
-    
+
+    ProductResponseDTO getProduct(Long productId);
+
     List<Product> getProducts(Long orderId);
+
+    void createProduct(ProductRequestDTO productRequestDTO);
+
+    void updateProduct(ProductUpdateDTO productUpdateDTO, Long id);
 }
