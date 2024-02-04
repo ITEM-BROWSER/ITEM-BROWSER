@@ -124,6 +124,5 @@ class ProductServiceImplTest {
             verify(productPersistence, never()).updateProduct(any());
             verify(fileService, never()).updateProductImages(any(), anyLong());
         }
-
     }
 }

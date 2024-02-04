@@ -125,7 +125,7 @@ class ProductApiControllerTest {
                 )
             );
 
-        verify(productService,times(1)).createProduct(any(ProductRequestDTO.class));
+        verify(productService, times(1)).createProduct(any(ProductRequestDTO.class));
     }
 
     @Test
@@ -134,7 +134,8 @@ class ProductApiControllerTest {
         MockMultipartFile file = new MockMultipartFile("file", "test.jpg", "image/jpeg",
             "product create test".getBytes());
 
-        doThrow(new BadRequestException(ErrorCode.PRODUCT_INSERT_FAIL)).when(productService).createProduct(any(ProductRequestDTO.class));
+        doThrow(new BadRequestException(ErrorCode.PRODUCT_INSERT_FAIL)).when(productService)
+            .createProduct(any(ProductRequestDTO.class));
 
         mockMvc.perform(RestDocumentationRequestBuilders.multipart("/v1/api/products")
                 .file(file)
@@ -195,7 +196,7 @@ class ProductApiControllerTest {
                 )
             );
 
-        verify(productService,times(1)).createProduct(any(ProductRequestDTO.class));
+        verify(productService, times(1)).createProduct(any(ProductRequestDTO.class));
     }
 
     @Test
@@ -205,31 +206,33 @@ class ProductApiControllerTest {
             "product create test".getBytes());
         Long productId = 1L;
 
-        doNothing().when(productService).updateProduct(any(ProductUpdateDTO.class), any(Long.class));
+        doNothing().when(productService)
+            .updateProduct(any(ProductUpdateDTO.class), any(Long.class));
 
-        mockMvc.perform(RestDocumentationRequestBuilders.multipart("/v1/api/products/{productId}", productId)
-                .file(file)
-                .with(request -> {
-                    request.setMethod("PUT");
-                    return request;
-                })
-                .param("name", "Test Product")
-                .param("category", "1")
-                .param("detail", "This is a detailed description of the product.")
-                .param("status", "COMPLETED")
-                .param("quantity", "100")
-                .param("unitPrice", "20000")
-                .param("sellerId", "test@test.com")
-                .param("sellStartDatetime", "2024-02-05T13:19:37")
-                .param("sellEndDatetime", "2024-02-07T13:19:37")
-                .param("displayName", "Test Display Name")
-                .param("brand", "Test Brand")
-                .param("deliveryFeeType", "FREE")
-                .param("deliveryMethod", "Direct Delivery")
-                .param("deliveryDefaultFee", "0")
-                .param("freeShipOverAmount", "50000")
-                .param("returnCenterCode", "RC12345")
-                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE))
+        mockMvc.perform(
+                RestDocumentationRequestBuilders.multipart("/v1/api/products/{productId}", productId)
+                    .file(file)
+                    .with(request -> {
+                        request.setMethod("PUT");
+                        return request;
+                    })
+                    .param("name", "Test Product")
+                    .param("category", "1")
+                    .param("detail", "This is a detailed description of the product.")
+                    .param("status", "COMPLETED")
+                    .param("quantity", "100")
+                    .param("unitPrice", "20000")
+                    .param("sellerId", "test@test.com")
+                    .param("sellStartDatetime", "2024-02-05T13:19:37")
+                    .param("sellEndDatetime", "2024-02-07T13:19:37")
+                    .param("displayName", "Test Display Name")
+                    .param("brand", "Test Brand")
+                    .param("deliveryFeeType", "FREE")
+                    .param("deliveryMethod", "Direct Delivery")
+                    .param("deliveryDefaultFee", "0")
+                    .param("freeShipOverAmount", "50000")
+                    .param("returnCenterCode", "RC12345")
+                    .contentType(MediaType.MULTIPART_FORM_DATA_VALUE))
             .andExpect(status().isOk())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
             .andDo(MockMvcRestDocumentationWrapper.document(
@@ -266,7 +269,8 @@ class ProductApiControllerTest {
                 )
             );
 
-        verify(productService,times(1)).updateProduct(any(ProductUpdateDTO.class), any(Long.class));
+        verify(productService, times(1)).updateProduct(any(ProductUpdateDTO.class),
+            any(Long.class));
     }
 
     @Test
@@ -276,31 +280,33 @@ class ProductApiControllerTest {
             "product create test".getBytes());
         Long productId = 1L;
 
-        doThrow(new BadRequestException(ErrorCode.PRODUCT_UPDATE_FAIL)).when(productService).updateProduct(any(ProductUpdateDTO.class), any(Long.class));
+        doThrow(new BadRequestException(ErrorCode.PRODUCT_UPDATE_FAIL)).when(productService)
+            .updateProduct(any(ProductUpdateDTO.class), any(Long.class));
 
-        mockMvc.perform(RestDocumentationRequestBuilders.multipart("/v1/api/products/{productId}", productId)
-                .file(file)
-                .with(request -> {
-                    request.setMethod("PUT");
-                    return request;
-                })
-                .param("name", "Test Product")
-                .param("category", "1")
-                .param("detail", "This is a detailed description of the product.")
-                .param("status", "COMPLETED")
-                .param("quantity", "100")
-                .param("unitPrice", "20000")
-                .param("sellerId", "test@test.com")
-                .param("sellStartDatetime", "2024-02-05T13:19:37")
-                .param("sellEndDatetime", "2024-02-07T13:19:37")
-                .param("displayName", "Test Display Name")
-                .param("brand", "Test Brand")
-                .param("deliveryFeeType", "FREE")
-                .param("deliveryMethod", "Direct Delivery")
-                .param("deliveryDefaultFee", "0")
-                .param("freeShipOverAmount", "50000")
-                .param("returnCenterCode", "RC12345")
-                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE))
+        mockMvc.perform(
+                RestDocumentationRequestBuilders.multipart("/v1/api/products/{productId}", productId)
+                    .file(file)
+                    .with(request -> {
+                        request.setMethod("PUT");
+                        return request;
+                    })
+                    .param("name", "Test Product")
+                    .param("category", "1")
+                    .param("detail", "This is a detailed description of the product.")
+                    .param("status", "COMPLETED")
+                    .param("quantity", "100")
+                    .param("unitPrice", "20000")
+                    .param("sellerId", "test@test.com")
+                    .param("sellStartDatetime", "2024-02-05T13:19:37")
+                    .param("sellEndDatetime", "2024-02-07T13:19:37")
+                    .param("displayName", "Test Display Name")
+                    .param("brand", "Test Brand")
+                    .param("deliveryFeeType", "FREE")
+                    .param("deliveryMethod", "Direct Delivery")
+                    .param("deliveryDefaultFee", "0")
+                    .param("freeShipOverAmount", "50000")
+                    .param("returnCenterCode", "RC12345")
+                    .contentType(MediaType.MULTIPART_FORM_DATA_VALUE))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
             .andDo(MockMvcRestDocumentationWrapper.document(
@@ -341,6 +347,7 @@ class ProductApiControllerTest {
                 )
             );
 
-        verify(productService,times(1)).updateProduct(any(ProductUpdateDTO.class), any(Long.class));
+        verify(productService, times(1)).updateProduct(any(ProductUpdateDTO.class),
+            any(Long.class));
     }
 }

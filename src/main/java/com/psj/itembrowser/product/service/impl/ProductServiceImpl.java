@@ -28,6 +28,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductPersistence productPersistence;
     private final FileService fileService;
+
     @Override
     @Transactional(readOnly = false)
     public boolean modifyProductQuantity(
@@ -71,6 +72,6 @@ public class ProductServiceImpl implements ProductService {
 
         productPersistence.updateProduct(product);
 
-        fileService.updateProductImages(productUpdateDTO,productId);
+        fileService.updateProductImages(productUpdateDTO, productId);
     }
 }

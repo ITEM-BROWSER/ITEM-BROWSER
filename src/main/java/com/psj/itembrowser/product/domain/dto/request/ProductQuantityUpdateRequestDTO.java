@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductQuantityUpdateRequestDTO implements Serializable {
+
     private Long id;
     private Integer quantity;
 }

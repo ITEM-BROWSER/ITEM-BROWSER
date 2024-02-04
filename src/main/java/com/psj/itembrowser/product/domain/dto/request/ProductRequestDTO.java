@@ -90,5 +90,4 @@ public class ProductRequestDTO {
             .returnCenterCode(this.returnCenterCode)
             .build();
     }
-
 }

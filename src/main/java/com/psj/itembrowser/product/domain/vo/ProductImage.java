@@ -29,12 +29,12 @@ public class ProductImage extends BaseDateTimeEntity {
     private Long size;
 
     public static ProductImage from(MultipartFile file, Long productId, Path savePath) {
-            return ProductImage.builder()
-                .productId(productId)
-                .fileName(savePath.getFileName().toString())
-                .filePath(savePath.toString())
-                .type(file.getContentType())
-                .size(file.getSize())
-                .build();
+        return ProductImage.builder()
+            .productId(productId)
+            .fileName(savePath.getFileName().toString())
+            .filePath(savePath.toString())
+            .type(file.getContentType())
+            .size(file.getSize())
+            .build();
     }
 }

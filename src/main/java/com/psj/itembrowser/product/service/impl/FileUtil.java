@@ -18,9 +18,11 @@ public class FileUtil {
         validateMimeType(file);
         validateFileName(file.getOriginalFilename());
     }
+
     public void validateNumberOfImageFiles(List<MultipartFile> files) {
         if (files.size() < 3 || files.size() > 10) {
-            throw new IllegalArgumentException("Images must be at least 3 and not more than 10. NowSize : " + files.size());
+            throw new IllegalArgumentException(
+                "Images must be at least 3 and not more than 10. NowSize : " + files.size());
         }
     }
 

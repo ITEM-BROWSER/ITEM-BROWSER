@@ -63,7 +63,8 @@ public class ProductPersistence {
     }
 
     @Transactional(readOnly = false)
-    public boolean updateProductQuantity(ProductQuantityUpdateRequestDTO productQuantityUpdateRequestDTO) {
+    public boolean updateProductQuantity(
+        ProductQuantityUpdateRequestDTO productQuantityUpdateRequestDTO) {
         return productMapper.updateProductQuantity(productQuantityUpdateRequestDTO);
     }
 

@@ -56,7 +56,6 @@ class FileServiceImplTest {
         ReflectionTestUtils.setField(fileServiceImpl, "uploadDir", UPLOAD_DIR);
         file = new MockMultipartFile("newImage", "newTest.jpg", "image/jpeg",
             "New Test Image Content".getBytes());
-
     }
 
     @AfterEach

@@ -88,5 +88,4 @@ public class ProductUpdateDTO {
             .returnCenterCode(this.returnCenterCode)
             .build();
     }
-
 }

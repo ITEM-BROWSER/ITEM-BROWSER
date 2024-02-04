@@ -33,12 +33,12 @@ public class ProductResponseDTO {
     private Integer deliveryDefaultFee;
 
     private List<ProductImage> productImages;
-    
+
     public static ProductResponseDTO of(Product product) {
         if (product == null) {
             return null;
         }
-        
+
         return ProductResponseDTO.builder()
             .id(product.getId())
             .name(product.getName())
@@ -53,5 +53,4 @@ public class ProductResponseDTO {
             .productImages(product.getProductImages())
             .build();
     }
-    
 }
