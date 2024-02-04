@@ -152,7 +152,7 @@ public class OrderSelectApiControllerTest {
 	void When_GetOrderWithCustomer_Expect_Status200() throws Exception {
 		// given
 		long orderId = 1L;
-		OrderResponseDTO expectedOrderResponseDTO = OrderResponseDTO.fromOrder(expectedOrderWithCUSTOMERUser);
+		OrderResponseDTO expectedOrderResponseDTO = OrderResponseDTO.create(expectedOrderWithCUSTOMERUser);
 		given(orderService.getOrderWithNotDeleted(orderId)).willReturn(expectedOrderResponseDTO);
 		given(userDetailsService.loadUserByJwt(any())).willReturn(
 			new UserDetailsServiceImpl.CustomUserDetails(expectedOrderResponseDTO.getMember()));
@@ -217,7 +217,7 @@ public class OrderSelectApiControllerTest {
 	void When_GetOrderWithAdmin_Expect_Status200() throws Exception {
 		// given
 		long orderId = 1L;
-		OrderResponseDTO expectedOrderResponseDTO = OrderResponseDTO.fromOrder(expectedOrderWithADMINUser);
+		OrderResponseDTO expectedOrderResponseDTO = OrderResponseDTO.create(expectedOrderWithADMINUser);
 		given(orderService.getOrderWithNoCondition(orderId)).willReturn(expectedOrderResponseDTO);
 		given(userDetailsService.loadUserByJwt(any())).willReturn(
 			new UserDetailsServiceImpl.CustomUserDetails(expectedOrderResponseDTO.getMember()));
