@@ -4,12 +4,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.psj.itembrowser.common.exception.NotFoundException;
+import com.psj.itembrowser.product.domain.dto.request.ProductUpdateDTO;
 import com.psj.itembrowser.product.service.FileService;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,7 +44,7 @@ class ProductServiceImplTest {
     class CreateProduct {
 
         @Test
-        @DisplayName("생성 성공 테스트")
+        @DisplayName("상품 생성 성공 테스트")
         void createProductSuccess() throws Exception {
             // given
             ProductRequestDTO dto = mock(ProductRequestDTO.class);
@@ -57,7 +60,7 @@ class ProductServiceImplTest {
         }
 
         @Test
-        @DisplayName("판매 날짜 유효성 검증 실패")
+        @DisplayName("상품 생성 판매 날짜 유효성 검증 실패")
         void createProductFailDueToInvalidSellDates() {
             // given
             ProductRequestDTO dto = mock(ProductRequestDTO.class);
@@ -72,9 +75,54 @@ class ProductServiceImplTest {
             assertThrows(IllegalArgumentException.class, () -> productService.createProduct(dto),
                 "The sell start datetime must not be before the sell end datetime.");
 
-            // 검증: createProduct 메소드가 실패하여, productPersistence.createProduct 메소드가 호출되지 않았는지 확인
             verify(productPersistence, never()).createProduct(product);
             verify(fileService, never()).createProductImages(anyList(), anyLong());
         }
+    }
+
+    @Nested
+    class UpdateProduct {
+
+        @Test
+        @DisplayName("상품 업데이트 성공")
+        void updateProductSuccess() {
+            // given
+            ProductUpdateDTO productUpdateDTO = mock(ProductUpdateDTO.class);
+            Long productId = 1L;
+            Product product = mock(Product.class);
+
+            when(productUpdateDTO.toProduct(productId)).thenReturn(product);
+            doNothing().when(product).validateSellDates();
+            doNothing().when(productPersistence).updateProduct(product);
+            doNothing().when(fileService).updateProductImages(productUpdateDTO, productId);
+
+            // when
+            productService.updateProduct(productUpdateDTO, productId);
+
+            // then
+            verify(productPersistence, times(1)).findProductById(productId);
+            verify(productPersistence, times(1)).updateProduct(product);
+            verify(fileService, times(1)).updateProductImages(productUpdateDTO, productId);
+        }
+
+        @Test
+        @DisplayName("상품을 찾을 수 없음 업데이트 실패")
+        void updateProductProductNotFoundFailure() {
+            // given
+            ProductUpdateDTO productUpdateDTO = mock(ProductUpdateDTO.class);
+            Long productId = 1L;
+
+            when(productPersistence.findProductById(productId)).thenThrow(
+                new NotFoundException("Product not found"));
+
+            // when & then
+            assertThrows(NotFoundException.class,
+                () -> productService.updateProduct(productUpdateDTO, productId));
+
+            verify(productPersistence, times(1)).findProductById(productId);
+            verify(productPersistence, never()).updateProduct(any());
+            verify(fileService, never()).updateProductImages(any(), anyLong());
+        }
+
     }
 }
