@@ -183,7 +183,7 @@ public class OrderSelectServiceTest {
         try (MockedStatic<PageMethod> mockStatic = mockStatic(PageMethod.class)) {
             //given
             OrderPageRequestDTO requestDTO = mock(OrderPageRequestDTO.class);
-            given(requestDTO.getPageNum()).willReturn(1);
+            given(requestDTO.getPageNum()).willReturn(0);
             given(requestDTO.getPageSize()).willReturn(10);
             
             mockStatic.when(
@@ -206,7 +206,7 @@ public class OrderSelectServiceTest {
         try (MockedStatic<PageMethod> mockStatic = mockStatic(PageMethod.class)) {
             //given
             OrderPageRequestDTO requestDTO = mock(OrderPageRequestDTO.class);
-            given(requestDTO.getPageNum()).willReturn(1);
+            given(requestDTO.getPageNum()).willReturn(0);
             given(requestDTO.getPageSize()).willReturn(10);
             
             mockStatic.when(
@@ -275,7 +275,7 @@ public class OrderSelectServiceTest {
         try (MockedStatic<PageMethod> mockStatic = mockStatic(PageMethod.class)) {
             //given
             OrderPageRequestDTO requestDTO = mock(OrderPageRequestDTO.class);
-            given(requestDTO.getPageNum()).willReturn(1);
+            given(requestDTO.getPageNum()).willReturn(0);
             given(requestDTO.getPageSize()).willReturn(10);
             
             mockStatic.when(
@@ -298,7 +298,7 @@ public class OrderSelectServiceTest {
         try (MockedStatic<PageMethod> mockStatic = mockStatic(PageMethod.class)) {
             //given
             OrderPageRequestDTO requestDTO = mock(OrderPageRequestDTO.class);
-            given(requestDTO.getPageNum()).willReturn(1);
+            given(requestDTO.getPageNum()).willReturn(0);
             given(requestDTO.getPageSize()).willReturn(10);
             
             mockStatic.when(
@@ -360,7 +360,7 @@ public class OrderSelectServiceTest {
         try (MockedStatic<PageMethod> mockStatic = mockStatic(PageMethod.class)) {
             //given
             OrderPageRequestDTO requestDTO = mock(OrderPageRequestDTO.class);
-            given(requestDTO.getPageNum()).willReturn(1);
+            given(requestDTO.getPageNum()).willReturn(0);
             given(requestDTO.getPageSize()).willReturn(10);
             
             mockStatic.when(
