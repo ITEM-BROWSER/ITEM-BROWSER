@@ -76,6 +76,16 @@
         SELECT
         <include refid="orderColumns"/>
         FROM ORDERS O
+        <where>
+            <choose>
+                <when test="orderPageRequestDTO.requestYear != null">
+                    AND YEAR(O.CREATED_DATE) = #{orderPageRequestDTO.requestYear}
+                </when>
+                <when test="orderPageRequestDTO.requestYear == null">
+                    AND O.CREATED_DATE >= DATE_SUB(NOW(), INTERVAL 6 MONTH)
+                </when>
+            </choose>
+        </where>
         ORDER BY O.CREATED_DATE DESC
         LIMIT #{orderPageRequestDTO.pageSize} offset #{orderPageRequestDTO.pageNum};
     </select>
@@ -86,6 +96,14 @@
         <include refid="orderColumns"/>
         FROM ORDERS O
         <where>
+            <choose>
+                <when test="orderPageRequestDTO.requestYear != null">
+                    AND YEAR(O.CREATED_DATE) = #{orderPageRequestDTO.requestYear}
+                </when>
+                <when test="orderPageRequestDTO.requestYear == null">
+                    AND O.CREATED_DATE >= DATE_SUB(NOW(), INTERVAL 6 MONTH)
+                </when>
+            </choose>
             AND O.DELETED_DATE IS NULL
         </where>
         ORDER BY O.CREATED_DATE DESC
