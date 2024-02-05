@@ -58,4 +58,6 @@ public interface OrderMapper {
     
     List<Order> selectOrdersWithPaginationAndNotDeleted(
         @Param("orderPageRequestDTO") OrderPageRequestDTO requestDTO);
+    
+    List<OrdersProductRelation> selectOrderRelation(@Param("orderId") long orderId);
 }
