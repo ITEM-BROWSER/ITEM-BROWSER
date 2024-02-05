@@ -1,5 +1,6 @@
 package com.psj.itembrowser.security.common.pagination;
 
+import javax.validation.constraints.Positive;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PageRequestDTO {
     
+    @Positive(message = "pageNum must be positive number")
     private int pageNum = 1;
+    @Positive(message = "pageSize must be positive number")
     private int pageSize = 10;
     
     public static PageRequestDTO create(int pageNum, int pageSize) {
