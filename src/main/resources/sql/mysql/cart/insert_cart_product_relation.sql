@@ -1,4 +1,4 @@
--- CART-data.sql
+-- insert_cart.sql
 INSERT INTO CART_PRODUCT_RELATION ( cart_id
                                   , product_id
                                   , product_quantity

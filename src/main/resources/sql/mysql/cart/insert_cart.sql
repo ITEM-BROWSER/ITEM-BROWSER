@@ -1,4 +1,4 @@
--- CART-data.sql
+-- insert_cart.sql
 INSERT INTO CART ( ID
                  , USER_ID
                  , CREATED_DATE
