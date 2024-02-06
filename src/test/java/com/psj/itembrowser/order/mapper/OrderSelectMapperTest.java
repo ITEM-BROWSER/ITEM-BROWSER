@@ -1,17 +1,23 @@
 package com.psj.itembrowser.order.mapper;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
 
+import com.psj.itembrowser.member.domain.vo.Member;
+import com.psj.itembrowser.order.domain.vo.Order;
+import com.psj.itembrowser.order.domain.vo.OrderStatus;
+import com.psj.itembrowser.order.domain.vo.OrdersProductRelation;
+import com.psj.itembrowser.shippingInfos.domain.vo.ShippingInfo;
 import java.time.LocalDateTime;
 import java.util.List;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlMergeMode;
 
@@ -24,11 +30,14 @@ import com.psj.itembrowser.order.domain.vo.OrdersProductRelation;
 import com.psj.itembrowser.shippingInfos.domain.vo.ShippingInfo;
 
 @MybatisTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@AutoConfigureTestDatabase(replace = Replace.AUTO_CONFIGURED)
+@ActiveProfiles("test")
 @Sql(scripts = {"classpath:drop-table.sql", "classpath:schema.sql",
-	"classpath:sql/member/insert_member.sql", "classpath:sql/shippinginfo/insert_shipping_info.sql",
-	"classpath:sql/product/insert_product.sql", "classpath:sql/order/insert_order_product.sql",
-	"classpath:sql/order/insert_order.sql"})
+	"classpath:sql/mysql/member/insert_member.sql",
+	"classpath:sql/mysql/shippinginfo/insert_shipping_info.sql",
+	"classpath:sql/mysql/product/insert_product.sql",
+	"classpath:sql/mysql/order/insert_order_product.sql",
+	"classpath:sql/mysql/order/insert_order.sql"})
 public class OrderSelectMapperTest {
 
 	@Autowired
