@@ -44,10 +44,10 @@ public class OrderDeleteIntegrationTest {
     @Test
     @Sql(scripts = {"classpath:drop-table.sql", "classpath:schema.sql",
         "classpath:/sql/h2/member/insert_member.sql",
-        "classpath:/sql/h2/shippinginfo/insert_shipping_info.sql", "classpath:sql/h2/product"
-        +
-        "/insert_product.sql", "classpath:sql/h2/order/insert_order_product.sql",
-        "classpath:sql" + "/order/insert_order.sql"})
+        "classpath:/sql/h2/shippinginfo/insert_shipping_info.sql",
+        "classpath:sql/h2/product/insert_product.sql",
+        "classpath:sql/h2/order/insert_order_product.sql",
+        "classpath:sql/h2/order/insert_order.sql"})
     @DisplayName("5개의 스레드로 동시에 주문 취소를 수행하는 경우, 1개의 스레드는 성공하고 나머지는 실패해야 합니다.")
     public void When_5ThreadsDeleteSameOrder_Expect_OnlyOneSuccessAnd()
         throws InterruptedException {

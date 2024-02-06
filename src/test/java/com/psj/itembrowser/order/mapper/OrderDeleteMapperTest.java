@@ -31,7 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
     "classpath:sql/h2/shippinginfo/insert_shipping_info.sql",
     "classpath:sql/h2/product/insert_product.sql",
     "classpath:sql/h2/order/insert_order_product.sql",
-    "classpath:sql" + "/order/insert_order.sql"})
+    "classpath:sql/h2/order/insert_order.sql"})
 public class OrderDeleteMapperTest {
     
     @Autowired

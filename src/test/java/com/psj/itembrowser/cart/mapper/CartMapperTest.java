@@ -92,7 +92,7 @@ class CartMapperTest {
     @Sql(value = {"classpath:drop-table.sql", "classpath:schema.sql",
         "classpath:/sql/h2/member/insert_member.sql",
         "classpath:/sql/h2/cart/insert_cart.sql",
-        "classpath:/insert_product.sql",
+        "classpath:/sql/h2/product/insert_product.sql",
         "classpath:/sql/h2/cart/insert_cart_product_relation.sql"})
     class SelectTest {
         
@@ -143,7 +143,7 @@ class CartMapperTest {
     @Sql(value = {"classpath:drop-table.sql", "classpath:schema.sql",
         "classpath:/sql/h2/member/insert_member.sql",
         "classpath:/sql/h2/cart/insert_cart.sql",
-        "classpath:/insert_product.sql",
+        "classpath:/sql/h2/product/insert_product.sql",
         "classpath:/sql/h2/cart/insert_cart_product_relation.sql"})
     class UpdateTest {
         
@@ -180,7 +180,7 @@ class CartMapperTest {
     @Sql(value = {"classpath:drop-table.sql", "classpath:schema.sql",
         "classpath:/sql/h2/member/insert_member.sql",
         "classpath:/sql/h2/cart/insert_cart.sql",
-        "classpath:/insert_product.sql",
+        "classpath:/sql/h2/product/insert_product.sql",
         "classpath:/sql/h2/cart/insert_cart_product_relation.sql"})
     class DeleteTest {
         
