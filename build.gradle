@@ -36,6 +36,7 @@ dependencies {
     implementation 'com.github.pagehelper:pagehelper-spring-boot-starter:2.1.0'
 
     implementation 'mysql:mysql-connector-java:8.0.28'
+    implementation 'com.h2database:h2:1.4.200'
     implementation 'org.yaml:snakeyaml:2.0' // yaml 파싱을 위한 라이브러리
     implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
 
