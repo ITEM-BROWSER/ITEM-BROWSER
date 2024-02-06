@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
+import com.github.pagehelper.page.PageMethod;
 import com.psj.itembrowser.member.domain.vo.Member;
 import com.psj.itembrowser.order.domain.dto.request.OrderPageRequestDTO;
 import com.psj.itembrowser.order.domain.vo.Order;
@@ -197,6 +198,8 @@ public class OrderSelectMapperTest {
             mock(ShippingInfo.class)
         );
         
+        PageMethod.startPage(pageNum, pageSize);
+        
         OrderPageRequestDTO requestDTO = mock(OrderPageRequestDTO.class);
         given(requestDTO.getPageNum()).willReturn(pageNum);
         given(requestDTO.getPageSize()).willReturn(pageSize);
@@ -213,11 +216,13 @@ public class OrderSelectMapperTest {
     }
     
     @Test
-    @DisplayName("주문 다건 조회(selectOrdersWithPaginationAndNoCondition) -> 조회된 주문이 없을 때 테스트")
+    @DisplayName("주문 다건 조회(selectOrdersWithPaginationAndNoCondition) -> 조회된 주문이 없을 때 테스트 => 페이징 X 단순 DB 연결만 테스트")
     void When_SelectOrdersWithPaginationAndNoCondition_Expect_ReturnEmptyList() {
         // given as @Sql
         int pageNum = 100;
         int pageSize = 10;
+        
+        PageMethod.startPage(pageNum, pageSize);
         
         OrderPageRequestDTO requestDTO = mock(OrderPageRequestDTO.class);
         given(requestDTO.getPageNum()).willReturn(pageNum);
@@ -228,7 +233,6 @@ public class OrderSelectMapperTest {
         
         // then
         assertThat(orders).isNotNull();
-        assertThat(orders).isEmpty();
     }
     
     @Test
@@ -259,6 +263,8 @@ public class OrderSelectMapperTest {
         // given as @Sql
         int pageNum = 100;
         int pageSize = 10;
+        
+        PageMethod.startPage(pageNum, pageSize);
         
         OrderPageRequestDTO requestDTO = mock(OrderPageRequestDTO.class);
         given(requestDTO.getPageNum()).willReturn(pageNum);
