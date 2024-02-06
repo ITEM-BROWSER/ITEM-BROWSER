@@ -65,7 +65,7 @@ public class OrderApiController {
         
         Member member = Member.from(customUserDetails.getMemberResponseDTO());
         
-        PageInfo<OrderResponseDTO> orderResponseDTOPageInfo = null;
+        PageInfo<OrderResponseDTO> orderResponseDTOPageInfo = new PageInfo<>();
         
         if (member.hasRole(Member.Role.ROLE_ADMIN)) {
             orderResponseDTOPageInfo = orderService.getOrdersWithPaginationAndNoCondition(
