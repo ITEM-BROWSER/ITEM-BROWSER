@@ -3,7 +3,7 @@ package com.psj.itembrowser.security.common.convertor;
 import com.psj.itembrowser.security.common.exception.BadRequestException;
 import com.psj.itembrowser.security.common.exception.ErrorCode;
 import java.time.LocalDate;
-import lombok.NonNull;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -19,8 +19,12 @@ import org.springframework.stereotype.Component;
 public class YearStringToLocalDateConverter implements Converter<String, LocalDate> {
     
     @Override
-    public LocalDate convert(@NonNull String source) {
+    public LocalDate convert(String source) {
         log.info("YearStringToLocalDateConverter.convert source: {}", source);
+        
+        if (Objects.nonNull(source) && source.length() != 4) {
+            return null;
+        }
         
         if (!source.isEmpty()) {
             int year = Integer.parseInt(source);
