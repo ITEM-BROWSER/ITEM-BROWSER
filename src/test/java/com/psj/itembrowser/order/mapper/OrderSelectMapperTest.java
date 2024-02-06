@@ -18,10 +18,9 @@ import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.context.jdbc.SqlMergeMode;
 
 @MybatisTest
-@Transactional
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Sql(scripts = {"classpath:drop-table.sql", "classpath:schema.sql",
     "classpath:sql/member/insert_member.sql", "classpath:sql/shippinginfo/insert_shipping_info.sql",
@@ -233,6 +232,7 @@ public class OrderSelectMapperTest {
     }
     
     @Test
+    @SqlMergeMode(SqlMergeMode.MergeMode.MERGE)
     @Sql(statements = "UPDATE ORDERS SET DELETED_DATE = NOW() WHERE ID = 1")
     @DisplayName("주문 다건 조회(selectOrdersWithPaginationAndNotDeleted) -> 삭제되지 않은 1건 조회 정상 조회")
     void When_SelectOrdersWithPaginationAndNotDeleted_Expect_ReturnOrdersWithPaginationAndReturnTwoOrders() {

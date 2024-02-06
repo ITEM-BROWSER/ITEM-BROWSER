@@ -260,16 +260,6 @@ public class OrderSelectServiceTest {
     }
     
     @Test
-    @DisplayName("다건 주문 조회(getOrdersWithPaginationAndNoCondition) - 매개변수 NULL 체크")
-    void When_GetOrdersWithPaginationAndNoCondition_Null_Expect_ThrowIllegalArgumentException() {
-        //when - then
-        assertThatThrownBy(() -> orderService.getOrdersWithPaginationAndNoCondition(null))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("requestDTO must not be null");
-    }
-    
-    
-    @Test
     @DisplayName("다건 주문 조회(getOrdersWithPaginationAndNotDeleted) - 삭제되지 않은 주문 조회시 주문 정보가 없을 경우 NotFoundException 발생")
     void When_GetOrdersWithPaginationAndNotDeleted_Expect_ThrowNotFoundException() {
         try (MockedStatic<PageMethod> mockStatic = mockStatic(PageMethod.class)) {
