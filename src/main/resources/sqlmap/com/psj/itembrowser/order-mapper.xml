@@ -87,7 +87,6 @@
             </choose>
         </where>
         ORDER BY O.CREATED_DATE DESC
-        LIMIT #{orderPageRequestDTO.pageSize} offset #{orderPageRequestDTO.pageNum};
     </select>
     
     <select id="selectOrdersWithPaginationAndNotDeleted" resultMap="orderResultMap"
@@ -107,7 +106,6 @@
             AND O.DELETED_DATE IS NULL
         </where>
         ORDER BY O.CREATED_DATE DESC
-        LIMIT #{orderPageRequestDTO.pageSize} offset #{orderPageRequestDTO.pageNum};
     </select>
     
     <select id="selectOrderRelation" resultMap="orderProductRelationResultMap"
