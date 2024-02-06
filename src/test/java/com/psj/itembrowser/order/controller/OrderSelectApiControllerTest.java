@@ -22,6 +22,7 @@ import com.psj.itembrowser.member.domain.dto.response.MemberResponseDTO;
 import com.psj.itembrowser.member.domain.vo.Address;
 import com.psj.itembrowser.member.domain.vo.Credentials;
 import com.psj.itembrowser.member.domain.vo.Member;
+import com.psj.itembrowser.member.domain.vo.Member.Role;
 import com.psj.itembrowser.member.domain.vo.MemberNo;
 import com.psj.itembrowser.member.domain.vo.Name;
 import com.psj.itembrowser.order.domain.dto.request.OrderPageRequestDTO;
@@ -76,7 +77,6 @@ public class OrderSelectApiControllerTest {
     
     private Order expectedOrderWithADMINUser;
     private Order expectedOrderWithCUSTOMERUser;
-    private PageInfo<OrderResponseDTO> expectedOrderResponseDTOPageInfo;
     
     @BeforeEach
     public void setUp(WebApplicationContext webApplicationContext,
@@ -222,7 +222,15 @@ public class OrderSelectApiControllerTest {
                         fieldWithPath("member.lastLoginDate").description("마지막 로그인 일자"),
                         fieldWithPath("member.createdDate").optional().description("생성 일자"),
                         fieldWithPath("member.updatedDate").optional().description("수정 일자"),
-                        fieldWithPath("member.deletedDate").optional().description("삭제 일자")
+                        fieldWithPath("member.deletedDate").optional().description("삭제 일자"),
+                        fieldWithPath("ordersProductRelations").description("주문-상품 관계 리스트"),
+                        fieldWithPath("ordersProductRelations[].groupId").description("주문 ID"),
+                        fieldWithPath("ordersProductRelations[].productId").description("상품 ID"),
+                        fieldWithPath("ordersProductRelations[].productQuantity").description(
+                            "상품 수량"),
+                        fieldWithPath("ordersProductRelations[].createdDate").description("생성 일자"),
+                        fieldWithPath("ordersProductRelations[].updatedDate").description("수정 일자"),
+                        fieldWithPath("ordersProductRelations[].deletedDate").description("삭제 일자")
                     )
                     .build()
                 )
@@ -291,7 +299,15 @@ public class OrderSelectApiControllerTest {
                         fieldWithPath("member.lastLoginDate").description("마지막 로그인 일자"),
                         fieldWithPath("member.createdDate").optional().description("생성 일자"),
                         fieldWithPath("member.updatedDate").optional().description("수정 일자"),
-                        fieldWithPath("member.deletedDate").optional().description("삭제 일자")
+                        fieldWithPath("member.deletedDate").optional().description("삭제 일자"),
+                        fieldWithPath("ordersProductRelations").description("주문-상품 관계 리스트"),
+                        fieldWithPath("ordersProductRelations[].groupId").description("주문 ID"),
+                        fieldWithPath("ordersProductRelations[].productId").description("상품 ID"),
+                        fieldWithPath("ordersProductRelations[].productQuantity").description(
+                            "상품 수량"),
+                        fieldWithPath("ordersProductRelations[].createdDate").description("생성 일자"),
+                        fieldWithPath("ordersProductRelations[].updatedDate").description("수정 일자"),
+                        fieldWithPath("ordersProductRelations[].deletedDate").description("삭제 일자")
                     )
                     .build()
                 )
@@ -388,11 +404,190 @@ public class OrderSelectApiControllerTest {
         throws Exception {
         // given
         long userNumber = 1L;
+        int pageNum = 0;
+        int pageSize = 10;
+        String requestYear = "2024";
+        
         OrderResponseDTO expectedOrderResponseDTO = OrderResponseDTO.create(
             expectedOrderWithCUSTOMERUser);
         
         OrderPageRequestDTO orderPageRequestDTO = OrderPageRequestDTO.create(
-            PageRequestDTO.create(0, 10), 1L, "2024");
+            PageRequestDTO.create(pageNum, pageSize), 1L, requestYear);
+        
+        PageInfo<OrderResponseDTO> expectedOrderResponseDTOPageInfo = new PageInfo<>(
+            List.of(expectedOrderResponseDTO));
+        
+        given(orderService.getOrdersWithPaginationAndNotDeleted(orderPageRequestDTO)).willReturn(
+            expectedOrderResponseDTOPageInfo);
+        
+        given(userDetailsService.loadUserByJwt(any())).willReturn(
+            new UserDetailsServiceImpl.CustomUserDetails(expectedOrderResponseDTO.getMember()));
+        
+        // when - then
+        ResultActions response = mockMvc.perform(
+                get("/v1/api/orders/users/{userNumber}", userNumber)
+                    .param("pageNum", String.valueOf(pageNum))
+                    .param("pageSize", String.valueOf(pageSize))
+                    .param("requestYear", requestYear)
+                    .param("userNumber", String.valueOf(userNumber))
+                    .contentType(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.list[0].ordererNumber").value(
+                expectedOrderResponseDTO.getOrdererNumber()))
+            .andExpect(jsonPath("$.list[0].orderStatus").value(
+                expectedOrderResponseDTO.getOrderStatus().name()))
+            .andExpect(jsonPath("$.list[0].member.email").value(
+                expectedOrderResponseDTO.getMember().getEmail()))
+            .andExpect(
+                jsonPath("$.list[0].member.role").value(Member.Role.ROLE_CUSTOMER.name()))
+            .andExpect(jsonPath("$.list[0].ordersProductRelations[0].productId").value(
+                expectedOrderResponseDTO.getOrdersProductRelations().get(0).getProductId()))
+            .andExpect(jsonPath("$.list[0].ordersProductRelations[0].productQuantity").value(
+                expectedOrderResponseDTO.getOrdersProductRelations().get(0).getProductQuantity()));
+        response
+            .andDo(MockMvcRestDocumentationWrapper.document(
+                "get-orders-customer",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                ResourceDocumentation.resource(ResourceSnippetParameters.builder()
+                    .tag("order")
+                    .summary("주문 다건 조회 API - CUSTOMER 권한의 경우")
+                    .pathParameters(
+                        parameterWithName("userNumber").description("사용자 번호")
+                    )
+                    .responseFields(
+                        fieldWithPath("total").description("전체 주문 수"),
+                        fieldWithPath("list").description("주문 리스트"),
+                        fieldWithPath("list[].id").description("주문 ID"),
+                        fieldWithPath("list[].ordererNumber").description("주문자 번호"),
+                        fieldWithPath("list[].orderStatus").description("주문 상태"),
+                        fieldWithPath("list[].paidDate").description("결제 일자"),
+                        fieldWithPath("list[].shippingInfoId").description("배송지 ID"),
+                        fieldWithPath("list[].createdDate").description("생성 일자"),
+                        fieldWithPath("list[].updatedDate").description("수정 일자"),
+                        fieldWithPath("list[].deletedDate").description("삭제 일자"),
+                        fieldWithPath("list[].member").description("주문자 정보"),
+                        fieldWithPath("list[].member.memberNo").description("주문자 번호"),
+                        fieldWithPath("list[].member.email").description("이메일"),
+                        fieldWithPath("list[].member.firstName").description("이름"),
+                        fieldWithPath("list[].member.lastName").description("성"),
+                        fieldWithPath("list[].member.phoneNumber").description("전화번호"),
+                        fieldWithPath("list[].member.addressMain").description("주소"),
+                        fieldWithPath("list[].member.addressSub").description("상세주소"),
+                        fieldWithPath("list[].member.zipCode").description("우편번호"),
+                        fieldWithPath("list[].member.gender").description("성별"),
+                        fieldWithPath("list[].member.role").description("역할"),
+                        fieldWithPath("list[].member.status").description("상태"),
+                        fieldWithPath("list[].member.birthday").description("생년월일"),
+                        fieldWithPath("list[].member.lastLoginDate").description("마지막 로그인 일자"),
+                        fieldWithPath("list[].member.createdDate").optional().description("생성 일자"),
+                        fieldWithPath("list[].member.updatedDate").optional().description("수정 일자"),
+                        fieldWithPath("list[].member.deletedDate").optional().description("삭제 일자"),
+                        fieldWithPath("list[].ordersProductRelations").description("주문-상품 관계 리스트"),
+                        fieldWithPath("list[].ordersProductRelations[].groupId").description(
+                            "주문 ID"),
+                        fieldWithPath("list[].ordersProductRelations[].productId").description(
+                            "상품 ID"),
+                        fieldWithPath(
+                            "list[].ordersProductRelations[].productQuantity").description(
+                            "상품 수량"),
+                        fieldWithPath("list[].ordersProductRelations[].createdDate").description(
+                            "생성 일자"),
+                        fieldWithPath("list[].ordersProductRelations[].updatedDate").description(
+                            "수정 일자"),
+                        fieldWithPath("list[].ordersProductRelations[].deletedDate").description(
+                            "삭제 일자"),
+                        fieldWithPath("pageNum").description("현재 페이지 번호"),
+                        fieldWithPath("pageSize").description("페이지 크기"),
+                        fieldWithPath("size").description("현재 페이지 크기"),
+                        fieldWithPath("startRow").description("현재 페이지 시작 행"),
+                        fieldWithPath("endRow").description("현재 페이지 끝 행"),
+                        fieldWithPath("pages").description("전체 페이지 수"),
+                        fieldWithPath("prePage").description("이전 페이지"),
+                        fieldWithPath("nextPage").description("다음 페이지"),
+                        fieldWithPath("isFirstPage").description("첫 페이지 여부"),
+                        fieldWithPath("isLastPage").description("마지막 페이지 여부"),
+                        fieldWithPath("hasPreviousPage").description("이전 페이지 여부"),
+                        fieldWithPath("hasNextPage").description("다음 페이지 여부"),
+                        fieldWithPath("navigatePages").description("네비게이션 페이지 수"),
+                        fieldWithPath("navigatepageNums").description("네비게이션 페이지 번호"),
+                        fieldWithPath("navigateFirstPage").description("첫 네비게이션 페이지"),
+                        fieldWithPath("navigateLastPage").description("마지막 네비게이션 페이지")
+                    ).build())));
+    }
+    
+    // 404 NOT_FOUND_EXCEPTION 이 터지는 경우 테스트
+    @Test
+    @MockMember(role = Role.ROLE_CUSTOMER)
+    @DisplayName("권한 - CUSTOMER 인 경우, 주문 다건 조회 실패 케이스의 경우 404 반환과 올바른 응답값이 오는지 확인합니다.")
+    void When_GetOrdersWithCustomer_Pagination_SpecificYear_Expect_Status404() throws Exception {
+        // given
+        long userNumber = 1L;
+        int pageNum = 100;
+        int pageSize = 0;
+        String requestYear = "2024";
+        
+        OrderPageRequestDTO orderPageRequestDTO = OrderPageRequestDTO.create(
+            PageRequestDTO.create(pageNum, pageSize), 1L, requestYear);
+        
+        given(orderService.getOrdersWithPaginationAndNotDeleted(orderPageRequestDTO)).willThrow(
+            new NotFoundException(ORDER_NOT_FOUND));
+        
+        given(userDetailsService.loadUserByJwt(any())).willReturn(
+            new UserDetailsServiceImpl.CustomUserDetails(
+                MemberResponseDTO.from(expectedOrderWithCUSTOMERUser.getMember())));
+        
+        // when - then
+        ResultActions response = mockMvc.perform(
+                get("/v1/api/orders/users/{userNumber}", userNumber)
+                    .param("pageNum", String.valueOf(pageNum))
+                    .param("pageSize", String.valueOf(pageSize))
+                    .param("requestYear", requestYear)
+                    .param("userNumber", String.valueOf(userNumber))
+                    .contentType(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.message").value(ORDER_NOT_FOUND.getMessage()));
+        
+        response
+            .andDo(MockMvcRestDocumentationWrapper.document(
+                "get-orders-fail-customer",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                ResourceDocumentation.resource(ResourceSnippetParameters.builder()
+                    .tag("order")
+                    .summary("주문 다건 조회 실패 API - CUSTOMER 권한의 경우")
+                    .pathParameters(
+                        parameterWithName("userNumber").description("사용자 번호")
+                    )
+                    .responseFields(
+                        fieldWithPath("status").description("오류 상태 코드"),
+                        fieldWithPath("error").description("에러 메시지"),
+                        fieldWithPath("message").description("오류 메시지"),
+                        fieldWithPath("path").description("URI"),
+                        fieldWithPath("timestamp").description("시간")
+                    ).build()
+                )
+            ));
+    }
+    
+    
+    @Test
+    @MockMember(role = Member.Role.ROLE_ADMIN)
+    @DisplayName("권한 - ADMIN 인 경우, 주문 다건 조회, 첫 페이지, 10개의 페이지사이즈, 2024년 주문 검색시 200 성공과 올바른 응답값이 오는지 확인합니다.")
+    void When_GetOrdersWithAdmin_Pagination_SpecificYear_Expect_Status200() throws Exception {
+        // given
+        long userNumber = 1L;
+        int pageNum = 0;
+        int pageSize = 10;
+        String requestYear = "2024";
+        
+        OrderResponseDTO expectedOrderResponseDTO = OrderResponseDTO.create(
+            expectedOrderWithADMINUser);
+        
+        OrderPageRequestDTO orderPageRequestDTO = OrderPageRequestDTO.create(
+            PageRequestDTO.create(pageNum, pageSize), 1L, requestYear);
         
         PageInfo<OrderResponseDTO> expectedOrderResponseDTOPageInfo = new PageInfo<>(
             List.of(expectedOrderResponseDTO));
@@ -406,49 +601,149 @@ public class OrderSelectApiControllerTest {
         // when - then
         ResultActions response = mockMvc.perform(
                 get("/v1/api/orders/users/{userNumber}", userNumber)
+                    .param("pageNum", String.valueOf(pageNum))
+                    .param("pageSize", String.valueOf(pageSize))
+                    .param("requestYear", requestYear)
+                    .param("userNumber", String.valueOf(userNumber))
                     .contentType(APPLICATION_JSON)
                     .accept(APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.content[0].id").value(expectedOrderResponseDTO.getId()))
-            .andExpect(jsonPath("$.content[0].ordererNumber").value(
+            .andExpect(jsonPath("$.list[0].ordererNumber").value(
                 expectedOrderResponseDTO.getOrdererNumber()))
-            .andExpect(jsonPath("$.content[0].member.memberNo").value(
-                expectedOrderResponseDTO.getMember().getMemberNo()))
-            .andExpect(jsonPath("$.content[0].member.email").value(
+            .andExpect(jsonPath("$.list[0].orderStatus").value(
+                expectedOrderResponseDTO.getOrderStatus().name()))
+            .andExpect(jsonPath("$.list[0].member.email").value(
                 expectedOrderResponseDTO.getMember().getEmail()))
             .andExpect(
-                jsonPath("$.content[0].member.role").value(Member.Role.ROLE_CUSTOMER.name()));
-        
+                jsonPath("$.list[0].member.role").value(Member.Role.ROLE_ADMIN.name()))
+            .andExpect(jsonPath("$.list[0].ordersProductRelations[0].productId").value(
+                expectedOrderResponseDTO.getOrdersProductRelations().get(0).getProductId()))
+            .andExpect(jsonPath("$.list[0].ordersProductRelations[0].productQuantity").value(
+                expectedOrderResponseDTO.getOrdersProductRelations().get(0).getProductQuantity()));
         response
             .andDo(MockMvcRestDocumentationWrapper.document(
-                "get-orders-customer",
+                "get-orders-admin",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 ResourceDocumentation.resource(ResourceSnippetParameters.builder()
-                    .tag("order")
-                    .summary("주문 다건 조회 API - CUSTOMER 권한의 경우")
+                        .
+                    tag("order")
+                    .summary("주문 다건 조회 API - ADMIN 권한의 경우")
                     .pathParameters(
                         parameterWithName("userNumber").description("사용자 번호")
                     )
                     .responseFields(
-                        fieldWithPath("content").description("주문 목록"),
-                        fieldWithPath("content[].id").description("주문 ID"),
-                        fieldWithPath("content[].ordererNumber").description("주문자 번호"),
-                        fieldWithPath("content[].orderStatus").description("주문 상태"),
-                        fieldWithPath("content[].paidDate").description("결제 일자"),
-                        fieldWithPath("content[].shippingInfoId").description("배송지 ID"),
-                        fieldWithPath("content[].createdDate").description("생성 일자"),
-                        fieldWithPath("content[].updatedDate").description("수정 일자"),
-                        fieldWithPath("content[].deletedDate").description("삭제 일자"),
-                        fieldWithPath("content[].member").description("주문자 정보"),
-                        fieldWithPath("content[].member.memberNo").description("주문자 번호"),
-                        fieldWithPath("content[].member.email").description("이메일"),
-                        fieldWithPath("content[].member.firstName").description("이름"),
-                        fieldWithPath("content[].member.lastName").description("성"),
-                        fieldWithPath("content[].member.phoneNumber").description("전화번호"),
-                        fieldWithPath("content[].member.addressMain").description("주소"),
-                        fieldWithPath("content[].member.addressSub").description("상세주소"),
-                        fieldWithPath("content[].member.zipCode").description("우편번호")
+                        fieldWithPath("total").description("전체 주문 수"),
+                        fieldWithPath("list").description("주문 리스트"),
+                        fieldWithPath("list[].id").description("주문 ID"),
+                        fieldWithPath("list[].ordererNumber").description("주문자 번호"),
+                        fieldWithPath("list[].orderStatus").description("주문 상태"),
+                        fieldWithPath("list[].paidDate").description("결제 일자"),
+                        fieldWithPath("list[].shippingInfoId").description("배송지 ID"),
+                        fieldWithPath("list[].createdDate").description("생성 일자"),
+                        fieldWithPath("list[].updatedDate").description("수정 일자"),
+                        fieldWithPath("list[].deletedDate").description("삭제 일자"),
+                        fieldWithPath("list[].member").description("주문자 정보"),
+                        fieldWithPath("list[].member.memberNo").description("주문자 번호"),
+                        fieldWithPath("list[].member.email").description("이메일"),
+                        fieldWithPath("list[].member.firstName").description("이름"),
+                        fieldWithPath("list[].member.lastName").description("성"),
+                        fieldWithPath("list[].member.phoneNumber").description("전화번호"),
+                        fieldWithPath("list[].member.addressMain").description("주소"),
+                        fieldWithPath("list[].member.addressSub").description("상세주소"),
+                        fieldWithPath("list[].member.zipCode").description("우편번호"),
+                        fieldWithPath("list[].member.gender").description("성별"),
+                        fieldWithPath("list[].member.role").description("역할"),
+                        fieldWithPath("list[].member.status").description("상태"),
+                        fieldWithPath("list[].member.birthday").description("생년월일"),
+                        fieldWithPath("list[].member.lastLoginDate").description("마지막 로그인 일자"),
+                        fieldWithPath("list[].member.createdDate").optional().description("생성 일자"),
+                        fieldWithPath("list[].member.updatedDate").optional().description("수정 일자"),
+                        fieldWithPath("list[].member.deletedDate").optional().description("삭제 일자"),
+                        fieldWithPath("list[].ordersProductRelations").description("주문-상품 관계 리스트"),
+                        fieldWithPath("list[].ordersProductRelations[].groupId").description(
+                            "주문 ID"),
+                        fieldWithPath("list[].ordersProductRelations[].productId").description(
+                            "상품 ID"),
+                        fieldWithPath(
+                            "list[].ordersProductRelations[].productQuantity").description(
+                            "상품 수량"),
+                        fieldWithPath("list[].ordersProductRelations[].createdDate").description(
+                            "생성 일자"),
+                        fieldWithPath("list[].ordersProductRelations[].updatedDate").description(
+                            "수정 일자"),
+                        fieldWithPath("list[].ordersProductRelations[].deletedDate").description(
+                            "삭제 일자"),
+                        fieldWithPath("pageNum").description("현재 페이지 번호"),
+                        fieldWithPath("pageSize").description("페이지 크기"),
+                        fieldWithPath("size").description("현재 페이지 크기"),
+                        fieldWithPath("startRow").description("현재 페이지 시작 행"),
+                        fieldWithPath("endRow").description("현재 페이지 끝 행"),
+                        fieldWithPath("pages").description("전체 페이지 수"),
+                        fieldWithPath("prePage").description("이전 페이지"),
+                        fieldWithPath("nextPage").description("다음 페이지"),
+                        fieldWithPath("isFirstPage").description("첫 페이지 여부"),
+                        fieldWithPath("isLastPage").description("마지막 페이지 여부"),
+                        fieldWithPath("hasPreviousPage").description("이전 페이지 여부"),
+                        fieldWithPath("hasNextPage").description("다음 페이지 여부"),
+                        fieldWithPath("navigatePages").description("네비게이션 페이지 수"),
+                        fieldWithPath("navigatepageNums").description("네비게이션 페이지 번호"),
+                        fieldWithPath("navigateFirstPage").description("첫 네비게이션 페이지"),
+                        fieldWithPath("navigateLastPage").description("마지막 네비게이션 페이지")
                     ).build())));
+    }
+    
+    @Test
+    @MockMember(role = Member.Role.ROLE_ADMIN)
+    @DisplayName("권한 - ADMIN 인 경우, 주문 다건 조회 실패 케이스의 경우 404 반환과 올바른 응답값이 오는지 확인합니다.")
+    void When_GetOrdersWithAdmin_Pagination_SpecificYear_Expect_Status404() throws Exception {
+        // given
+        long userNumber = 1L;
+        int pageNum = 100;
+        int pageSize = 0;
+        String requestYear = "2024";
+        
+        OrderPageRequestDTO orderPageRequestDTO = OrderPageRequestDTO.create(
+            PageRequestDTO.create(pageNum, pageSize), 1L, requestYear);
+        
+        given(orderService.getOrdersWithPaginationAndNoCondition(orderPageRequestDTO)).willThrow(
+            new NotFoundException(ORDER_NOT_FOUND));
+        
+        given(userDetailsService.loadUserByJwt(any())).willReturn(
+            new UserDetailsServiceImpl.CustomUserDetails(
+                MemberResponseDTO.from(expectedOrderWithADMINUser.getMember())));
+        
+        // when - then
+        ResultActions response = mockMvc.perform(
+                get("/v1/api/orders/users/{userNumber}", userNumber)
+                    .param("pageNum", String.valueOf(pageNum))
+                    .param("pageSize", String.valueOf(pageSize))
+                    .param("requestYear", requestYear)
+                    .param("userNumber", String.valueOf(userNumber))
+                    .contentType(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.message").value(ORDER_NOT_FOUND.getMessage()));
+        
+        response
+            .andDo(MockMvcRestDocumentationWrapper.document(
+                "get-orders-fail-admin",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                ResourceDocumentation.resource(ResourceSnippetParameters.builder()
+                    .tag("order")
+                    .summary("주문 다건 조회 실패 API - ADMIN 권한의 경우")
+                    .pathParameters(
+                        parameterWithName("userNumber").description("사용자 번호")
+                    )
+                    .responseFields(
+                        fieldWithPath("status").description("오류 상태 코드"),
+                        fieldWithPath("error").description("에러 메시지"),
+                        fieldWithPath("message").description("오류 메시지"),
+                        fieldWithPath("path").description("URI"),
+                        fieldWithPath("timestamp").description("시간")
+                    ).build()
+                )
+            ));
     }
 }
