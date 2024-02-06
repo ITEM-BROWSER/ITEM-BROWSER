@@ -2,8 +2,8 @@ package com.psj.itembrowser.order.service.impl;
 
 import static com.psj.itembrowser.security.common.exception.ErrorCode.ORDER_NOT_CANCELABLE;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.github.pagehelper.page.PageMethod;
 import com.psj.itembrowser.order.domain.dto.request.OrderPageRequestDTO;
 import com.psj.itembrowser.order.domain.dto.response.OrderResponseDTO;
 import com.psj.itembrowser.order.domain.vo.Order;
@@ -57,7 +57,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public PageInfo<OrderResponseDTO> getOrdersWithPaginationAndNoCondition(@NotNull
     OrderPageRequestDTO requestDTO) {
-        PageHelper.startPage(requestDTO.getPageNum(), requestDTO.getPageSize());
+        PageMethod.startPage(requestDTO.getPageNum(), requestDTO.getPageSize());
         List<Order> orders = orderPersistence.getOrdersWithPaginationAndNoCondition(requestDTO);
         
         return new PageInfo<>(
@@ -67,7 +67,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public PageInfo<OrderResponseDTO> getOrdersWithPaginationAndNotDeleted(@NotNull
     OrderPageRequestDTO requestDTO) {
-        PageHelper.startPage(requestDTO.getPageNum(), requestDTO.getPageSize());
+        PageMethod.startPage(requestDTO.getPageNum(), requestDTO.getPageSize());
         List<Order> orders = orderPersistence.getOrdersWithPaginationAndNotDeleted(requestDTO);
         
         authenticationService.authorizeOrdersWhenCustomer(orders);
