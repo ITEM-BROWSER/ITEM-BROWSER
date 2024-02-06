@@ -19,8 +19,8 @@ drop table if exists PRODUCT;
 
 drop table if exists SHIPPING_INFOS;
 
-drop table if exists MEMBER;
-
 drop table if exists MEMBER_REFRESH_TOKEN;
+
+drop table if exists MEMBER;
 
 set foreign_key_checks = 1;
