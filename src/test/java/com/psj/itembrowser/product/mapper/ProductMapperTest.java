@@ -32,9 +32,9 @@ import org.springframework.transaction.annotation.Transactional;
 @ActiveProfiles("test")
 @Transactional
 @Sql(value = {"classpath:drop-table.sql", "classpath:schema.sql",
-    "classpath:/sql/mysql/member/insert_member.sql",
-    "classpath:/sql/mysql/product/insert_product.sql",
-    "classpath:/sql/mysql/product/insert_product_image.sql"})
+    "classpath:/sql/h2/member/insert_member.sql",
+    "classpath:/sql/h2/product/insert_product.sql",
+    "classpath:/sql/h2/product/insert_product_image.sql"})
 class ProductMapperTest {
 
     @Autowired

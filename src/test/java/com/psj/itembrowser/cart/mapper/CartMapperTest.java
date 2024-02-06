@@ -42,10 +42,10 @@ class CartMapperTest {
     
     @Nested
     @Sql(value = {"classpath:drop-table.sql", "classpath:schema.sql",
-        "classpath:/sql/mysql/member/insert_member.sql",
-        "classpath:/sql/mysql/cart/insert_cart.sql",
-        "classpath:/sql/mysql/product/insert_product.sql",
-        "classpath:/sql/mysql/cart/insert_cart_product_relation.sql"})
+        "classpath:/sql/h2/member/insert_member.sql",
+        "classpath:/sql/h2/cart/insert_cart.sql",
+        "classpath:/sql/h2/product/insert_product.sql",
+        "classpath:/sql/h2/cart/insert_cart_product_relation.sql"})
     class InsertTest {
         
         @Test
@@ -90,10 +90,10 @@ class CartMapperTest {
     
     @Nested
     @Sql(value = {"classpath:drop-table.sql", "classpath:schema.sql",
-        "classpath:/sql/mysql/member/insert_member.sql",
-        "classpath:/sql/mysql/cart/insert_cart.sql",
+        "classpath:/sql/h2/member/insert_member.sql",
+        "classpath:/sql/h2/cart/insert_cart.sql",
         "classpath:/insert_product.sql",
-        "classpath:/sql/mysql/cart/insert_cart_product_relation.sql"})
+        "classpath:/sql/h2/cart/insert_cart_product_relation.sql"})
     class SelectTest {
         
         @Test
@@ -141,10 +141,10 @@ class CartMapperTest {
     
     @Nested
     @Sql(value = {"classpath:drop-table.sql", "classpath:schema.sql",
-        "classpath:/sql/mysql/member/insert_member.sql",
-        "classpath:/sql/mysql/cart/insert_cart.sql",
+        "classpath:/sql/h2/member/insert_member.sql",
+        "classpath:/sql/h2/cart/insert_cart.sql",
         "classpath:/insert_product.sql",
-        "classpath:/sql/mysql/cart/insert_cart_product_relation.sql"})
+        "classpath:/sql/h2/cart/insert_cart_product_relation.sql"})
     class UpdateTest {
         
         @Test
@@ -178,10 +178,10 @@ class CartMapperTest {
     
     @Nested
     @Sql(value = {"classpath:drop-table.sql", "classpath:schema.sql",
-        "classpath:/sql/mysql/member/insert_member.sql",
-        "classpath:/sql/mysql/cart/insert_cart.sql",
+        "classpath:/sql/h2/member/insert_member.sql",
+        "classpath:/sql/h2/cart/insert_cart.sql",
         "classpath:/insert_product.sql",
-        "classpath:/sql/mysql/cart/insert_cart_product_relation.sql"})
+        "classpath:/sql/h2/cart/insert_cart_product_relation.sql"})
     class DeleteTest {
         
         @Test

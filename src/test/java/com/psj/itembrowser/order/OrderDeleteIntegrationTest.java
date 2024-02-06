@@ -43,10 +43,10 @@ public class OrderDeleteIntegrationTest {
     //TODO @sql 을 JPA 로 변경
     @Test
     @Sql(scripts = {"classpath:drop-table.sql", "classpath:schema.sql",
-        "classpath:/sql/mysql/member/insert_member.sql",
-        "classpath:/sql/mysql/shippinginfo/insert_shipping_info.sql", "classpath:sql/mysql/product"
+        "classpath:/sql/h2/member/insert_member.sql",
+        "classpath:/sql/h2/shippinginfo/insert_shipping_info.sql", "classpath:sql/h2/product"
         +
-        "/insert_product.sql", "classpath:sql/mysql/order/insert_order_product.sql",
+        "/insert_product.sql", "classpath:sql/h2/order/insert_order_product.sql",
         "classpath:sql" + "/order/insert_order.sql"})
     @DisplayName("5개의 스레드로 동시에 주문 취소를 수행하는 경우, 1개의 스레드는 성공하고 나머지는 실패해야 합니다.")
     public void When_5ThreadsDeleteSameOrder_Expect_OnlyOneSuccessAnd()
