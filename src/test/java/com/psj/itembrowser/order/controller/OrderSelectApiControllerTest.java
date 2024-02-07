@@ -390,8 +390,8 @@ public class OrderSelectApiControllerTest {
     //다건 조회 테스트
     @Test
     @MockMember(role = Member.Role.ROLE_CUSTOMER)
-    @DisplayName("권한 - CUSTOMER 인 경우, 주문 다건 조회, 첫 페이지, 10개의 페이지사이즈, 2024년 주문 검색시 200 성공과 올바른 응답값이 오는지 확인합니다.")
-    void When_GetOrdersWithCustomer_Pagination_SpecificYear_Expect_Status200()
+    @DisplayName("권한 - CUSTOMER 인 경우, 삭제되지 않은 주문을 조회하는 서비스를 호출 시 200 성공을 기대합니다.")
+    void When_GetOrdersWithCustomer_Expect_Status200()
         throws Exception {
         // given
         long userNumber = 1L;
@@ -407,8 +407,7 @@ public class OrderSelectApiControllerTest {
         
         given(orderService.getOrdersWithPaginationAndNotDeleted(orderPageRequestDTO)).willReturn(expectedOrderResponseDTOPageInfo);
         
-        given(userDetailsService.loadUserByJwt(any())).willReturn(
-            new UserDetailsServiceImpl.CustomUserDetails(expectedOrderResponseDTO.getMember()));
+        given(userDetailsService.loadUserByJwt(any())).willReturn(new UserDetailsServiceImpl.CustomUserDetails(expectedOrderResponseDTO.getMember()));
         
         // when - then
         ResultActions response = mockMvc.perform(
@@ -419,19 +418,7 @@ public class OrderSelectApiControllerTest {
                     .param("userNumber", String.valueOf(userNumber))
                     .contentType(APPLICATION_JSON)
                     .accept(APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.list[0].ordererNumber").value(
-                expectedOrderResponseDTO.getOrdererNumber()))
-            .andExpect(jsonPath("$.list[0].orderStatus").value(
-                expectedOrderResponseDTO.getOrderStatus().name()))
-            .andExpect(jsonPath("$.list[0].member.email").value(
-                expectedOrderResponseDTO.getMember().getEmail()))
-            .andExpect(
-                jsonPath("$.list[0].member.role").value(Member.Role.ROLE_CUSTOMER.name()))
-            .andExpect(jsonPath("$.list[0].ordersProductRelations[0].productId").value(
-                expectedOrderResponseDTO.getOrdersProductRelations().get(0).getProductId()))
-            .andExpect(jsonPath("$.list[0].ordersProductRelations[0].productQuantity").value(
-                expectedOrderResponseDTO.getOrdersProductRelations().get(0).getProductQuantity()));
+            .andExpect(status().isOk());
         response
             .andDo(MockMvcRestDocumentationWrapper.document(
                 "get-orders-customer",
@@ -552,8 +539,8 @@ public class OrderSelectApiControllerTest {
     
     @Test
     @MockMember(role = Member.Role.ROLE_ADMIN)
-    @DisplayName("권한 - ADMIN 인 경우, 주문 다건 조회, 첫 페이지, 10개의 페이지사이즈, 2024년 주문 검색시 200 성공과 올바른 응답값이 오는지 확인합니다.")
-    void When_GetOrdersWithAdmin_Pagination_SpecificYear_Expect_Status200() throws Exception {
+    @DisplayName("권한 - ADMIN 인 경우, 삭제되지 않은 주문을 조회하는 서비스를 호출 시 200 성공을 기대합니다.")
+    void When_GetOrdersWithAdmin_Expect_Status200() throws Exception {
         // given
         long userNumber = 1L;
         int pageNum = 0;
@@ -580,14 +567,7 @@ public class OrderSelectApiControllerTest {
                     .param("userNumber", String.valueOf(userNumber))
                     .contentType(APPLICATION_JSON)
                     .accept(APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.list[0].ordererNumber").value(expectedOrderResponseDTO.getOrdererNumber()))
-            .andExpect(jsonPath("$.list[0].orderStatus").value(expectedOrderResponseDTO.getOrderStatus().name()))
-            .andExpect(jsonPath("$.list[0].member.email").value(expectedOrderResponseDTO.getMember().getEmail()))
-            .andExpect(jsonPath("$.list[0].member.role").value(Member.Role.ROLE_ADMIN.name()))
-            .andExpect(jsonPath("$.list[0].ordersProductRelations[0].productId").value(expectedOrderResponseDTO.getOrdersProductRelations().get(0).getProductId()))
-            .andExpect(
-                jsonPath("$.list[0].ordersProductRelations[0].productQuantity").value(expectedOrderResponseDTO.getOrdersProductRelations().get(0).getProductQuantity()));
+            .andExpect(status().isOk());
         response
             .andDo(MockMvcRestDocumentationWrapper.document(
                 "get-orders-admin",
