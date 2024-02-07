@@ -166,11 +166,9 @@ public class OrderSelectApiControllerTest {
     void When_GetOrderWithCustomer_Expect_Status200() throws Exception {
         // given
         long orderId = 1L;
-        OrderResponseDTO expectedOrderResponseDTO = OrderResponseDTO.create(
-            expectedOrderWithCUSTOMERUser);
+        OrderResponseDTO expectedOrderResponseDTO = OrderResponseDTO.create(expectedOrderWithCUSTOMERUser);
         given(orderService.getOrderWithNotDeleted(orderId)).willReturn(expectedOrderResponseDTO);
-        given(userDetailsService.loadUserByJwt(any())).willReturn(
-            new UserDetailsServiceImpl.CustomUserDetails(expectedOrderResponseDTO.getMember()));
+        given(userDetailsService.loadUserByJwt(any())).willReturn(new UserDetailsServiceImpl.CustomUserDetails(expectedOrderResponseDTO.getMember()));
         
         // when - then
         ResultActions response = mockMvc.perform(get("/v1/api/orders/{orderId}", orderId)
@@ -180,8 +178,7 @@ public class OrderSelectApiControllerTest {
             .andExpect(jsonPath("$.id").value(expectedOrderResponseDTO.getId()))
             .andExpect(
                 jsonPath("$.ordererNumber").value(expectedOrderResponseDTO.getOrdererNumber()))
-            .andExpect(jsonPath("$.member.memberNo").value(
-                expectedOrderResponseDTO.getMember().getMemberNo()))
+            .andExpect(jsonPath("$.member.memberNo").value(expectedOrderResponseDTO.getMember().getMemberNo()))
             .andExpect(
                 jsonPath("$.member.email").value(expectedOrderResponseDTO.getMember().getEmail()))
             .andExpect(jsonPath("$.member.role").value(Member.Role.ROLE_CUSTOMER.name()));
@@ -243,11 +240,9 @@ public class OrderSelectApiControllerTest {
     void When_GetOrderWithAdmin_Expect_Status200() throws Exception {
         // given
         long orderId = 1L;
-        OrderResponseDTO expectedOrderResponseDTO = OrderResponseDTO.create(
-            expectedOrderWithADMINUser);
+        OrderResponseDTO expectedOrderResponseDTO = OrderResponseDTO.create(expectedOrderWithADMINUser);
         given(orderService.getOrderWithNoCondition(orderId)).willReturn(expectedOrderResponseDTO);
-        given(userDetailsService.loadUserByJwt(any())).willReturn(
-            new UserDetailsServiceImpl.CustomUserDetails(expectedOrderResponseDTO.getMember()));
+        given(userDetailsService.loadUserByJwt(any())).willReturn(new UserDetailsServiceImpl.CustomUserDetails(expectedOrderResponseDTO.getMember()));
         
         // when - then
         ResultActions response = mockMvc.perform(get("/v1/api/orders/{orderId}", orderId)
@@ -320,11 +315,9 @@ public class OrderSelectApiControllerTest {
     void When_GetOrderWithCUSTOMER_Expect_Status404() throws Exception {
         // given
         long orderId = 1L;
-        given(orderService.getOrderWithNotDeleted(orderId)).willThrow(
-            new NotFoundException(ORDER_NOT_FOUND));
+        given(orderService.getOrderWithNotDeleted(orderId)).willThrow(new NotFoundException(ORDER_NOT_FOUND));
         given(userDetailsService.loadUserByJwt(any())).willReturn(
-            new UserDetailsServiceImpl.CustomUserDetails(
-                MemberResponseDTO.from(expectedOrderWithCUSTOMERUser.getMember())));
+            new UserDetailsServiceImpl.CustomUserDetails(MemberResponseDTO.from(expectedOrderWithCUSTOMERUser.getMember())));
         
         // when - then
         ResultActions response = mockMvc.perform(get("/v1/api/orders/{orderId}", orderId)
@@ -361,11 +354,9 @@ public class OrderSelectApiControllerTest {
     void When_GetOrderWithADMIN_Expect_Status404() throws Exception {
         // given
         long orderId = 1L;
-        given(orderService.getOrderWithNoCondition(orderId)).willThrow(
-            new NotFoundException(ORDER_NOT_FOUND));
-        given(userDetailsService.loadUserByJwt(any())).willReturn(
-            new UserDetailsServiceImpl.CustomUserDetails(
-                MemberResponseDTO.from(expectedOrderWithADMINUser.getMember())));
+        given(orderService.getOrderWithNoCondition(orderId)).willThrow(new NotFoundException(ORDER_NOT_FOUND));
+        given(userDetailsService.loadUserByJwt(any())).willReturn(new UserDetailsServiceImpl.CustomUserDetails(
+            MemberResponseDTO.from(expectedOrderWithADMINUser.getMember())));
         
         // when - then
         ResultActions response = mockMvc.perform(get("/v1/api/orders/{orderId}", orderId)
@@ -408,17 +399,13 @@ public class OrderSelectApiControllerTest {
         int pageSize = 10;
         String requestYear = "2024";
         
-        OrderResponseDTO expectedOrderResponseDTO = OrderResponseDTO.create(
-            expectedOrderWithCUSTOMERUser);
+        OrderResponseDTO expectedOrderResponseDTO = OrderResponseDTO.create(expectedOrderWithCUSTOMERUser);
         
-        OrderPageRequestDTO orderPageRequestDTO = OrderPageRequestDTO.create(
-            PageRequestDTO.create(pageNum, pageSize), 1L, requestYear);
+        OrderPageRequestDTO orderPageRequestDTO = OrderPageRequestDTO.create(PageRequestDTO.create(pageNum, pageSize), 1L, requestYear);
         
-        PageInfo<OrderResponseDTO> expectedOrderResponseDTOPageInfo = new PageInfo<>(
-            List.of(expectedOrderResponseDTO));
+        PageInfo<OrderResponseDTO> expectedOrderResponseDTOPageInfo = new PageInfo<>(List.of(expectedOrderResponseDTO));
         
-        given(orderService.getOrdersWithPaginationAndNotDeleted(orderPageRequestDTO)).willReturn(
-            expectedOrderResponseDTOPageInfo);
+        given(orderService.getOrdersWithPaginationAndNotDeleted(orderPageRequestDTO)).willReturn(expectedOrderResponseDTOPageInfo);
         
         given(userDetailsService.loadUserByJwt(any())).willReturn(
             new UserDetailsServiceImpl.CustomUserDetails(expectedOrderResponseDTO.getMember()));
@@ -521,15 +508,12 @@ public class OrderSelectApiControllerTest {
         int pageSize = 0;
         String requestYear = "2024";
         
-        OrderPageRequestDTO orderPageRequestDTO = OrderPageRequestDTO.create(
-            PageRequestDTO.create(pageNum, pageSize), 1L, requestYear);
+        OrderPageRequestDTO orderPageRequestDTO = OrderPageRequestDTO.create(PageRequestDTO.create(pageNum, pageSize), 1L, requestYear);
         
-        given(orderService.getOrdersWithPaginationAndNotDeleted(orderPageRequestDTO)).willThrow(
-            new NotFoundException(ORDER_NOT_FOUND));
+        given(orderService.getOrdersWithPaginationAndNotDeleted(orderPageRequestDTO)).willThrow(new NotFoundException(ORDER_NOT_FOUND));
         
         given(userDetailsService.loadUserByJwt(any())).willReturn(
-            new UserDetailsServiceImpl.CustomUserDetails(
-                MemberResponseDTO.from(expectedOrderWithCUSTOMERUser.getMember())));
+            new UserDetailsServiceImpl.CustomUserDetails(MemberResponseDTO.from(expectedOrderWithCUSTOMERUser.getMember())));
         
         // when - then
         ResultActions response = mockMvc.perform(
@@ -576,17 +560,13 @@ public class OrderSelectApiControllerTest {
         int pageSize = 10;
         String requestYear = "2024";
         
-        OrderResponseDTO expectedOrderResponseDTO = OrderResponseDTO.create(
-            expectedOrderWithADMINUser);
+        OrderResponseDTO expectedOrderResponseDTO = OrderResponseDTO.create(expectedOrderWithADMINUser);
         
-        OrderPageRequestDTO orderPageRequestDTO = OrderPageRequestDTO.create(
-            PageRequestDTO.create(pageNum, pageSize), 1L, requestYear);
+        OrderPageRequestDTO orderPageRequestDTO = OrderPageRequestDTO.create(PageRequestDTO.create(pageNum, pageSize), 1L, requestYear);
         
-        PageInfo<OrderResponseDTO> expectedOrderResponseDTOPageInfo = new PageInfo<>(
-            List.of(expectedOrderResponseDTO));
+        PageInfo<OrderResponseDTO> expectedOrderResponseDTOPageInfo = new PageInfo<>(List.of(expectedOrderResponseDTO));
         
-        given(orderService.getOrdersWithPaginationAndNoCondition(orderPageRequestDTO)).willReturn(
-            expectedOrderResponseDTOPageInfo);
+        given(orderService.getOrdersWithPaginationAndNoCondition(orderPageRequestDTO)).willReturn(expectedOrderResponseDTOPageInfo);
         
         given(userDetailsService.loadUserByJwt(any())).willReturn(
             new UserDetailsServiceImpl.CustomUserDetails(expectedOrderResponseDTO.getMember()));
