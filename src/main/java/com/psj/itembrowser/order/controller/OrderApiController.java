@@ -55,8 +55,7 @@ public class OrderApiController {
 
 	@PreAuthorize("hasAnyRole('ROLE_CUSTOMER', 'ROLE_ADMIN')")
 	@GetMapping("/v1/api/orders/users/{userNumber}")
-	public ResponseEntity<PageInfo<OrderResponseDTO>> getOrders(
-		@PathVariable Long userNumber, @ModelAttribute OrderPageRequestDTO orderPageRequestDTO, @CurrentUser Jwt jwt) {
+	public ResponseEntity<PageInfo<OrderResponseDTO>> getOrders(@PathVariable Long userNumber, @ModelAttribute OrderPageRequestDTO orderPageRequestDTO, @CurrentUser Jwt jwt) {
 		log.info("getOrders userNumber : {}", userNumber);
 
 		UserDetailsServiceImpl.CustomUserDetails customUserDetails = userDetailsService.loadUserByJwt(jwt);

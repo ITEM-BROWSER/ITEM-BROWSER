@@ -31,8 +31,7 @@ public class OrderPageRequestDTO extends PageRequestDTO {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate requestYear;
 
-	public static OrderPageRequestDTO create(PageRequestDTO pageRequestDTO, Long userNumber,
-		String requestYearString) {
+	public static OrderPageRequestDTO create(PageRequestDTO pageRequestDTO, Long userNumber, String requestYearString) {
 		OrderPageRequestDTO orderPageRequestDTO = new OrderPageRequestDTO();
 
 		orderPageRequestDTO.setPageNum(pageRequestDTO.getPageNum());
