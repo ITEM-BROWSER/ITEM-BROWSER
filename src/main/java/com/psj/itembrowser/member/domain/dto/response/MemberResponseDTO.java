@@ -35,10 +35,10 @@ public class MemberResponseDTO {
 	private LocalDateTime createdDate;
 	private LocalDateTime updatedDate;
 	private LocalDateTime deletedDate;
-	
+
 	public static MemberResponseDTO from(Member member) {
 		MemberResponseDTO memberResponseDTO = new MemberResponseDTO();
-		
+
 		memberResponseDTO.setMemberNo(member.getNo().getMemberNo());
 		memberResponseDTO.setPassword(member.getCredentials().getPassword());
 		memberResponseDTO.setEmail(member.getCredentials().getEmail());
@@ -56,7 +56,7 @@ public class MemberResponseDTO {
 		memberResponseDTO.setCreatedDate(member.getCreatedDate());
 		memberResponseDTO.setUpdatedDate(member.getUpdatedDate());
 		memberResponseDTO.setDeletedDate(member.getDeletedDate());
-		
+
 		return memberResponseDTO;
 	}
 }

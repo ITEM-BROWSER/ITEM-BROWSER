@@ -485,19 +485,12 @@ public class OrderSelectApiControllerTest {
                         fieldWithPath("list[].member.updatedDate").optional().description("수정 일자"),
                         fieldWithPath("list[].member.deletedDate").optional().description("삭제 일자"),
                         fieldWithPath("list[].ordersProductRelations").description("주문-상품 관계 리스트"),
-                        fieldWithPath("list[].ordersProductRelations[].groupId").description(
-                            "주문 ID"),
-                        fieldWithPath("list[].ordersProductRelations[].productId").description(
-                            "상품 ID"),
-                        fieldWithPath(
-                            "list[].ordersProductRelations[].productQuantity").description(
-                            "상품 수량"),
-                        fieldWithPath("list[].ordersProductRelations[].createdDate").description(
-                            "생성 일자"),
-                        fieldWithPath("list[].ordersProductRelations[].updatedDate").description(
-                            "수정 일자"),
-                        fieldWithPath("list[].ordersProductRelations[].deletedDate").description(
-                            "삭제 일자"),
+                        fieldWithPath("list[].ordersProductRelations[].groupId").description("주문 ID"),
+                        fieldWithPath("list[].ordersProductRelations[].productId").description("상품 ID"),
+                        fieldWithPath("list[].ordersProductRelations[].productQuantity").description("상품 수량"),
+                        fieldWithPath("list[].ordersProductRelations[].createdDate").description("생성 일자"),
+                        fieldWithPath("list[].ordersProductRelations[].updatedDate").description("수정 일자"),
+                        fieldWithPath("list[].ordersProductRelations[].deletedDate").description("삭제 일자"),
                         fieldWithPath("pageNum").description("현재 페이지 번호"),
                         fieldWithPath("pageSize").description("페이지 크기"),
                         fieldWithPath("size").description("현재 페이지 크기"),
@@ -608,26 +601,20 @@ public class OrderSelectApiControllerTest {
                     .contentType(APPLICATION_JSON)
                     .accept(APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.list[0].ordererNumber").value(
-                expectedOrderResponseDTO.getOrdererNumber()))
-            .andExpect(jsonPath("$.list[0].orderStatus").value(
-                expectedOrderResponseDTO.getOrderStatus().name()))
-            .andExpect(jsonPath("$.list[0].member.email").value(
-                expectedOrderResponseDTO.getMember().getEmail()))
+            .andExpect(jsonPath("$.list[0].ordererNumber").value(expectedOrderResponseDTO.getOrdererNumber()))
+            .andExpect(jsonPath("$.list[0].orderStatus").value(expectedOrderResponseDTO.getOrderStatus().name()))
+            .andExpect(jsonPath("$.list[0].member.email").value(expectedOrderResponseDTO.getMember().getEmail()))
+            .andExpect(jsonPath("$.list[0].member.role").value(Member.Role.ROLE_ADMIN.name()))
+            .andExpect(jsonPath("$.list[0].ordersProductRelations[0].productId").value(expectedOrderResponseDTO.getOrdersProductRelations().get(0).getProductId()))
             .andExpect(
-                jsonPath("$.list[0].member.role").value(Member.Role.ROLE_ADMIN.name()))
-            .andExpect(jsonPath("$.list[0].ordersProductRelations[0].productId").value(
-                expectedOrderResponseDTO.getOrdersProductRelations().get(0).getProductId()))
-            .andExpect(jsonPath("$.list[0].ordersProductRelations[0].productQuantity").value(
-                expectedOrderResponseDTO.getOrdersProductRelations().get(0).getProductQuantity()));
+                jsonPath("$.list[0].ordersProductRelations[0].productQuantity").value(expectedOrderResponseDTO.getOrdersProductRelations().get(0).getProductQuantity()));
         response
             .andDo(MockMvcRestDocumentationWrapper.document(
                 "get-orders-admin",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 ResourceDocumentation.resource(ResourceSnippetParameters.builder()
-                        .
-                    tag("order")
+                    .tag("order")
                     .summary("주문 다건 조회 API - ADMIN 권한의 경우")
                     .pathParameters(
                         parameterWithName("userNumber").description("사용자 번호")
@@ -661,19 +648,12 @@ public class OrderSelectApiControllerTest {
                         fieldWithPath("list[].member.updatedDate").optional().description("수정 일자"),
                         fieldWithPath("list[].member.deletedDate").optional().description("삭제 일자"),
                         fieldWithPath("list[].ordersProductRelations").description("주문-상품 관계 리스트"),
-                        fieldWithPath("list[].ordersProductRelations[].groupId").description(
-                            "주문 ID"),
-                        fieldWithPath("list[].ordersProductRelations[].productId").description(
-                            "상품 ID"),
-                        fieldWithPath(
-                            "list[].ordersProductRelations[].productQuantity").description(
-                            "상품 수량"),
-                        fieldWithPath("list[].ordersProductRelations[].createdDate").description(
-                            "생성 일자"),
-                        fieldWithPath("list[].ordersProductRelations[].updatedDate").description(
-                            "수정 일자"),
-                        fieldWithPath("list[].ordersProductRelations[].deletedDate").description(
-                            "삭제 일자"),
+                        fieldWithPath("list[].ordersProductRelations[].groupId").description("주문 ID"),
+                        fieldWithPath("list[].ordersProductRelations[].productId").description("상품 ID"),
+                        fieldWithPath("list[].ordersProductRelations[].productQuantity").description("상품 수량"),
+                        fieldWithPath("list[].ordersProductRelations[].createdDate").description("생성 일자"),
+                        fieldWithPath("list[].ordersProductRelations[].updatedDate").description("수정 일자"),
+                        fieldWithPath("list[].ordersProductRelations[].deletedDate").description("삭제 일자"),
                         fieldWithPath("pageNum").description("현재 페이지 번호"),
                         fieldWithPath("pageSize").description("페이지 크기"),
                         fieldWithPath("size").description("현재 페이지 크기"),
@@ -703,15 +683,12 @@ public class OrderSelectApiControllerTest {
         int pageSize = 0;
         String requestYear = "2024";
         
-        OrderPageRequestDTO orderPageRequestDTO = OrderPageRequestDTO.create(
-            PageRequestDTO.create(pageNum, pageSize), 1L, requestYear);
+        OrderPageRequestDTO orderPageRequestDTO = OrderPageRequestDTO.create(PageRequestDTO.create(pageNum, pageSize), 1L, requestYear);
         
-        given(orderService.getOrdersWithPaginationAndNoCondition(orderPageRequestDTO)).willThrow(
-            new NotFoundException(ORDER_NOT_FOUND));
+        given(orderService.getOrdersWithPaginationAndNoCondition(orderPageRequestDTO)).willThrow(new NotFoundException(ORDER_NOT_FOUND));
         
         given(userDetailsService.loadUserByJwt(any())).willReturn(
-            new UserDetailsServiceImpl.CustomUserDetails(
-                MemberResponseDTO.from(expectedOrderWithADMINUser.getMember())));
+            new UserDetailsServiceImpl.CustomUserDetails(MemberResponseDTO.from(expectedOrderWithADMINUser.getMember())));
         
         // when - then
         ResultActions response = mockMvc.perform(

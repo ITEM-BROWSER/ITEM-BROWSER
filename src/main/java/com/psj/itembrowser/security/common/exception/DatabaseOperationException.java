@@ -16,7 +16,7 @@ import lombok.NonNull;
  */
 @Getter
 public class DatabaseOperationException extends CustomIllegalStateException {
-	
+
 	public DatabaseOperationException(@NonNull ErrorCode e) {
 		super(e);
 	}

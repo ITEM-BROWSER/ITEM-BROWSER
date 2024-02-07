@@ -1,8 +1,10 @@
 package com.psj.itembrowser.security.auth.service;
 
-import com.psj.itembrowser.order.domain.vo.Order;
 import java.util.List;
+
 import org.springframework.stereotype.Service;
+
+import com.psj.itembrowser.order.domain.vo.Order;
 
 /**
  * packageName    : com.psj.itembrowser.order.service.impl fileName       : AuthenticationService
@@ -12,6 +14,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public interface AuthenticationService {
-    
-    void authorizeOrdersWhenCustomer(List<Order> orders);
+
+	void authorizeOrdersWhenCustomer(List<Order> orders);
 }

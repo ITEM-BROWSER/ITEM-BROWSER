@@ -77,31 +77,31 @@
         </selectKey>
         insert into member
         (EMAIL,
-         PASSWORD,
-         FIRST_NAME,
-         LAST_NAME,
-         PHONE_NUMBER,
-         GENDER,
-         ROLE,
-         STATUS,
-         ADDRESS_MAIN,
-         ADDRESS_SUB,
-         ZIP_CODE,
-         BIRTHDAY)
-            value (
-                   #{credentialsEmail},
-                   #{credentialsPassword},
-                   #{nameFirstName},
-                   #{nameLastName},
-                   #{contactPhoneNumber},
-                   #{gender},
-                   #{role},
-                   #{status},
-                   #{addressAddressMain},
-                   #{addressAddressSub},
-                   #{addressZipCode},
-                   #{birthday}
-            );
+        PASSWORD,
+        FIRST_NAME,
+        LAST_NAME,
+        PHONE_NUMBER,
+        GENDER,
+        ROLE,
+        STATUS,
+        ADDRESS_MAIN,
+        ADDRESS_SUB,
+        ZIP_CODE,
+        BIRTHDAY)
+        value (
+        #{credentialsEmail},
+        #{credentialsPassword},
+        #{nameFirstName},
+        #{nameLastName},
+        #{contactPhoneNumber},
+        #{gender},
+        #{role},
+        #{status},
+        #{addressAddressMain},
+        #{addressAddressSub},
+        #{addressZipCode},
+        #{birthday}
+        );
     </insert>
 
     <select id="findById" resultMap="memberResultMap" parameterType="long">

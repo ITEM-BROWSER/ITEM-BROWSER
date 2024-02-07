@@ -1,7 +1,9 @@
 package com.psj.itembrowser.cart.domain.dto.response;
 
-import com.psj.itembrowser.product.domain.dto.response.ProductResponseDTO;
 import javax.validation.constraints.PositiveOrZero;
+
+import com.psj.itembrowser.product.domain.dto.response.ProductResponseDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,18 +18,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartProductRelationResponseDTO {
-    
-    Long cartId;
-    
-    Long productId;
-    
-    @PositiveOrZero
-    Long productQuantity;
-    
-    ProductResponseDTO product;
-    
-    public static CartProductRelationResponseDTO of(Long cartId, Long productId,
-        Long productQuantity, ProductResponseDTO product) {
-        return new CartProductRelationResponseDTO(cartId, productId, productQuantity, product);
-    }
+
+	Long cartId;
+
+	Long productId;
+
+	@PositiveOrZero
+	Long productQuantity;
+
+	ProductResponseDTO product;
+
+	public static CartProductRelationResponseDTO of(Long cartId, Long productId,
+		Long productQuantity, ProductResponseDTO product) {
+		return new CartProductRelationResponseDTO(cartId, productId, productQuantity, product);
+	}
 }

@@ -19,20 +19,20 @@ import com.psj.itembrowser.member.annotation.MockMember;
  * 2024-02-01        ipeac       최초 생성
  */
 public class MockMemberSecurityContextFactory implements WithSecurityContextFactory<MockMember> {
-	
+
 	@Override
 	public SecurityContext createSecurityContext(MockMember annotation) {
 		Jwt jwt = Jwt.withTokenValue("token")
 			.header("alg", "hs-256")
 			.claim("sub", annotation.email())
 			.build();
-		
+
 		JwtAuthenticationToken authentication = new JwtAuthenticationToken(jwt, null, null);
-		
+
 		SecurityContext context = org.springframework.security.core.context.SecurityContextHolder.createEmptyContext();
-		
+
 		context.setAuthentication(authentication);
-		
+
 		return context;
 	}
 }

@@ -15,17 +15,17 @@ import lombok.Getter;
  */
 @Getter
 public enum DeliveryFeeType {
-    // ENUM('FREE', 'NOT_FREE', 'CHARGE_RECEIVED', 'CONDITIONAL_FREE')
-    
-    FREE("free"),
-    NOT_FREE("notFree"),
-    CHARGE_RECEIVED("chargeReceived"),
-    CONDITIONAL_FREE("conditionalFree"),
-    ;
-    
-    private final String deliveryFeeType;
-    
-    DeliveryFeeType(String deliveryFeeType) {
-        this.deliveryFeeType = deliveryFeeType;
-    }
+	// ENUM('FREE', 'NOT_FREE', 'CHARGE_RECEIVED', 'CONDITIONAL_FREE')
+
+	FREE("free"),
+	NOT_FREE("notFree"),
+	CHARGE_RECEIVED("chargeReceived"),
+	CONDITIONAL_FREE("conditionalFree"),
+	;
+
+	private final String deliveryFeeType;
+
+	DeliveryFeeType(String deliveryFeeType) {
+		this.deliveryFeeType = deliveryFeeType;
+	}
 }

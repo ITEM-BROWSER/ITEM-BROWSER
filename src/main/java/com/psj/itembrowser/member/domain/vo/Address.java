@@ -35,7 +35,7 @@ public class Address {
 	 * 우편번호
 	 */
 	private String zipCode;
-	
+
 	public static Address create(String addressMain, String addressSub, String zipCode) {
 		return new Address(addressMain, addressSub, zipCode);
 	}

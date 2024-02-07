@@ -1,7 +1,7 @@
 package com.psj.itembrowser.security.common;
 
-
 import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BaseDateTimeEntity {
-    protected LocalDateTime createdDate;
-    protected LocalDateTime updatedDate;
-    protected LocalDateTime deletedDate;
+	protected LocalDateTime createdDate;
+	protected LocalDateTime updatedDate;
+	protected LocalDateTime deletedDate;
 }

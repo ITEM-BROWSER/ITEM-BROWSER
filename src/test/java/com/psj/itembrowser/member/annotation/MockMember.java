@@ -23,9 +23,9 @@ import com.psj.itembrowser.member.factory.MockMemberSecurityContextFactory;
 @WithSecurityContext(factory = MockMemberSecurityContextFactory.class)
 public @interface MockMember {
 	String email() default "mockMember3410@gmail.com";
-	
+
 	Member.Role role() default Member.Role.ROLE_CUSTOMER;
-	
+
 	Member.Status status() default Member.Status.ACTIVE;
-	
+
 }

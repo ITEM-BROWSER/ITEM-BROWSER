@@ -1,6 +1,5 @@
 package com.psj.itembrowser.security.common.message;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -18,5 +17,5 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class MessageDTO {
-    private final String message;
+	private final String message;
 }

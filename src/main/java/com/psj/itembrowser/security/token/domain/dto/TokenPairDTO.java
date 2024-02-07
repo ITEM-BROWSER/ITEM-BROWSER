@@ -1,6 +1,7 @@
 package com.psj.itembrowser.security.token.domain.dto;
 
 import com.psj.itembrowser.security.token.domain.vo.RefreshToken;
+
 import lombok.AllArgsConstructor;
 import lombok.Value;
 
@@ -10,6 +11,6 @@ import lombok.Value;
 @Value
 @AllArgsConstructor
 public class TokenPairDTO {
-    String accessToken;
-    String refreshToken;
+	String accessToken;
+	String refreshToken;
 }

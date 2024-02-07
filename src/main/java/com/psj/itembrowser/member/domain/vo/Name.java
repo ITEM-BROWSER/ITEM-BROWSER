@@ -31,7 +31,7 @@ public class Name {
 	 * 성
 	 */
 	private String lastName;
-	
+
 	public static Name create(String firstName, String lastName) {
 		return new Name(firstName, lastName);
 	}
