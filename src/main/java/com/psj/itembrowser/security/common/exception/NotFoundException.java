@@ -5,9 +5,9 @@ import lombok.NonNull;
 
 @Getter
 public class NotFoundException extends CustomRuntimeException {
-	
+
 	public NotFoundException(@NonNull ErrorCode e) {
 		super(e);
 	}
-	
+
 }

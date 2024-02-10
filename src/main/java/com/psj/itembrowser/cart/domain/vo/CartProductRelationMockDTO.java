@@ -1,6 +1,7 @@
 package com.psj.itembrowser.cart.domain.vo;
 
 import com.psj.itembrowser.cart.domain.dto.response.CartProductRelationResponseDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,16 +23,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartProductRelationMockDTO {
-    Long cartId;
-    Long productId;
-    Long productQuantity;
-    
-    public CartProductRelationResponseDTO toCartProductRelationResponseDTO() {
-        return new CartProductRelationResponseDTO(
-                this.cartId,
-                this.productId,
-                this.productQuantity,
-                null
-        );
-    }
+	Long cartId;
+	Long productId;
+	Long productQuantity;
+
+	public CartProductRelationResponseDTO toCartProductRelationResponseDTO() {
+		return new CartProductRelationResponseDTO(
+			this.cartId,
+			this.productId,
+			this.productQuantity,
+			null
+		);
+	}
 }

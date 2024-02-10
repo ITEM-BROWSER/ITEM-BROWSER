@@ -14,7 +14,7 @@ import lombok.NonNull;
  * 2024-01-30        ipeac       최초 생성
  */
 public class NotAuthorizedException extends CustomAuthenticationException {
-	
+
 	public NotAuthorizedException(@NonNull ErrorCode e) {
 		super(e);
 	}

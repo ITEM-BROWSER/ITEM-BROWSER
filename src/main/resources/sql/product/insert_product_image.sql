@@ -11,7 +11,7 @@ VALUES ( 1
        , 'image/jpeg'
        , 2048),
        ( 1
-        , 'image3.jpg'
-        , '/path/to/image3.jpg'
-        , 'image/jpeg'
-        , 2048);
+       , 'image3.jpg'
+       , '/path/to/image3.jpg'
+       , 'image/jpeg'
+       , 2048);

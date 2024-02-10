@@ -31,7 +31,7 @@ public class Credentials {
 	 * 비밀번호
 	 */
 	private String password;
-	
+
 	public static Credentials create(String email, String password) {
 		return new Credentials(email, password);
 	}

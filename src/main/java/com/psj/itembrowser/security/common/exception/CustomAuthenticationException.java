@@ -1,8 +1,9 @@
 package com.psj.itembrowser.security.common.exception;
 
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+
 import lombok.Getter;
 import lombok.NonNull;
-import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 
 /**
  * packageName    : com.psj.itembrowser.common.exception
@@ -18,7 +19,7 @@ import org.springframework.security.authentication.AuthenticationCredentialsNotF
 @Getter
 public class CustomAuthenticationException extends AuthenticationCredentialsNotFoundException {
 	private final ErrorCode errorCode;
-	
+
 	public CustomAuthenticationException(@NonNull ErrorCode e) {
 		super(e.getMessage());
 		this.errorCode = e;

@@ -7,14 +7,27 @@
         <id property="id" column="id"/>
         <result property="ordererNumber" column="ORDERER_NUMBER"/>
         <result property="orderStatus" column="order_status"
-            typeHandler="com.psj.itembrowser.security.common.handler.OrderStatusTypeHandler"/>
+                typeHandler="com.psj.itembrowser.security.common.handler.OrderStatusTypeHandler"/>
         <result property="paidDate" column="paid_date"/>
         <result property="shippingInfoId" column="shipping_info_id"/>
         <result property="createdDate" column="created_date"/>
         <result property="updatedDate" column="updated_date"/>
         <result property="deletedDate" column="deleted_date"/>
         <association property="member" javaType="com.psj.itembrowser.member.domain.vo.Member"
-                     column="ORDERER_NUMBER" select="com.psj.itembrowser.member.mapper.MemberMapper.findById"/>
+                     column="ORDERER_NUMBER"
+                     select="com.psj.itembrowser.member.mapper.MemberMapper.findById"/>
+        <association property="products" javaType="java.util.List" column="id"
+                     select="com.psj.itembrowser.order.mapper.OrderMapper.selectOrderRelation"/>
+    </resultMap>
+
+    <resultMap id="orderProductRelationResultMap"
+               type="com.psj.itembrowser.order.domain.vo.OrdersProductRelation">
+        <id property="groupId" column="GROUP_ID"/>
+        <result property="productId" column="PRODUCT_ID"/>
+        <result property="productQuantity" column="PRODUCT_QUANTITY"/>
+        <result property="createdDate" column="CREATED_DATE"/>
+        <result property="updatedDate" column="UPDATED_DATE"/>
+        <result property="deletedDate" column="DELETED_DATE"/>
     </resultMap>
 
     <sql id="orderColumns">
@@ -26,6 +39,15 @@
         O.CREATED_DATE,
         O.UPDATED_DATE,
         O.DELETED_DATE
+    </sql>
+
+    <sql id="orderRelationColumns">
+        OPR.GROUP_ID,
+        OPR.PRODUCT_ID,
+        OPR.PRODUCT_QUANTITY,
+        OPR.CREATED_DATE,
+        OPR.UPDATED_DATE,
+        OPR.DELETED_DATE
     </sql>
 
     <select id="selectOrderWithNoCondition" resultMap="orderResultMap" parameterType="long">
@@ -47,5 +69,52 @@
             AND O.DELETED_DATE IS NULL
         </where>
         LIMIT 1;
+    </select>
+
+    <select id="selectOrdersWithPaginationAndNoCondition" resultMap="orderResultMap"
+            parameterType="com.psj.itembrowser.order.domain.dto.request.OrderPageRequestDTO">
+        SELECT
+        <include refid="orderColumns"/>
+        FROM ORDERS O
+        <where>
+            <choose>
+                <when test="orderPageRequestDTO.requestYear != null">
+                    AND YEAR(O.CREATED_DATE) = #{orderPageRequestDTO.requestYear}
+                </when>
+                <when test="orderPageRequestDTO.requestYear == null">
+                    AND O.CREATED_DATE >= DATE_SUB(NOW(), INTERVAL 6 MONTH)
+                </when>
+            </choose>
+        </where>
+        ORDER BY O.CREATED_DATE DESC
+    </select>
+
+    <select id="selectOrdersWithPaginationAndNotDeleted" resultMap="orderResultMap"
+            parameterType="com.psj.itembrowser.order.domain.dto.request.OrderPageRequestDTO">
+        SELECT
+        <include refid="orderColumns"/>
+        FROM ORDERS O
+        <where>
+            <choose>
+                <when test="orderPageRequestDTO.requestYear != null">
+                    AND YEAR(O.CREATED_DATE) = #{orderPageRequestDTO.requestYear}
+                </when>
+                <when test="orderPageRequestDTO.requestYear == null">
+                    AND O.CREATED_DATE >= DATE_SUB(NOW(), INTERVAL 6 MONTH)
+                </when>
+            </choose>
+            AND O.DELETED_DATE IS NULL
+        </where>
+        ORDER BY O.CREATED_DATE DESC
+    </select>
+
+    <select id="selectOrderRelation" resultMap="orderProductRelationResultMap"
+            parameterType="long">
+        SELECT
+        <include refid="orderRelationColumns"/>
+        FROM ORDERS_PRODUCT_RELATION OPR
+        <where>
+            OPR.GROUP_ID = #{orderId}
+        </where>
     </select>
 </mapper>

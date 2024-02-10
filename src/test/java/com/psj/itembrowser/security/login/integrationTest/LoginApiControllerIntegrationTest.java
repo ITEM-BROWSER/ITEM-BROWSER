@@ -44,27 +44,27 @@ public class LoginApiControllerIntegrationTest {
     
     @BeforeEach
     public void setUp() {
-        validLoginRequestDTO = new LoginRequestDTO(EXIST_USER_EMAIL,
-            EXIST_USER_PASSWORD);
+        validLoginRequestDTO = new LoginRequestDTO(EXIST_USER_EMAIL, EXIST_USER_PASSWORD);
     }
     
     @Test
     @DisplayName("로그인시 엑세스토큰과 리프레시 토큰 정상 발급")
     public void whenValidLogin_thenReturnsAccessTokenAndRefreshToken() throws Exception {
         mockMvc.perform(post("/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(validLoginRequestDTO)))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.accessToken").exists())
-            .andExpect(jsonPath("$.refreshToken").exists())
-            .andDo(document("login-success",
-                requestFields(
-                    fieldWithPath("email").description("사용자의 이메일"),
-                    fieldWithPath("password").description("사용자의 비밀번호")
-                ),
-                responseFields(
-                    fieldWithPath("accessToken").description("엑세스 토큰"),
-                    fieldWithPath("refreshToken").description("리프레시 토큰")
-                )));
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(validLoginRequestDTO)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.accessToken").exists())
+                .andExpect(jsonPath("$.refreshToken").exists())
+                .andDo(document("login-success",
+                        requestFields(
+                                fieldWithPath("email").description("사용자의 이메일"),
+                                fieldWithPath("password").description("사용자의 비밀번호")
+                        ),
+                        responseFields(
+                                fieldWithPath("accessToken").description("엑세스 토큰"),
+                                fieldWithPath("refreshToken").description("리프레시 토큰")
+                        )));
     }
 }

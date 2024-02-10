@@ -27,7 +27,7 @@ public class MemberNo {
 	 * 회원번호
 	 */
 	private Long memberNo;
-	
+
 	public static MemberNo create(Long memberNo) {
 		return new MemberNo(memberNo);
 	}

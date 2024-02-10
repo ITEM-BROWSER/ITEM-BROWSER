@@ -5,8 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class ItemBrowserApplication {
-    
-    public static void main(String[] args) {
-        SpringApplication.run(ItemBrowserApplication.class, args);
-    }
+
+	public static void main(String[] args) {
+		SpringApplication.run(ItemBrowserApplication.class, args);
+	}
 }

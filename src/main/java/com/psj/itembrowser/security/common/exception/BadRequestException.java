@@ -16,7 +16,7 @@ import lombok.NonNull;
  */
 @Getter
 public class BadRequestException extends CustomIllegalStateException {
-	
+
 	public BadRequestException(@NonNull ErrorCode e) {
 		super(e);
 	}

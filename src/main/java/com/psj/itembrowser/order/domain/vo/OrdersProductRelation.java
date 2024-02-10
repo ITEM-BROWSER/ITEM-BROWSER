@@ -14,46 +14,46 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class OrdersProductRelation {
-    /**
-     * 주문그룹ID
-     */
-    Long groupId;
-    
-    /**
-     * 상품ID
-     */
-    Long productId;
-    
-    /**
-     * 상품수량
-     */
-    Integer productQuantity;
-    
-    LocalDateTime createdDate;
-    
-    LocalDateTime updatedDate;
-    
-    LocalDateTime deletedDate;
-    
-    Product product;
-    
-    public static OrdersProductRelation create(
-            Long groupId,
-            Long productId,
-            int productQuantity,
-            LocalDateTime createdDate,
-            LocalDateTime updatedDate,
-            LocalDateTime deletedDate,
-            Product product
-    ) {
-        OrdersProductRelation ordersProductRelation = new OrdersProductRelation();
-        ordersProductRelation.groupId = groupId;
-        ordersProductRelation.productId = productId;
-        ordersProductRelation.productQuantity = productQuantity;
-        ordersProductRelation.createdDate = createdDate;
-        ordersProductRelation.updatedDate = updatedDate;
-        ordersProductRelation.deletedDate = deletedDate;
-        ordersProductRelation.product = product;
-        return ordersProductRelation;
-    }
+	/**
+	 * 주문그룹ID
+	 */
+	Long groupId;
+
+	/**
+	 * 상품ID
+	 */
+	Long productId;
+
+	/**
+	 * 상품수량
+	 */
+	Integer productQuantity;
+
+	LocalDateTime createdDate;
+
+	LocalDateTime updatedDate;
+
+	LocalDateTime deletedDate;
+
+	Product product;
+
+	public static OrdersProductRelation create(
+		Long groupId,
+		Long productId,
+		int productQuantity,
+		LocalDateTime createdDate,
+		LocalDateTime updatedDate,
+		LocalDateTime deletedDate,
+		Product product
+	) {
+		OrdersProductRelation ordersProductRelation = new OrdersProductRelation();
+		ordersProductRelation.groupId = groupId;
+		ordersProductRelation.productId = productId;
+		ordersProductRelation.productQuantity = productQuantity;
+		ordersProductRelation.createdDate = createdDate;
+		ordersProductRelation.updatedDate = updatedDate;
+		ordersProductRelation.deletedDate = deletedDate;
+		ordersProductRelation.product = product;
+		return ordersProductRelation;
+	}
 }
