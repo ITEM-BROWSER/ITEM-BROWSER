@@ -2,7 +2,7 @@ spring:
   sql:
     init:
       schema-locations: classpath:/drop-table.sql, classpath:/schema.sql
-      data-locations: classpath:/sql/member/insert_member.sql, classpath:/sql/shippinginfo/insert_shipping_info.sql ,classpath:/sql/product/insert_product.sql, classpath:/sql/order/insert_order_product.sql, classpath:/sql/order/insert_order.sql, classpath:/sql/product/insert_product_image.sql
+      data-locations: classpath:/sql/mysql/member/insert_member.sql, classpath:/sql/mysql/shippinginfo/insert_shipping_info.sql ,classpath:/sql/mysql/product/insert_product.sql, classpath:/sql/mysql/order/insert_order_product.sql, classpath:/sql/mysql/order/insert_order.sql, classpath:/sql/mysql/product/insert_product_image.sql
       mode: always
       encoding: UTF-8
   datasource:

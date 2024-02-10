@@ -69,8 +69,7 @@ CREATE TABLE product_image
     `CREATED_DATE` timestamp    NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성일',
     `UPDATED_DATE` timestamp    NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '업데이트일',
     `DELETED_DATE` timestamp    NULL DEFAULT NULL COMMENT '삭제일',
-    PRIMARY KEY (ID),
-    FOREIGN KEY (PRODUCT_ID) REFERENCES product (ID) ON DELETE CASCADE ON UPDATE CASCADE
+    PRIMARY KEY (ID)
 );
 
 -- Index 설정 SQL - product_image(PRODUCT_ID)
@@ -100,7 +99,7 @@ CREATE UNIQUE INDEX UQ_orders_product_relation_1
 
 -- Foreign Key 설정 SQL - orders_product_relation(PRODUCT_ID) -> product(ID)
 ALTER TABLE orders_product_relation
-    ADD CONSTRAINT FOREIGN KEY (PRODUCT_ID)
+    ADD CONSTRAINT fk_orders_product_relation_product_id FOREIGN KEY (PRODUCT_ID)
         REFERENCES product (ID) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 -- Foreign Key 삭제 SQL - orders_product_relation(PRODUCT_ID)
@@ -151,10 +150,6 @@ CREATE TABLE cart
     `DELETED_DATE` timestamp    NULL,
     PRIMARY KEY (ID)
 );
-
--- 테이블 Comment 설정 SQL - cart
-ALTER TABLE cart
-    COMMENT '장바구니';
 
 -- Foreign Key 설정 SQL - cart(USER_ID) -> member(EMAIL)
 ALTER TABLE cart
@@ -246,7 +241,7 @@ CREATE TABLE center
 CREATE TABLE orders
 (
     `ID`               bigint       NOT NULL AUTO_INCREMENT COMMENT '주문ID. 주문번호',
-    ORDERER_NUMBER     varchar(200) NULL DEFAULT NULL COMMENT '주문자. 주문자 ( 현재 사용자 정보 호출)',
+    ORDERER_NUMBER varchar(200) NULL DEFAULT NULL COMMENT '주문자. 주문자 ( 현재 사용자 정보 호출)',
     `ORDER_STATUS`     varchar(200) NULL DEFAULT NULL COMMENT '주문상태. ACCEPT 결제완료 | INSTRUCT 상품준비중 | DEPARTURE 배송지시 | DELIVERING 배송중 | FINAL_DELIVERY 배송완료 | NONE_TRACKING 업체 직접 배송(배송 추적X)',
     `PAID_DATE`        timestamp    NULL DEFAULT NULL COMMENT '결제일시',
     `SHIPPING_INFO_ID` bigint       NULL DEFAULT NULL COMMENT '배송지정보ID. 배송정보 ID',
@@ -259,15 +254,6 @@ CREATE TABLE orders
 -- Index 설정 SQL - orders(SHIPPING_INFO_ID)
 CREATE INDEX FK_ORDERS_SHIPPING_INFO_ID_SHIPPING_INFOS_ID
     ON orders (SHIPPING_INFO_ID);
-
--- Foreign Key 설정 SQL - orders(ID) -> orders_product_relation(GROUP_ID)
-ALTER TABLE orders
-    ADD CONSTRAINT FK_ORDERS_ID_ORDERS_PRODUCT_RELATION_GROUP_ID FOREIGN KEY (ID)
-        REFERENCES orders_product_relation (GROUP_ID) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
--- Foreign Key 삭제 SQL - orders(ID)
--- ALTER TABLE orders
--- DROP FOREIGN KEY FK_ORDERS_ID_ORDERS_PRODUCT_RELATION_GROUP_ID;
 
 -- Foreign Key 설정 SQL - orders(SHIPPING_INFO_ID) -> shipping_infos(ID)
 ALTER TABLE orders
@@ -289,10 +275,6 @@ CREATE TABLE member_refresh_token
     `CREATED_DATE`  TIMESTAMP    NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (ID)
 );
-
--- 테이블 Comment 설정 SQL - member_refresh_token
-ALTER TABLE member_refresh_token
-    COMMENT '회원의 리프레시 토큰 테이블';
 
 -- Unique Index 설정 SQL - member_refresh_token(EMAIL)
 CREATE UNIQUE INDEX UQ_member_refresh_token_1

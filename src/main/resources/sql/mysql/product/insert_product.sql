@@ -1,4 +1,4 @@
--- PRODUCT-data.sql
+-- insert_product.sql
 INSERT INTO PRODUCT ( ID
                     , NAME
                     , CATEGORY

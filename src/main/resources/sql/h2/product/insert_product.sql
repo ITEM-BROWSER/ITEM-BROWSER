@@ -1,4 +1,4 @@
--- PRODUCT-data.sql
+-- insert_product.sql
 INSERT INTO PRODUCT ( ID
                     , NAME
                     , CATEGORY
@@ -24,7 +24,7 @@ VALUES ( 1
        , 100
        , 'seller1'
        , NOW()
-       , DATE_ADD(NOW(), INTERVAL 30 DAY)
+       , TIMESTAMPADD(DAY, 30, NOW())
        , 'Product A'
        , 10000
        , 'BrandA'
@@ -41,7 +41,7 @@ VALUES ( 1
        , 50
        , 'seller2'
        , NOW()
-       , DATE_ADD(NOW(), INTERVAL 30 DAY)
+       , TIMESTAMPADD(DAY, 30, NOW())
        , 'Product B'
        , 15000
        , 'BrandB'
