@@ -23,10 +23,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
 /**
- * packageName    : com.psj.itembrowser.cart.mapper fileName       : CartMapperTest author         :
- * ipeac date           : 2023-10-22 description    :
- * =========================================================== DATE              AUTHOR NOTE
- * ----------------------------------------------------------- 2023-10-22        ipeac       최초 생성
+ * packageName    : com.psj.itembrowser.cart.mapper fileName       : CartMapperTest author         : ipeac date           : 2023-10-22 description    : =========================================================== DATE              AUTHOR NOTE ----------------------------------------------------------- 2023-10-22        ipeac       최초 생성
  */
 @MybatisTest
 @DisplayName("CartMapper 테스트")
@@ -42,10 +39,10 @@ class CartMapperTest {
     
     @Nested
     @Sql(value = {"classpath:drop-table.sql", "classpath:schema.sql",
-        "classpath:/sql/h2/member/insert_member.sql",
-        "classpath:/sql/h2/cart/insert_cart.sql",
-        "classpath:/sql/h2/product/insert_product.sql",
-        "classpath:/sql/h2/cart/insert_cart_product_relation.sql"})
+            "classpath:/sql/h2/member/insert_member.sql",
+            "classpath:/sql/h2/cart/insert_cart.sql",
+            "classpath:/sql/h2/product/insert_product.sql",
+            "classpath:/sql/h2/cart/insert_cart_product_relation.sql"})
     class InsertTest {
         
         @Test
@@ -83,17 +80,17 @@ class CartMapperTest {
             
             // when-then
             assertThatThrownBy(() -> cartMapper.insertCart(
-                DuplicatedUserId))
-                .isInstanceOf(DuplicateKeyException.class);
+                    DuplicatedUserId))
+                    .isInstanceOf(DuplicateKeyException.class);
         }
     }
     
     @Nested
     @Sql(value = {"classpath:drop-table.sql", "classpath:schema.sql",
-        "classpath:/sql/h2/member/insert_member.sql",
-        "classpath:/sql/h2/cart/insert_cart.sql",
-        "classpath:/sql/h2/product/insert_product.sql",
-        "classpath:/sql/h2/cart/insert_cart_product_relation.sql"})
+            "classpath:/sql/h2/member/insert_member.sql",
+            "classpath:/sql/h2/cart/insert_cart.sql",
+            "classpath:/sql/h2/product/insert_product.sql",
+            "classpath:/sql/h2/cart/insert_cart_product_relation.sql"})
     class SelectTest {
         
         @Test
@@ -109,7 +106,7 @@ class CartMapperTest {
         @DisplayName("장바구니에 담긴 상품들을 조회합니다.")
         void When_getCartProductRelationsByCartId_Expect_NotNull_And_CartId_Is_One_And_Product_Size_Is_Two() {
             List<CartProductRelation> cartProductRelationsByCartId = cartMapper.getCartProductRelationsByCartId(
-                1L);
+                    1L);
             
             assertThat(cartProductRelationsByCartId).isNotNull();
             
@@ -118,14 +115,14 @@ class CartMapperTest {
             
             // 카트안의 장바구니 번호 1로 제한
             assertThat(cartProductRelationsByCartId
-                .stream()
-                .allMatch(cartProductRelation -> cartProductRelation.getCartId() == 1L)).isTrue();
+                               .stream()
+                               .allMatch(cartProductRelation -> cartProductRelation.getCartId() == 1L)).isTrue();
             
             // 카트안의 상품이 2개인지 체크
             assertThat(cartProductRelationsByCartId
-                .stream()
-                .map(CartProductRelation::getProduct)
-                .count()).isEqualTo(2);
+                               .stream()
+                               .map(CartProductRelation::getProduct)
+                               .count()).isEqualTo(2);
         }
         
         @Test
@@ -141,17 +138,16 @@ class CartMapperTest {
     
     @Nested
     @Sql(value = {"classpath:drop-table.sql", "classpath:schema.sql",
-        "classpath:/sql/h2/member/insert_member.sql",
-        "classpath:/sql/h2/cart/insert_cart.sql",
-        "classpath:/sql/h2/product/insert_product.sql",
-        "classpath:/sql/h2/cart/insert_cart_product_relation.sql"})
+            "classpath:/sql/h2/member/insert_member.sql",
+            "classpath:/sql/h2/cart/insert_cart.sql",
+            "classpath:/sql/h2/product/insert_product.sql",
+            "classpath:/sql/h2/cart/insert_cart_product_relation.sql"})
     class UpdateTest {
         
         @Test
         @DisplayName("장바구니에 담긴 상품을 업데이트하는 경우 올바르게 추가되는지 확인")
         void When_IncreaseProductQuantity_InCartProductRelation_Expect_ProductQuantity_Rise() {
-            CartProductUpdateRequestDTO cartProductUpdateRequestDTO = mock(
-                CartProductUpdateRequestDTO.class);
+            CartProductUpdateRequestDTO cartProductUpdateRequestDTO = mock(CartProductUpdateRequestDTO.class);
             given(cartProductUpdateRequestDTO.getCartId()).willReturn(1L);
             given(cartProductUpdateRequestDTO.getProductId()).willReturn(1L);
             given(cartProductUpdateRequestDTO.getQuantity()).willReturn(1L);
@@ -164,8 +160,7 @@ class CartMapperTest {
         @Test
         @DisplayName("장바구니에 담긴 상품이 존재하지 않음 - 업데이트가 실패하는지 확인")
         void When_UpdateProductQuantity_Expect_Fail() {
-            CartProductUpdateRequestDTO cartProductUpdateRequestDTO = mock(
-                CartProductUpdateRequestDTO.class);
+            CartProductUpdateRequestDTO cartProductUpdateRequestDTO = mock(CartProductUpdateRequestDTO.class);
             given(cartProductUpdateRequestDTO.getCartId()).willReturn(1L);
             given(cartProductUpdateRequestDTO.getProductId()).willReturn(3L);
             given(cartProductUpdateRequestDTO.getQuantity()).willReturn(1L);
@@ -178,17 +173,16 @@ class CartMapperTest {
     
     @Nested
     @Sql(value = {"classpath:drop-table.sql", "classpath:schema.sql",
-        "classpath:/sql/h2/member/insert_member.sql",
-        "classpath:/sql/h2/cart/insert_cart.sql",
-        "classpath:/sql/h2/product/insert_product.sql",
-        "classpath:/sql/h2/cart/insert_cart_product_relation.sql"})
+            "classpath:/sql/h2/member/insert_member.sql",
+            "classpath:/sql/h2/cart/insert_cart.sql",
+            "classpath:/sql/h2/product/insert_product.sql",
+            "classpath:/sql/h2/cart/insert_cart_product_relation.sql"})
     class DeleteTest {
         
         @Test
         @DisplayName("존재하는 장바구니 상품을 삭제시 성공하는지 확인")
         void When_DeleteCartProductRelation_Expect_True() {
-            CartProductDeleteRequestDTO cartProductDeleteRequestDTO = mock(
-                CartProductDeleteRequestDTO.class);
+            CartProductDeleteRequestDTO cartProductDeleteRequestDTO = mock(CartProductDeleteRequestDTO.class);
             given(cartProductDeleteRequestDTO.getCartId()).willReturn(1L);
             given(cartProductDeleteRequestDTO.getProductId()).willReturn(1L);
             
@@ -200,8 +194,7 @@ class CartMapperTest {
         @Test
         @DisplayName("존재하지 않는 장바구니 상품을 삭제시 실패하는지 확인")
         void When_DeleteCartProductRelation_Expect_False() {
-            CartProductDeleteRequestDTO cartProductDeleteRequestDTO = mock(
-                CartProductDeleteRequestDTO.class);
+            CartProductDeleteRequestDTO cartProductDeleteRequestDTO = mock(CartProductDeleteRequestDTO.class);
             given(cartProductDeleteRequestDTO.getCartId()).willReturn(1L);
             given(cartProductDeleteRequestDTO.getProductId()).willReturn(3L);
             
