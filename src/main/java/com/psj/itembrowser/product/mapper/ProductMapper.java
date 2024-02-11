@@ -43,9 +43,9 @@ public interface ProductMapper {
 
 	List<ProductImage> findProductImagesByImageIds(List<Long> imageIds);
 
-	void softDeleteProductImages(List<Long> deleteImageIds);
-
 	void updateProduct(Product product);
+
+	void softDeleteProductImages(List<Long> deleteImageIds);
 
 	void softDeleteProduct(@Param("productId") Long productId);
 

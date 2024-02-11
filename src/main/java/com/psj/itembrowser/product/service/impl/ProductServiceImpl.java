@@ -1,6 +1,5 @@
 package com.psj.itembrowser.product.service.impl;
 
-import com.psj.itembrowser.product.domain.vo.ProductImage;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -28,67 +27,67 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
-	private final ProductPersistence productPersistence;
-	private final FileService fileService;
+    private final ProductPersistence productPersistence;
+    private final FileService fileService;
 
-	@Override
-	@Transactional
-	public boolean modifyProductQuantity(
-		ProductQuantityUpdateRequestDTO productQuantityUpdateRequestDTO) {
-		return productPersistence.updateProductQuantity(productQuantityUpdateRequestDTO);
-	}
+    @Override
+    @Transactional
+    public boolean modifyProductQuantity(
+        ProductQuantityUpdateRequestDTO productQuantityUpdateRequestDTO) {
+        return productPersistence.updateProductQuantity(productQuantityUpdateRequestDTO);
+    }
 
-	@Override
-	@Transactional(readOnly = true)
-	public ProductResponseDTO getProduct(Long productId) {
-		return productPersistence.findProductById(productId).toProductResponseDTO();
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public ProductResponseDTO getProduct(Long productId) {
+        return productPersistence.findProductById(productId).toProductResponseDTO();
+    }
 
-	@Override
-	@Deprecated
-	@Transactional(readOnly = true)
-	public List<Product> getProducts(Long orderId) {
-		return productPersistence.findProductsByOrderId(orderId);
-	}
+    @Override
+    @Deprecated
+    @Transactional(readOnly = true)
+    public List<Product> getProducts(Long orderId) {
+        return productPersistence.findProductsByOrderId(orderId);
+    }
 
-	@Override
-	@Transactional
-	public void createProduct(ProductRequestDTO productRequestDTO) {
-		Product product = productRequestDTO.toProduct();
-		List<MultipartFile> files = productRequestDTO.getMultipartFiles();
+    @Override
+    @Transactional
+    public void createProduct(ProductRequestDTO productRequestDTO) {
+        Product product = productRequestDTO.toProduct();
+        List<MultipartFile> files = productRequestDTO.getMultipartFiles();
 
-		product.validateSellDates();
+        product.validateSellDates();
 
-		productPersistence.createProduct(product);
+        productPersistence.createProduct(product);
 
-		Long productId = product.getId();
+        Long productId = product.getId();
 
-		fileService.createProductImages(files, productId);
-	}
+        fileService.createProductImages(files, productId);
+    }
 
-	@Override
-	@Transactional
-	public void updateProduct(ProductUpdateDTO productUpdateDTO, Long productId) {
-		// Ensure data consistency using pessimistic locking
-		productPersistence.findProductStatusForUpdate(productId);
+    @Override
+    @Transactional
+    public void updateProduct(ProductUpdateDTO productUpdateDTO, Long productId) {
+        // Ensure data consistency using pessimistic locking
+        Product product = productUpdateDTO.toProduct(productId);
 
-		Product product = productUpdateDTO.toProduct(productId);
+        productPersistence.findProductStatusForUpdate(productId);
 
-		product.validateSellDates();
+        product.validateSellDates();
 
-		productPersistence.updateProduct(product);
+        productPersistence.updateProduct(product);
 
-		fileService.updateProductImages(productUpdateDTO, productId);
-	}
+        fileService.updateProductImages(productUpdateDTO, productId);
+    }
 
-	@Override
-	@Transactional
-	public void deleteProduct(Long productId) {
-		// Ensure data consistency using pessimistic locking
-		productPersistence.findProductStatusForUpdate(productId);
+    @Override
+    @Transactional
+    public void deleteProduct(Long productId) {
+        // Ensure data consistency using pessimistic locking
+        productPersistence.findProductStatusForUpdate(productId);
 
-		productPersistence.softDeleteProduct(productId);
+        productPersistence.softDeleteProduct(productId);
 
-		fileService.deleteProductImages(productId);
-	}
+        fileService.deleteProductImages(productId);
+    }
 }
