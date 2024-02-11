@@ -9,13 +9,9 @@ import com.psj.itembrowser.product.domain.dto.request.ProductUpdateDTO;
 
 public interface FileService {
 
-	Path storeFile(MultipartFile file);
+    void createProductImages(List<MultipartFile> files, Long productId);
 
-	void deleteFilesInStorage(String filePath);
+    void updateProductImages(ProductUpdateDTO productUpdateDTO, Long productId);
 
-	Path replaceFileInStorage(MultipartFile newFile, String oldFilePath);
-
-	void createProductImages(List<MultipartFile> files, Long productId);
-
-	void updateProductImages(ProductUpdateDTO productUpdateDTO, Long productId);
+    void deleteProductImages(Long productId);
 }
