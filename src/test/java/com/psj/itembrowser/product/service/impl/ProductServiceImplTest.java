@@ -1,9 +1,11 @@
 package com.psj.itembrowser.product.service.impl;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import com.psj.itembrowser.product.domain.dto.response.ProductResponseDTO;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -95,7 +97,7 @@ class ProductServiceImplTest {
 			productService.updateProduct(productUpdateDTO, productId);
 
 			// then
-			verify(productPersistence, times(1)).findProductById(productId);
+			verify(productPersistence, times(1)).findProductStatusForUpdate(productId);
 			verify(productPersistence, times(1)).updateProduct(product);
 			verify(fileService, times(1)).updateProductImages(productUpdateDTO, productId);
 		}
@@ -107,16 +109,49 @@ class ProductServiceImplTest {
 			ProductUpdateDTO productUpdateDTO = mock(ProductUpdateDTO.class);
 			Long productId = 1L;
 
-			when(productPersistence.findProductById(productId)).thenThrow(
+			when(productPersistence.findProductStatusForUpdate(productId)).thenThrow(
 				new NotFoundException(ErrorCode.PRODUCT_NOT_FOUND));
 
 			// when & then
 			assertThrows(NotFoundException.class,
 				() -> productService.updateProduct(productUpdateDTO, productId));
 
-			verify(productPersistence, times(1)).findProductById(productId);
+			verify(productPersistence, times(1)).findProductStatusForUpdate(productId);
 			verify(productPersistence, never()).updateProduct(any());
 			verify(fileService, never()).updateProductImages(any(), anyLong());
 		}
+	}
+
+	@Nested
+	class GetProduct {
+		@Test
+		@DisplayName("상품 조회 성공")
+		void getProductSuccess() {
+			// given
+			Long productId = 1L;
+			Product product = new Product();
+			ProductResponseDTO expectedResponse = ProductResponseDTO.of(product);
+			when(productPersistence.findProductById(productId)).thenReturn(product);
+
+			// when
+			ProductResponseDTO actualResponse = productService.getProduct(productId);
+
+			// then
+			assertThat(actualResponse).isNotNull();
+			assertThat(actualResponse).isEqualToComparingFieldByField(expectedResponse);
+			verify(productPersistence, times(1)).findProductById(productId);
+		}
+
+		@Test
+		@DisplayName("상품 조회 실패 - 상품을 찾을 수 없음")
+		void getProductFailureProductNotFound() {
+			// given
+			Long productId = 1L;
+			when(productPersistence.findProductById(productId)).thenThrow(new NotFoundException(ErrorCode.PRODUCT_NOT_FOUND));
+
+			// when & then
+			assertThrows(NotFoundException.class, () -> productService.getProduct(productId));
+		}
+
 	}
 }

@@ -32,7 +32,7 @@ public class ProductServiceImpl implements ProductService {
 	private final FileService fileService;
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public boolean modifyProductQuantity(
 		ProductQuantityUpdateRequestDTO productQuantityUpdateRequestDTO) {
 		return productPersistence.updateProductQuantity(productQuantityUpdateRequestDTO);
@@ -52,7 +52,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public void createProduct(ProductRequestDTO productRequestDTO) {
 		Product product = productRequestDTO.toProduct();
 		List<MultipartFile> files = productRequestDTO.getMultipartFiles();
@@ -67,7 +67,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public void updateProduct(ProductUpdateDTO productUpdateDTO, Long productId) {
 		// Ensure data consistency using pessimistic locking
 		productPersistence.findProductStatusForUpdate(productId);
@@ -82,7 +82,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public void deleteProduct(Long productId) {
 		// Ensure data consistency using pessimistic locking
 		productPersistence.findProductStatusForUpdate(productId);
