@@ -1,5 +1,6 @@
 package com.psj.itembrowser.product.service.impl;
 
+import com.psj.itembrowser.product.domain.vo.ProductImage;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -25,7 +26,6 @@ import lombok.RequiredArgsConstructor;
  */
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class ProductServiceImpl implements ProductService {
 
 	private final ProductPersistence productPersistence;
@@ -39,11 +39,14 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public ProductResponseDTO getProduct(Long productId) {
-		return productPersistence.findProductById(productId);
+		return productPersistence.findProductById(productId).toProductResponseDTO();
 	}
 
 	@Override
+	@Deprecated
+	@Transactional(readOnly = true)
 	public List<Product> getProducts(Long orderId) {
 		return productPersistence.findProductsByOrderId(orderId);
 	}
@@ -66,7 +69,8 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	@Transactional(readOnly = false)
 	public void updateProduct(ProductUpdateDTO productUpdateDTO, Long productId) {
-		productPersistence.findProductById(productId);
+		// Ensure data consistency using pessimistic locking
+		productPersistence.findProductStatusForUpdate(productId);
 
 		Product product = productUpdateDTO.toProduct(productId);
 
@@ -75,5 +79,16 @@ public class ProductServiceImpl implements ProductService {
 		productPersistence.updateProduct(product);
 
 		fileService.updateProductImages(productUpdateDTO, productId);
+	}
+
+	@Override
+	@Transactional(readOnly = false)
+	public void deleteProduct(Long productId) {
+		// Ensure data consistency using pessimistic locking
+		productPersistence.findProductStatusForUpdate(productId);
+
+		productPersistence.softDeleteProduct(productId);
+
+		fileService.deleteProductImages(productId);
 	}
 }

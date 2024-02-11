@@ -18,9 +18,17 @@ public class ProductResponseDTO {
 
 	private String name;
 
+	private Integer category;
+
+	private String detail;
+
 	private ProductStatus status;
 
 	private Integer quantity;
+
+	private Integer unitPrice;
+
+	private String sellerId;
 
 	private LocalDateTime sellStartDatetime;
 
@@ -33,6 +41,10 @@ public class ProductResponseDTO {
 	private String deliveryMethod;
 
 	private Integer deliveryDefaultFee;
+
+	private Integer freeShipOverAmount;
+
+	private String returnCenterCode;
 
 	private List<ProductImage> productImages;
 

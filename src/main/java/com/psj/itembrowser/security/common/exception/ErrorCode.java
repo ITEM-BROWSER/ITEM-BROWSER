@@ -47,6 +47,7 @@ public enum ErrorCode {
 	PRODUCT_UPDATE_FAIL(HttpStatus.BAD_REQUEST, "PRODUCT_003", "Fail to update to product"),
 	PRODUCT_DELETE_FAIL(HttpStatus.BAD_REQUEST, "PRODUCT_004", "Fail to delete to product"),
 	PRODUCT_VALIDATION_FAIL(HttpStatus.BAD_REQUEST, "PRODUCT_005", "Validation Error"),
+	PRODUCT_IMAGE_NOT_FOUND(HttpStatus.BAD_REQUEST, "PRODUCT_006", "Not Found Product IMAGE"),
 
 	//Token
 	ACCESS_TOKEN_NOT_GENERATED(HttpStatus.UNAUTHORIZED, "TOKEN_001",

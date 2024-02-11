@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.psj.itembrowser.product.domain.dto.request.ProductQuantityUpdateRequestDTO;
-import com.psj.itembrowser.product.domain.dto.response.ProductResponseDTO;
 import com.psj.itembrowser.product.domain.vo.Product;
 import com.psj.itembrowser.product.domain.vo.ProductImage;
 import com.psj.itembrowser.product.mapper.ProductMapper;
@@ -26,61 +25,79 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProductPersistence {
 
-	private final ProductMapper productMapper;
+    private final ProductMapper productMapper;
 
-	public ProductResponseDTO findProductById(Long productId) {
-		Product productById = productMapper.findProductById(productId);
-		if (productById == null) {
-			throw new NotFoundException(ErrorCode.PRODUCT_NOT_FOUND);
-		}
+    public Product findProductById(Long productId) {
+        Product productById = productMapper.findProductById(productId);
+        if (productById == null) {
+            throw new NotFoundException(ErrorCode.PRODUCT_NOT_FOUND);
+        }
 
-		return productById.toProductResponseDTO();
-	}
+        return productById;
+    }
 
-	public List<ProductResponseDTO> findProductsByIds(List<Long> productIds) {
-		List<Product> productsByIds = productMapper.findProductsByIds(productIds);
-		if (productsByIds == null || productsByIds.isEmpty()) {
-			throw new NotFoundException(ErrorCode.PRODUCT_NOT_FOUND);
-		}
+    public List<Product> findProductsByIds(List<Long> productIds) {
+        List<Product> productsByIds = productMapper.findProductsByIds(productIds);
+        if (productsByIds == null || productsByIds.isEmpty()) {
+            throw new NotFoundException(ErrorCode.PRODUCT_NOT_FOUND);
+        }
 
-		return productsByIds
-			.stream()
-			.map(Product::toProductResponseDTO)
-			.collect(Collectors.toUnmodifiableList());
-	}
+        return productsByIds;
+    }
 
-	@Transactional(readOnly = true)
-	public List<Product> findProductsByOrderId(Long orderId) {
-		return productMapper.findProductsByOrderId(orderId);
-	}
+    public Product findProductStatusForUpdate(Long productId) {
+        Product product = productMapper.lockProductById(productId);
+        if (product == null) {
+            throw new NotFoundException(ErrorCode.PRODUCT_NOT_FOUND);
+        }
 
-	@Transactional(readOnly = false)
-	public void createProduct(Product product) {
-		productMapper.insertProduct(product);
-	}
+        return product;
+    }
 
-	@Transactional(readOnly = false)
-	public void createProductImages(List<ProductImage> productImages) {
-		productMapper.insertProductImages(productImages);
-	}
+    public List<Product> findProductsByOrderId(Long orderId) {
+        return productMapper.findProductsByOrderId(orderId);
+    }
 
-	@Transactional(readOnly = false)
-	public boolean updateProductQuantity(
-		ProductQuantityUpdateRequestDTO productQuantityUpdateRequestDTO) {
-		return productMapper.updateProductQuantity(productQuantityUpdateRequestDTO);
-	}
+    public void createProduct(Product product) {
+        productMapper.insertProduct(product);
+    }
 
-	@Transactional(readOnly = false)
-	public void deleteProductImages(List<Long> deleteImageIds) {
-		productMapper.deleteProductImages(deleteImageIds);
-	}
+    public void createProductImages(List<ProductImage> productImages) {
+        productMapper.insertProductImages(productImages);
+    }
 
-	public List<ProductImage> findProductImagesByImageIds(List<Long> imageIds) {
-		return productMapper.findProductImagesByImageIds(imageIds);
-	}
+    public boolean updateProductQuantity(
+        ProductQuantityUpdateRequestDTO productQuantityUpdateRequestDTO) {
+        return productMapper.updateProductQuantity(productQuantityUpdateRequestDTO);
+    }
 
-	@Transactional(readOnly = false)
-	public void updateProduct(Product product) {
-		productMapper.updateProduct(product);
-	}
+    public void deleteProductImages(List<Long> deleteImageIds) {
+        productMapper.softDeleteProductImages(deleteImageIds);
+    }
+
+    public List<ProductImage> findProductImagesByImageIds(List<Long> imageIds) {
+        List<ProductImage> productImagesByImageIds = productMapper.findProductImagesByImageIds(
+            imageIds);
+        if (productImagesByImageIds == null || productImagesByImageIds.isEmpty()) {
+            throw new NotFoundException(ErrorCode.PRODUCT_IMAGE_NOT_FOUND);
+        }
+        return productImagesByImageIds;
+    }
+
+    public List<ProductImage> findProductImagesByProductId(Long productId) {
+        List<ProductImage> productImagesByProductId = productMapper.findProductImagesByProductId(
+            productId);
+        if (productImagesByProductId == null || productImagesByProductId.isEmpty()) {
+            throw new NotFoundException(ErrorCode.PRODUCT_IMAGE_NOT_FOUND);
+        }
+        return productImagesByProductId;
+    }
+
+    public void updateProduct(Product product) {
+        productMapper.updateProduct(product);
+    }
+
+    public void softDeleteProduct(Long productId) {
+        productMapper.softDeleteProduct(productId);
+    }
 }
