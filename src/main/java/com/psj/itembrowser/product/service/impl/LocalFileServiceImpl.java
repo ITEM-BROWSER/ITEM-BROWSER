@@ -1,12 +1,16 @@
 package com.psj.itembrowser.product.service.impl;
 
 import com.psj.itembrowser.product.service.FileStoreService;
+import com.psj.itembrowser.security.common.exception.ErrorCode;
+import com.psj.itembrowser.security.common.exception.StorageException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -17,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Primary
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class LocalFileServiceImpl implements FileStoreService {
 
     @Value("${file.upload-dir}")
@@ -38,7 +43,8 @@ public class LocalFileServiceImpl implements FileStoreService {
 
             return savePath;
         } catch (IOException e) {
-            throw new RuntimeException("Failed to store file " + originalFilename, e);
+            log.error("Failed to store file {}: {}", originalFilename, e.getMessage(), e);
+            throw new StorageException(ErrorCode.FILE_STORE_FAIL);
         }
     }
 
@@ -48,7 +54,8 @@ public class LocalFileServiceImpl implements FileStoreService {
             Path path = Paths.get(filePath);
             Files.deleteIfExists(path);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to delete file at " + filePath, e);
+            log.error("Failed to delete file {}: {}", filePath, e.getMessage(), e);
+            throw new StorageException(ErrorCode.FILE_STORE_DELETE_FAIL);
         }
     }
 

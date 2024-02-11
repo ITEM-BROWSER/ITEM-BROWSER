@@ -49,6 +49,10 @@ public enum ErrorCode {
 	PRODUCT_VALIDATION_FAIL(HttpStatus.BAD_REQUEST, "PRODUCT_005", "Validation Error"),
 	PRODUCT_IMAGE_NOT_FOUND(HttpStatus.BAD_REQUEST, "PRODUCT_006", "Not Found Product IMAGE"),
 
+	// FileStore
+	FILE_STORE_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "FILE_001", "File Store Exception"),
+	FILE_STORE_DELETE_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "FILE_002", "File Delete Exception"),
+
 	//Token
 	ACCESS_TOKEN_NOT_GENERATED(HttpStatus.UNAUTHORIZED, "TOKEN_001",
 		"Fail to generate Access Token"),
