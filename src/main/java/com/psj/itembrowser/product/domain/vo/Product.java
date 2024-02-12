@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.psj.itembrowser.cart.domain.vo.CartProductRelation;
-import com.psj.itembrowser.product.domain.dto.request.ProductQuantityUpdateRequestDTO;
 import com.psj.itembrowser.product.domain.dto.response.ProductResponseDTO;
 import com.psj.itembrowser.security.common.BaseDateTimeEntity;
 
@@ -148,6 +147,14 @@ public class Product extends BaseDateTimeEntity {
 		return this.quantity >= quantity;
 	}
 
+	public double calculateTotalPrice() {
+		return this.unitPrice * this.quantity;
+	}
+
+	public double calculateDiscount(int quantity, int discountRate) {
+		return (this.unitPrice * quantity) * ((double)discountRate / 100);
+	}
+
 	public ProductResponseDTO toProductResponseDTO() {
 		return ProductResponseDTO
 			.builder()
@@ -163,11 +170,19 @@ public class Product extends BaseDateTimeEntity {
 			.build();
 	}
 
-	public ProductQuantityUpdateRequestDTO toProductQuantityUpdateRequestDTO() {
-		return ProductQuantityUpdateRequestDTO
-			.builder()
-			.id(this.id)
-			.quantity(this.quantity)
+	public static Product from(ProductResponseDTO productResponseDTO) {
+		return Product.builder()
+			.id(productResponseDTO.getId())
+			.name(productResponseDTO.getName())
+			.status(productResponseDTO.getStatus())
+			.quantity(productResponseDTO.getQuantity())
+			.sellStartDatetime(productResponseDTO.getSellStartDatetime())
+			.sellEndDatetime(productResponseDTO.getSellEndDatetime())
+			.displayName(productResponseDTO.getDisplayName())
+			.brand(productResponseDTO.getBrand())
+			.deliveryMethod(productResponseDTO.getDeliveryMethod())
+			.deliveryDefaultFee(productResponseDTO.getDeliveryDefaultFee())
+			.productImages(productResponseDTO.getProductImages())
 			.build();
 	}
 }
