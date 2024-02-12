@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.psj.itembrowser.member.domain.dto.request.MemberSignUpRequestDTO;
 import com.psj.itembrowser.member.domain.dto.response.MemberResponseDTO;
+import com.psj.itembrowser.member.domain.vo.Member;
 import com.psj.itembrowser.member.mapper.MemberMapper;
 import com.psj.itembrowser.member.persistence.MemberPersistance;
 import com.psj.itembrowser.member.service.MemberService;
@@ -41,7 +42,7 @@ public class MemberServiceImpl implements MemberService {
 	public Optional<MemberResponseDTO> register(MemberSignUpRequestDTO requestDTO) {
 		String encodedPassword = passwordEncoder.encode(requestDTO.getCredentialsPassword());
 		requestDTO.setCredentialsPassword(encodedPassword);
-
+		requestDTO.setMemberShipType(Member.MemberShipType.REGULAR);
 		try {
 			Long insertedMemberno = memberPersistance.insertMember(requestDTO);
 			return Optional.of(memberPersistance.findById(insertedMemberno));

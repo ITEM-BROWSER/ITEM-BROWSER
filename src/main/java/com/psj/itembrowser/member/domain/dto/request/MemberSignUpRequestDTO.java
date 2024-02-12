@@ -48,6 +48,7 @@ public class MemberSignUpRequestDTO {
 	@NotNull
 	private Member.Role role;
 	private Member.Status status;
+	private Member.MemberShipType memberShipType;
 	private String addressAddressMain;
 	private String addressAddressSub;
 	private String addressZipCode;

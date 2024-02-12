@@ -30,6 +30,7 @@ public class MemberResponseDTO {
 	private Member.Gender gender;
 	private Member.Role role;
 	private Member.Status status;
+	private Member.MemberShipType memberShipType;
 	private LocalDate birthday;
 	private LocalDateTime lastLoginDate;
 	private LocalDateTime createdDate;
@@ -51,6 +52,7 @@ public class MemberResponseDTO {
 		memberResponseDTO.setGender(member.getGender());
 		memberResponseDTO.setRole(member.getRole());
 		memberResponseDTO.setStatus(member.getStatus());
+		memberResponseDTO.setMemberShipType(member.getMemberShipType());
 		memberResponseDTO.setBirthday(member.getBirthday());
 		memberResponseDTO.setLastLoginDate(member.getLastLoginDate());
 		memberResponseDTO.setCreatedDate(member.getCreatedDate());
