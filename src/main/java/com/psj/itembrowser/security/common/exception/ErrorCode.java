@@ -49,6 +49,9 @@ public enum ErrorCode {
 	PRODUCT_VALIDATION_FAIL(HttpStatus.BAD_REQUEST, "PRODUCT_005", "Validation Error"),
 	PRODUCT_QUANTITY_NOT_ENOUGH(HttpStatus.BAD_REQUEST, "PRODUCT_006", "Product Quantity is not enough"),
 
+	// Address
+	ADDRESS_NOT_FOUND(HttpStatus.NOT_FOUND, "ADDRESS_001", "Not Found Address"),
+
 	//Token
 	ACCESS_TOKEN_NOT_GENERATED(HttpStatus.UNAUTHORIZED, "TOKEN_001",
 		"Fail to generate Access Token"),
@@ -68,4 +71,4 @@ public enum ErrorCode {
 	private final HttpStatus status;
 	private final String code;
 	private final String message;
-}
+	}

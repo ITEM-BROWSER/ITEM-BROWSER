@@ -25,6 +25,7 @@ import com.psj.itembrowser.product.domain.vo.Product;
 import com.psj.itembrowser.product.service.impl.ProductValidationHelper;
 import com.psj.itembrowser.security.auth.service.AuthenticationService;
 import com.psj.itembrowser.security.common.exception.BadRequestException;
+import com.psj.itembrowser.shippingInfos.domain.vo.ShippingInfo;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,8 @@ public class OrderServiceImpl implements OrderService {
 	private final OrderCalculationServiceImpl orderCalculationService;
 	private final AuthenticationService authenticationService;
 	private final ProductValidationHelper productValidationHelper;
+	private final ShppingInfoValidationService shippingInfoValidationService;
+	private final PaymentService paymentService;
 
 	@Override
 	@Transactional(readOnly = false, timeout = 4)
@@ -102,11 +105,16 @@ public class OrderServiceImpl implements OrderService {
 		productValidationHelper.validateProduct(products);
 
 		//주문 상품에 대한 가격, 수량, 할인, 배송비 등을 계산한다.
-		orderCalculationService.calculateOrderDetails(orderCreateRequestDTO, member);
+		OrderCalculationResult orderCalculationResult = orderCalculationService.calculateOrderDetails(
+			orderCreateRequestDTO, member);
 
 		//주문자의 배송지에 대한 검증 수행한다. -> 존재하는 배송지인지 확인한다.
+		ShippingInfo shippingInfo = ShippingInfo.from(orderCreateRequestDTO.getShippingInfo());
+		AddressValidationResult addressValidationResult = shippingInfoValidationService.validateAddress(shippingInfo);
 
 		//결제 처리
+		//TODO 결제 추후 구현
+		paymentService.pay(orderCalculationResult);
 
 		//DB 주문내역에 생성 ( 감사 기능 )
 
