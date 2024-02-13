@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 public class OrderCalculationServiceImpl implements OrderCalculationService {
 	private final ProductService productService;
 	private final PercentageDiscountService percentageDiscountService;
-	private final ShippingFeeServiceImpl shippingFeeService;
+	private final ShippingPolicyService shippingPolicyService;
 
 	@Override
 	public OrderCalculationResult calculateOrderDetails(OrderCreateRequestDTO orderCreateRequestDTO, Member member) {
@@ -47,7 +47,7 @@ public class OrderCalculationServiceImpl implements OrderCalculationService {
 			totalDiscount += discount;
 		}
 
-		shippingFee = shippingFeeService.calculateShippingFee(totalPrice);
+		shippingFee = shippingPolicyService.getCurrentShippingPolicy().calculateShippingFee(totalPrice);
 
 		double orderTotal = totalPrice - totalDiscount + shippingFee;
 
