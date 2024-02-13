@@ -4,15 +4,14 @@ import java.time.LocalDateTime;
 
 import com.psj.itembrowser.shippingInfos.domain.dto.response.ShippingInfoResponseDTO;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.ToString;
+import lombok.NoArgsConstructor;
 
 @Getter
-@Builder
 @AllArgsConstructor
-@ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ShippingInfo {
 	/**
 	 * 배송지 PK
@@ -38,6 +37,11 @@ public class ShippingInfo {
 	 * 상세주소
 	 */
 	private String subAddress;
+
+	/**
+	 * 우편번호
+	 */
+	private String zipCode;
 
 	/**
 	 * 휴대폰 번호. 휴대폰번호 (-) 가 없어야함
@@ -69,19 +73,38 @@ public class ShippingInfo {
 	 */
 	private LocalDateTime deletedDate;
 
-	public ShippingInfoResponseDTO toShippingInfoRespDTO() {
-		return ShippingInfoResponseDTO
-			.builder()
-			.id(this.id)
-			.userId(this.userId)
-			.receiver(this.receiver)
-			.mainAddress(this.mainAddress)
-			.subAddress(this.subAddress)
-			.phoneNumber(this.phoneNumber)
-			.alternativeNumber(this.alternativeNumber)
-			.shippingRequestMsg(this.shippingRequestMsg)
-			.createdDate(this.createdDate)
-			.updatedDate(this.updatedDate)
-			.build();
+	public static ShippingInfo from(ShippingInfoResponseDTO shippingInfoResponseDTO) {
+		ShippingInfo shippingInfo = new ShippingInfo();
+
+		shippingInfo.id = shippingInfoResponseDTO.getId();
+		shippingInfo.userId = shippingInfoResponseDTO.getUserId();
+		shippingInfo.receiver = shippingInfoResponseDTO.getReceiver();
+		shippingInfo.mainAddress = shippingInfoResponseDTO.getMainAddress();
+		shippingInfo.subAddress = shippingInfoResponseDTO.getSubAddress();
+		shippingInfo.phoneNumber = shippingInfoResponseDTO.getPhoneNumber();
+		shippingInfo.alternativeNumber = shippingInfoResponseDTO.getAlternativeNumber();
+		shippingInfo.shippingRequestMsg = shippingInfoResponseDTO.getShippingRequestMsg();
+		shippingInfo.createdDate = shippingInfoResponseDTO.getCreatedDate();
+		shippingInfo.updatedDate = shippingInfoResponseDTO.getUpdatedDate();
+		shippingInfo.deletedDate = shippingInfoResponseDTO.getDeletedDate();
+
+		return shippingInfo;
+	}
+
+	@Override
+	public String toString() {
+		return "ShippingInfo{" +
+			"id=" + id +
+			", userId='" + userId + '\'' +
+			", receiver='" + receiver + '\'' +
+			", mainAddress='" + mainAddress + '\'' +
+			", subAddress='" + subAddress + '\'' +
+			", phoneNumber='" + phoneNumber + '\'' +
+			", alternativeNumber='" + alternativeNumber + '\'' +
+			", shippingRequestMsg='" + shippingRequestMsg + '\'' +
+			", createdDate=" + createdDate +
+			", updatedDate=" + updatedDate +
+			", deletedDate=" + deletedDate +
+			'}';
 	}
 }

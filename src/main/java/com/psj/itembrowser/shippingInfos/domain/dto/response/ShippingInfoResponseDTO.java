@@ -5,14 +5,17 @@ import java.time.LocalDateTime;
 
 import com.psj.itembrowser.shippingInfos.domain.vo.ShippingInfo;
 
-import lombok.Builder;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * DTO for {@link ShippingInfo}
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Data
-@Builder
 public class ShippingInfoResponseDTO implements Serializable {
 	Long id;
 	String userId;
@@ -24,4 +27,5 @@ public class ShippingInfoResponseDTO implements Serializable {
 	String shippingRequestMsg;
 	LocalDateTime createdDate;
 	LocalDateTime updatedDate;
+	LocalDateTime deletedDate;
 }
