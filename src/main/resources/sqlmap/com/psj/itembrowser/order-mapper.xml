@@ -66,46 +66,46 @@
         FROM ORDERS O
         <where>
             O.id = #{id}
-            AND O.DELETED_DATE IS NULL
+              AND O.DELETED_DATE IS NULL
         </where>
         LIMIT 1;
     </select>
 
     <select id="selectOrdersWithPaginationAndNoCondition" resultMap="orderResultMap"
             parameterType="com.psj.itembrowser.order.domain.dto.request.OrderPageRequestDTO">
-      SELECT
-      <include refid="orderColumns"/>
-      FROM ORDERS O
-      <where>
-        <choose>
-          <when test="orderPageRequestDTO.requestYear != null">
-            AND YEAR(O.CREATED_DATE) = #{orderPageRequestDTO.requestYear}
-          </when>
-          <when test="orderPageRequestDTO.requestYear == null">
-            AND O.CREATED_DATE >= CURRENT_DATE - INTERVAL '6' MONTH
-          </when>
-        </choose>
-      </where>
-      ORDER BY O.CREATED_DATE DESC
+        SELECT
+        <include refid="orderColumns"/>
+        FROM ORDERS O
+        <where>
+            <choose>
+                <when test="orderPageRequestDTO.requestYear != null">
+                    AND YEAR(O.CREATED_DATE) = #{orderPageRequestDTO.requestYear}
+                </when>
+                <when test="orderPageRequestDTO.requestYear == null">
+                    AND O.CREATED_DATE >= CURRENT_DATE - INTERVAL '6' MONTH
+                </when>
+            </choose>
+        </where>
+        ORDER BY O.CREATED_DATE DESC
     </select>
 
     <select id="selectOrdersWithPaginationAndNotDeleted" resultMap="orderResultMap"
             parameterType="com.psj.itembrowser.order.domain.dto.request.OrderPageRequestDTO">
-      SELECT
-      <include refid="orderColumns"/>
-      FROM ORDERS O
-      <where>
-        <choose>
-          <when test="orderPageRequestDTO.requestYear != null">
-            AND YEAR(O.CREATED_DATE) = #{orderPageRequestDTO.requestYear}
-          </when>
-          <when test="orderPageRequestDTO.requestYear == null">
-            AND O.CREATED_DATE >= CURRENT_DATE - INTERVAL '6' MONTH
-          </when>
-        </choose>
-        AND O.DELETED_DATE IS NULL
-      </where>
-      ORDER BY O.CREATED_DATE DESC
+        SELECT
+        <include refid="orderColumns"/>
+        FROM ORDERS O
+        <where>
+            <choose>
+                <when test="orderPageRequestDTO.requestYear != null">
+                    AND YEAR(O.CREATED_DATE) = #{orderPageRequestDTO.requestYear}
+                </when>
+                <when test="orderPageRequestDTO.requestYear == null">
+                    AND O.CREATED_DATE >= CURRENT_DATE - INTERVAL '6' MONTH
+                </when>
+            </choose>
+            AND O.DELETED_DATE IS NULL
+        </where>
+        ORDER BY O.CREATED_DATE DESC
     </select>
 
     <select id="selectOrderRelation" resultMap="orderProductRelationResultMap"
@@ -117,4 +117,17 @@
             OPR.GROUP_ID = #{orderId}
         </where>
     </select>
+
+    <insert id="createOrder" parameterType="com.psj.itembrowser.order.domain.vo.Order" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ORDERS (ORDERER_NUMBER, ORDER_STATUS, PAID_DATE, SHIPPING_INFO_ID, CREATED_DATE, UPDATED_DATE)
+        VALUES (#{ordererNumber}, #{orderStatus}, #{paidDate}, #{shippingInfoId}, NOW(), NOW());
+    </insert>
+
+    <insert id="createOrderProducts" parameterType="list">
+        INSERT INTO ORDERS_PRODUCT_RELATION (GROUP_ID, PRODUCT_ID, PRODUCT_QUANTITY, CREATED_DATE, UPDATED_DATE)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.groupId}, #{item.productId}, #{item.productQuantity}, NOW(), NOW())
+        </foreach>
+    </insert>
 </mapper>

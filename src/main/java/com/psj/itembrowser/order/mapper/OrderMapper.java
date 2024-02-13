@@ -62,4 +62,8 @@ public interface OrderMapper {
 		@Param("orderPageRequestDTO") OrderPageRequestDTO requestDTO);
 
 	List<OrdersProductRelation> selectOrderRelation(@Param("orderId") long orderId);
+
+	void createOrder(Order order);
+
+	void createOrderProducts(List<OrdersProductRelation> products);
 }
