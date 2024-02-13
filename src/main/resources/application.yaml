@@ -60,6 +60,19 @@ pagehelper:
 file:
   upload-dir: ./src/main/resources/static/uploads/
 
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: full
+        retryer: full
+
+juso:
+  url: https://business.juso.go.kr/addrlink/addrLinkApiJsonp.do
+  confmKey: classpath:juso.key
+
 server:
   error:
     include-stacktrace: never
