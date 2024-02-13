@@ -74,7 +74,7 @@ public class OrderSelectPersistenceTest {
 			null,
 			null, new Product());
 
-		this.expectedOrder = Order.createOrder(
+		this.expectedOrder = Order.of(
 			1L,
 			1L,
 			OrderStatus.ACCEPT,

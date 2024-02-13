@@ -1,17 +1,36 @@
 package com.psj.itembrowser.order.controller;
 
-import static com.psj.itembrowser.security.common.exception.ErrorCode.ORDER_NOT_FOUND;
-import static org.mockito.BDDMockito.any;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static com.psj.itembrowser.security.common.exception.ErrorCode.*;
+import static org.mockito.BDDMockito.*;
+import static org.springframework.http.MediaType.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties.Jwt;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.epages.restdocs.apispec.ResourceDocumentation;
@@ -36,48 +55,27 @@ import com.psj.itembrowser.security.common.exception.NotFoundException;
 import com.psj.itembrowser.security.common.pagination.PageRequestDTO;
 import com.psj.itembrowser.security.service.impl.UserDetailsServiceImpl;
 import com.psj.itembrowser.shippingInfos.domain.vo.ShippingInfo;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties.Jwt;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.restdocs.RestDocumentationContextProvider;
-import org.springframework.restdocs.RestDocumentationExtension;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 @WebMvcTest(OrderApiController.class)
 @AutoConfigureRestDocs
 public class OrderSelectApiControllerTest {
-    
+
     @Autowired
     private MockMvc mockMvc;
-    
+
     @MockBean
     private OrderService orderService;
-    
+
     @MockBean
     private UserDetailsServiceImpl userDetailsService;
-    
+
     @Mock
     private Jwt jwt;
-    
+
     private Order expectedOrderWithADMINUser;
     private Order expectedOrderWithCUSTOMERUser;
-    
+
     @BeforeEach
     public void setUp(WebApplicationContext webApplicationContext,
             RestDocumentationContextProvider restDocumentation) {
@@ -85,7 +83,7 @@ public class OrderSelectApiControllerTest {
                                .webAppContextSetup(webApplicationContext)
                                .apply(MockMvcRestDocumentation.documentationConfiguration(restDocumentation))
                                .build();
-        
+
         Member expectedAdminMember = new Member(MemberNo.create(1L),
                 Credentials.create("mockUser3410@gamil.com", "3410"),
                 Name.create("홍", "길동"),
@@ -95,7 +93,7 @@ public class OrderSelectApiControllerTest {
                 Address.create("서울시 강남구", "김밥빌딩 101동 302호", "01012"),
                 LocalDate.of(1995, 11, 3),
                 LocalDateTime.now());
-        
+
         Member expectedCustomerMember = new Member(MemberNo.create(1L),
                 Credentials.create("mockUser3410@gmail.com", "3410"),
                 Name.create("홍", "길동"),
@@ -105,7 +103,7 @@ public class OrderSelectApiControllerTest {
                 Address.create("서울시 강남구", "김밥빌딩 101동 302호", "01012"),
                 LocalDate.of(1995, 11, 3),
                 LocalDateTime.now());
-        
+
         ShippingInfo expectedShppingInfo = new ShippingInfo(1L,
                 "mockUser3410@gamil.com",
                 "홍길동",
@@ -115,19 +113,19 @@ public class OrderSelectApiControllerTest {
                 LocalDateTime.now(),
                 null,
                 null);
-        
+
         OrdersProductRelation expectedOrderRelation1 = OrdersProductRelation.create(1L, 1L, 1,
                 LocalDateTime.now(),
                 null,
                 null,
                 new Product());
-        
+
         OrdersProductRelation expectedOrderRelation2 = OrdersProductRelation.create(2L, 1L, 1,
                 LocalDateTime.now(),
                 null,
                 null, new Product());
-        
-        this.expectedOrderWithADMINUser = Order.createOrder(
+
+        this.expectedOrderWithADMINUser = Order.of(
                 1L,
                 1L,
                 OrderStatus.ACCEPT,
@@ -142,8 +140,8 @@ public class OrderSelectApiControllerTest {
                 ),
                 expectedAdminMember,
                 expectedShppingInfo);
-        
-        this.expectedOrderWithCUSTOMERUser = Order.createOrder(
+
+        this.expectedOrderWithCUSTOMERUser = Order.of(
                 1L,
                 1L,
                 OrderStatus.ACCEPT,
@@ -159,7 +157,7 @@ public class OrderSelectApiControllerTest {
                 expectedCustomerMember,
                 expectedShppingInfo);
     }
-    
+
     @Test
     @MockMember
     @DisplayName("권한 - CUSTOMER 의 경우 주문 단건 조회시 200 성공과 올바른 응답값이 오는지 확인합니다.")
@@ -169,7 +167,7 @@ public class OrderSelectApiControllerTest {
         OrderResponseDTO expectedOrderResponseDTO = OrderResponseDTO.create(expectedOrderWithCUSTOMERUser);
         given(orderService.getOrderWithNotDeleted(orderId)).willReturn(expectedOrderResponseDTO);
         given(userDetailsService.loadUserByJwt(any())).willReturn(new UserDetailsServiceImpl.CustomUserDetails(expectedOrderResponseDTO.getMember()));
-        
+
         // when - then
         ResultActions response = mockMvc.perform(get("/v1/api/orders/{orderId}", orderId)
                                                          .contentType(APPLICATION_JSON)
@@ -182,7 +180,7 @@ public class OrderSelectApiControllerTest {
                                          .andExpect(
                                                  jsonPath("$.member.email").value(expectedOrderResponseDTO.getMember().getEmail()))
                                          .andExpect(jsonPath("$.member.role").value(Member.Role.ROLE_CUSTOMER.name()));
-        
+
         response
                 .andDo(MockMvcRestDocumentationWrapper.document(
                         "get-order-customer",
@@ -233,7 +231,7 @@ public class OrderSelectApiControllerTest {
                         )
                 ));
     }
-    
+
     @Test
     @DisplayName("권한 - ADMIN 의 경우 주문 단건 조회시 200 성공과 올바른 응답값이 오는지 확인합니다.")
     @MockMember(role = Member.Role.ROLE_ADMIN)
@@ -243,7 +241,7 @@ public class OrderSelectApiControllerTest {
         OrderResponseDTO expectedOrderResponseDTO = OrderResponseDTO.create(expectedOrderWithADMINUser);
         given(orderService.getOrderWithNoCondition(orderId)).willReturn(expectedOrderResponseDTO);
         given(userDetailsService.loadUserByJwt(any())).willReturn(new UserDetailsServiceImpl.CustomUserDetails(expectedOrderResponseDTO.getMember()));
-        
+
         // when - then
         ResultActions response = mockMvc.perform(get("/v1/api/orders/{orderId}", orderId)
                                                          .contentType(APPLICATION_JSON)
@@ -257,7 +255,7 @@ public class OrderSelectApiControllerTest {
                                          .andExpect(
                                                  jsonPath("$.member.email").value(expectedOrderResponseDTO.getMember().getEmail()))
                                          .andExpect(jsonPath("$.member.role").value(Member.Role.ROLE_ADMIN.name()));
-        
+
         response
                 .andDo(MockMvcRestDocumentationWrapper.document(
                         "get-order-customer",
@@ -308,7 +306,7 @@ public class OrderSelectApiControllerTest {
                         )
                 ));
     }
-    
+
     @Test
     @MockMember(role = Member.Role.ROLE_CUSTOMER)
     @DisplayName("권한 - CUSTOMER 인 경우, 주문 단건 조회 실패 케이스의 경우 404 반환과 올바른 응답값이 오는지 확인합니다.")
@@ -318,14 +316,14 @@ public class OrderSelectApiControllerTest {
         given(orderService.getOrderWithNotDeleted(orderId)).willThrow(new NotFoundException(ORDER_NOT_FOUND));
         given(userDetailsService.loadUserByJwt(any())).willReturn(
                 new UserDetailsServiceImpl.CustomUserDetails(MemberResponseDTO.from(expectedOrderWithCUSTOMERUser.getMember())));
-        
+
         // when - then
         ResultActions response = mockMvc.perform(get("/v1/api/orders/{orderId}", orderId)
                                                          .contentType(APPLICATION_JSON)
                                                          .accept(APPLICATION_JSON))
                                          .andExpect(status().isNotFound())
                                          .andExpect(jsonPath("$.message").value(ORDER_NOT_FOUND.getMessage()));
-        
+
         response
                 .andDo(MockMvcRestDocumentationWrapper.document(
                         "get-order-fail-customer",
@@ -347,7 +345,7 @@ public class OrderSelectApiControllerTest {
                         )
                 ));
     }
-    
+
     @Test
     @MockMember(role = Member.Role.ROLE_ADMIN)
     @DisplayName("권한 - ADMIN 인 경우, 주문 단건 조회 실패 케이스의 경우 404 반환과 올바른 응답값이 오는지 확인합니다.")
@@ -357,14 +355,14 @@ public class OrderSelectApiControllerTest {
         given(orderService.getOrderWithNoCondition(orderId)).willThrow(new NotFoundException(ORDER_NOT_FOUND));
         given(userDetailsService.loadUserByJwt(any())).willReturn(new UserDetailsServiceImpl.CustomUserDetails(
                 MemberResponseDTO.from(expectedOrderWithADMINUser.getMember())));
-        
+
         // when - then
         ResultActions response = mockMvc.perform(get("/v1/api/orders/{orderId}", orderId)
                                                          .contentType(APPLICATION_JSON)
                                                          .accept(APPLICATION_JSON))
                                          .andExpect(status().isNotFound())
                                          .andExpect(jsonPath("$.message").value(ORDER_NOT_FOUND.getMessage()));
-        
+
         response
                 .andDo(MockMvcRestDocumentationWrapper.document(
                         "get-order-fail-admin",
@@ -386,7 +384,7 @@ public class OrderSelectApiControllerTest {
                         )
                 ));
     }
-    
+
     //다건 조회 테스트
     @Test
     @MockMember(role = Member.Role.ROLE_CUSTOMER)
@@ -398,19 +396,19 @@ public class OrderSelectApiControllerTest {
         int pageNum = 0;
         int pageSize = 10;
         String requestYear = "2024";
-        
+
         OrderResponseDTO expectedOrderResponseDTO = OrderResponseDTO.create(expectedOrderWithCUSTOMERUser);
-        
+
         Member member = Member.from(MemberResponseDTO.from(expectedOrderWithCUSTOMERUser.getMember()));
-        
+
         OrderPageRequestDTO orderPageRequestDTO = OrderPageRequestDTO.create(PageRequestDTO.create(pageNum, pageSize), 1L, requestYear);
-        
+
         PageInfo<OrderResponseDTO> expectedOrderResponseDTOPageInfo = new PageInfo<>(List.of(expectedOrderResponseDTO));
-        
+
         given(orderService.getOrdersWithPaginationAndNotDeleted(member, orderPageRequestDTO)).willReturn(expectedOrderResponseDTOPageInfo);
-        
+
         given(userDetailsService.loadUserByJwt(any())).willReturn(new UserDetailsServiceImpl.CustomUserDetails(expectedOrderResponseDTO.getMember()));
-        
+
         // when - then
         ResultActions response = mockMvc.perform(
                         get("/v1/api/orders/users/{userNumber}", userNumber)
@@ -485,7 +483,7 @@ public class OrderSelectApiControllerTest {
                                                                        fieldWithPath("navigateLastPage").description("마지막 네비게이션 페이지")
                                                                ).build())));
     }
-    
+
     // 404 NOT_FOUND_EXCEPTION 이 터지는 경우 테스트
     @Test
     @MockMember(role = Role.ROLE_CUSTOMER)
@@ -496,16 +494,16 @@ public class OrderSelectApiControllerTest {
         int pageNum = 100;
         int pageSize = 0;
         String requestYear = "2024";
-        
+
         Member member = Member.from(MemberResponseDTO.from(expectedOrderWithCUSTOMERUser.getMember()));
-        
+
         OrderPageRequestDTO orderPageRequestDTO = OrderPageRequestDTO.create(PageRequestDTO.create(pageNum, pageSize), 1L, requestYear);
-        
+
         given(orderService.getOrdersWithPaginationAndNotDeleted(member, orderPageRequestDTO)).willThrow(new NotFoundException(ORDER_NOT_FOUND));
-        
+
         given(userDetailsService.loadUserByJwt(any())).willReturn(
                 new UserDetailsServiceImpl.CustomUserDetails(MemberResponseDTO.from(expectedOrderWithCUSTOMERUser.getMember())));
-        
+
         // when - then
         ResultActions response = mockMvc.perform(
                         get("/v1/api/orders/users/{userNumber}", userNumber)
@@ -517,7 +515,7 @@ public class OrderSelectApiControllerTest {
                                 .accept(APPLICATION_JSON))
                                          .andExpect(status().isNotFound())
                                          .andExpect(jsonPath("$.message").value(ORDER_NOT_FOUND.getMessage()));
-        
+
         response
                 .andDo(MockMvcRestDocumentationWrapper.document(
                         "get-orders-fail-customer",
@@ -539,8 +537,8 @@ public class OrderSelectApiControllerTest {
                         )
                 ));
     }
-    
-    
+
+
     @Test
     @MockMember(role = Member.Role.ROLE_ADMIN)
     @DisplayName("권한 - ADMIN 인 경우, 삭제되지 않은 주문을 조회하는 서비스를 호출 시 200 성공을 기대합니다.")
@@ -550,20 +548,20 @@ public class OrderSelectApiControllerTest {
         int pageNum = 0;
         int pageSize = 10;
         String requestYear = "2024";
-        
+
         OrderResponseDTO expectedOrderResponseDTO = OrderResponseDTO.create(expectedOrderWithADMINUser);
-        
+
         Member member = Member.from(MemberResponseDTO.from(expectedOrderWithADMINUser.getMember()));
-        
+
         OrderPageRequestDTO orderPageRequestDTO = OrderPageRequestDTO.create(PageRequestDTO.create(pageNum, pageSize), 1L, requestYear);
-        
+
         PageInfo<OrderResponseDTO> expectedOrderResponseDTOPageInfo = new PageInfo<>(List.of(expectedOrderResponseDTO));
-        
+
         given(orderService.getOrdersWithPaginationAndNoCondition(member, orderPageRequestDTO)).willReturn(expectedOrderResponseDTOPageInfo);
-        
+
         given(userDetailsService.loadUserByJwt(any())).willReturn(
                 new UserDetailsServiceImpl.CustomUserDetails(expectedOrderResponseDTO.getMember()));
-        
+
         // when - then
         ResultActions response = mockMvc.perform(
                         get("/v1/api/orders/users/{userNumber}", userNumber)
@@ -638,7 +636,7 @@ public class OrderSelectApiControllerTest {
                                                                        fieldWithPath("navigateLastPage").description("마지막 네비게이션 페이지")
                                                                ).build())));
     }
-    
+
     @Test
     @MockMember(role = Member.Role.ROLE_ADMIN)
     @DisplayName("권한 - ADMIN 인 경우, 주문 다건 조회 실패 케이스의 경우 404 반환과 올바른 응답값이 오는지 확인합니다.")
@@ -648,16 +646,16 @@ public class OrderSelectApiControllerTest {
         int pageNum = 100;
         int pageSize = 0;
         String requestYear = "2024";
-        
+
         OrderPageRequestDTO orderPageRequestDTO = OrderPageRequestDTO.create(PageRequestDTO.create(pageNum, pageSize), 1L, requestYear);
-        
+
         Member member = Member.from(MemberResponseDTO.from(expectedOrderWithADMINUser.getMember()));
-        
+
         given(orderService.getOrdersWithPaginationAndNoCondition(member, orderPageRequestDTO)).willThrow(new NotFoundException(ORDER_NOT_FOUND));
-        
+
         given(userDetailsService.loadUserByJwt(any())).willReturn(
                 new UserDetailsServiceImpl.CustomUserDetails(MemberResponseDTO.from(expectedOrderWithADMINUser.getMember())));
-        
+
         // when - then
         ResultActions response = mockMvc.perform(
                         get("/v1/api/orders/users/{userNumber}", userNumber)
@@ -669,7 +667,7 @@ public class OrderSelectApiControllerTest {
                                 .accept(APPLICATION_JSON))
                                          .andExpect(status().isNotFound())
                                          .andExpect(jsonPath("$.message").value(ORDER_NOT_FOUND.getMessage()));
-        
+
         response
                 .andDo(MockMvcRestDocumentationWrapper.document(
                         "get-orders-fail-admin",

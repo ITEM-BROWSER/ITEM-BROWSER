@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.psj.itembrowser.member.domain.vo.Member;
+import com.psj.itembrowser.order.service.impl.OrderCalculationResult;
 import com.psj.itembrowser.shippingInfos.domain.vo.ShippingInfo;
 
 import lombok.AccessLevel;
@@ -30,9 +31,10 @@ public class Order implements Cancelable {
 	private List<OrdersProductRelation> products;
 	private Member member;
 	private ShippingInfo shippingInfo;
+	private OrderCalculationResult orderCalculationResult;
 
 	@Builder
-	public static Order createOrder(
+	public static Order of(
 		Long id, Long ordererNumber, OrderStatus orderStatus, LocalDateTime paidDate,
 		Long shippingInfoId, LocalDateTime createdDate, LocalDateTime updatedDate,
 		LocalDateTime deletedDate, List<OrdersProductRelation> products, Member member,
