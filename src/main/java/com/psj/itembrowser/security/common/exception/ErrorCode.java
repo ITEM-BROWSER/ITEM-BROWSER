@@ -40,6 +40,7 @@ public enum ErrorCode {
 	// Member
 	NOT_FOUND_MEMBER(HttpStatus.NOT_FOUND, "MEMBER_001", "Not Found Member"),
 	MEMBER_INSERT_FAIL(HttpStatus.BAD_REQUEST, "MEMBER_002", "Fail to insert Member"),
+	NOT_ACTIVATED_MEMBER(HttpStatus.UNAUTHORIZED, "MEMBER_003", "Not Activated Member"),
 
 	// Product
 	PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "PRODUCT_001", "Not Found Product"),
@@ -65,10 +66,9 @@ public enum ErrorCode {
 	ADMIN_NOT_AUTHORIZED(HttpStatus.UNAUTHORIZED, "AUTH_002", "Admin is not authorized"),
 	CUSTOMER_NOT_AUTHORIZED(HttpStatus.UNAUTHORIZED, "AUTH_003", "Customer is not authorized"),
 	PRINCIPAL_NOT_FOUND(HttpStatus.UNAUTHORIZED, "AUTH_004", "Principal is not found"),
-	INVALID_MEMBER_ROLE(HttpStatus.UNAUTHORIZED, "AUTH_005", "Invalid Member Role"),
-	;
+	INVALID_MEMBER_ROLE(HttpStatus.UNAUTHORIZED, "AUTH_005", "Invalid Member Role");
 
 	private final HttpStatus status;
 	private final String code;
 	private final String message;
-	}
+}

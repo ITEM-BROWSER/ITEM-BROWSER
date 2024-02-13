@@ -54,7 +54,7 @@ public class OrderApiController {
 		return ResponseEntity.ok(dto);
 	}
 
-	@PreAuthorize("hasRole('ROLE_CUSTOMER' and returnObject.body.member.status == 'ACTIVE')")
+	@PreAuthorize("hasRole('ROLE_CUSTOMER')")
 	@PostMapping("/v1/api/orders")
 	public ResponseEntity<OrderResponseDTO> createOrder(@Valid @RequestBody OrderCreateRequestDTO orderCreateRequestDTO,
 		@CurrentUser Jwt jwt) {

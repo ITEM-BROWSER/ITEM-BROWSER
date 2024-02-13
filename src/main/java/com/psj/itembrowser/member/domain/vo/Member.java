@@ -105,6 +105,10 @@ public class Member extends BaseDateTimeEntity {
 		return this.role == role;
 	}
 
+	public boolean isActivated() {
+		return this.status == Status.ACTIVE;
+	}
+
 	@Getter
 	public enum Role {
 		ROLE_CUSTOMER("일반 구매자"),

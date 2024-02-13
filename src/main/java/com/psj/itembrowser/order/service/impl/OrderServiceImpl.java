@@ -27,6 +27,8 @@ import com.psj.itembrowser.product.service.ProductService;
 import com.psj.itembrowser.product.service.impl.ProductValidationHelper;
 import com.psj.itembrowser.security.auth.service.AuthenticationService;
 import com.psj.itembrowser.security.common.exception.BadRequestException;
+import com.psj.itembrowser.security.common.exception.ErrorCode;
+import com.psj.itembrowser.security.common.exception.NotAuthorizedException;
 import com.psj.itembrowser.shippingInfos.domain.vo.ShippingInfo;
 
 import lombok.RequiredArgsConstructor;
@@ -101,6 +103,10 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	@Transactional(readOnly = false, timeout = 10)
 	public OrderResponseDTO createOrder(Member member, @Valid OrderCreateRequestDTO orderCreateRequestDTO) {
+		if (!member.isActivated()) {
+			throw new NotAuthorizedException(ErrorCode.NOT_ACTIVATED_MEMBER);
+		}
+
 		//해당 주문상품이 존재하는지 확인 && 각 상품에 대한 재고확인 수행
 		List<Product> orderProducts = orderCreateRequestDTO.getProducts().stream()
 			.map(OrdersProductRelationResponseDTO::getProductResponseDTO)
