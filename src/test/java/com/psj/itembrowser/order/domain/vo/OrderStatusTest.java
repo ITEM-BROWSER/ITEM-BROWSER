@@ -25,15 +25,15 @@ public class OrderStatusTest {
 	@DisplayName("주문 상태 검색시 정상적으로 검색되어야 합니다.")
 	void When_ofMethodCalled_Expect_OrderStatusReturned() {
 		// given
-		String orderStatusName = OrderStatus.CANCELED.getValue();
+		String orderStatusName = Order.OrderStatus.CANCELED.getValue();
 
 		// when
-		OrderStatus orderStatus = OrderStatus.of(orderStatusName);
+		Order.OrderStatus orderStatus = Order.OrderStatus.of(orderStatusName);
 
 		// then
 		assertThat(orderStatus).isNotNull();
 
-		assertThat(orderStatus).isEqualTo(OrderStatus.CANCELED);
+		assertThat(orderStatus).isEqualTo(Order.OrderStatus.CANCELED);
 	}
 
 	@Test
@@ -43,7 +43,7 @@ public class OrderStatusTest {
 		String orderStatusName = "INVALID";
 
 		// when & then
-		assertThatThrownBy(() -> OrderStatus.of(orderStatusName))
+		assertThatThrownBy(() -> Order.OrderStatus.of(orderStatusName))
 			.as("주문 상태가 존재하지 않을 때 IllegalArgumentException이 발생해야 합니다.")
 			.isInstanceOf(IllegalArgumentException.class);
 	}

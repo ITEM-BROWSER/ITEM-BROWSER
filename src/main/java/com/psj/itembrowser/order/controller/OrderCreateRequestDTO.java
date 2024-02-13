@@ -1,6 +1,7 @@
 package com.psj.itembrowser.order.controller;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
@@ -29,9 +30,10 @@ public class OrderCreateRequestDTO implements Serializable {
 	private MemberResponseDTO member;
 	private ShippingInfoResponseDTO shippingInfo;
 
+	private LocalDateTime createdDate;
+
 	public static OrderCreateRequestDTO create(Long ordererNumber, List<OrdersProductRelationResponseDTO> products,
 		MemberResponseDTO member, ShippingInfoResponseDTO shippingInfo) {
-
 		OrderCreateRequestDTO orderCreateRequestDTO = new OrderCreateRequestDTO();
 
 		orderCreateRequestDTO.setOrdererNumber(ordererNumber);

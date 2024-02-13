@@ -27,7 +27,6 @@ import com.psj.itembrowser.member.domain.vo.Name;
 import com.psj.itembrowser.order.domain.dto.request.OrderPageRequestDTO;
 import com.psj.itembrowser.order.domain.dto.response.OrderResponseDTO;
 import com.psj.itembrowser.order.domain.vo.Order;
-import com.psj.itembrowser.order.domain.vo.OrderStatus;
 import com.psj.itembrowser.order.domain.vo.OrdersProductRelation;
 import com.psj.itembrowser.order.persistence.OrderPersistence;
 import com.psj.itembrowser.order.service.impl.OrderServiceImpl;
@@ -83,13 +82,13 @@ public class OrderSelectServiceTest {
 			null,
 			null);
 
-		OrdersProductRelation expectedOrderRelation1 = OrdersProductRelation.create(1L, 1L, 1,
+		OrdersProductRelation expectedOrderRelation1 = OrdersProductRelation.of(1L, 1L, 1,
 			LocalDateTime.now(),
 			null,
 			null,
 			new Product());
 
-		OrdersProductRelation expectedOrderRelation2 = OrdersProductRelation.create(2L, 1L, 1,
+		OrdersProductRelation expectedOrderRelation2 = OrdersProductRelation.of(2L, 1L, 1,
 			LocalDateTime.now(),
 			null,
 			null, new Product());
@@ -97,7 +96,7 @@ public class OrderSelectServiceTest {
 		this.validOrder = Order.of(
 			1L,
 			1L,
-			OrderStatus.ACCEPT,
+			Order.OrderStatus.ACCEPT,
 			LocalDateTime.now(),
 			1L,
 			LocalDateTime.now(),
@@ -148,7 +147,7 @@ public class OrderSelectServiceTest {
 	@DisplayName("조건 없이 주문 조회 시 주문 정보가 없을 경우 NotFoundException 발생")
 	void When_GetOrderWithNoCondition_Expect_ThrowNotFoundException() {
 		//given
-		given(orderPersistence.getOrderWithNoConditiojn(invalidOrderId)).willThrow(
+		given(orderPersistence.getOrderWithNoCondition(invalidOrderId)).willThrow(
 			new NotFoundException(ErrorCode.ORDER_NOT_FOUND));
 
 		//when - then
@@ -161,7 +160,7 @@ public class OrderSelectServiceTest {
 	@DisplayName("조건 없이 주문 조회 후 주문 정보 반환이 올바르게 되는지 테스트")
 	void When_GetOrderWithNoCondition_Expect_ReturnOrderResponseDTO() {
 		//given
-		given(orderPersistence.getOrderWithNoConditiojn(validOrderId)).willReturn(validOrder);
+		given(orderPersistence.getOrderWithNoCondition(validOrderId)).willReturn(validOrder);
 
 		//when
 		OrderResponseDTO result = orderService.getOrderWithNoCondition(validOrderId);

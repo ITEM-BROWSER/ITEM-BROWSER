@@ -1,6 +1,6 @@
 package com.psj.itembrowser.order.mapper;
 
-import com.psj.itembrowser.order.domain.vo.OrderStatus;
+import com.psj.itembrowser.order.domain.vo.Order;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,5 +15,5 @@ import lombok.Data;
 public class OrderDeleteRequestDTO {
 	private Long id;
 
-	private OrderStatus orderStatus;
+	private Order.OrderStatus orderStatus;
 }

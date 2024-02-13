@@ -2,7 +2,6 @@ package com.psj.itembrowser.order.mapper;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,7 +20,6 @@ import com.github.pagehelper.page.PageMethod;
 import com.psj.itembrowser.member.domain.vo.Member;
 import com.psj.itembrowser.order.domain.dto.request.OrderPageRequestDTO;
 import com.psj.itembrowser.order.domain.vo.Order;
-import com.psj.itembrowser.order.domain.vo.OrderStatus;
 import com.psj.itembrowser.order.domain.vo.OrdersProductRelation;
 import com.psj.itembrowser.shippingInfos.domain.vo.ShippingInfo;
 
@@ -47,7 +45,7 @@ public class OrderSelectMapperTest {
 		Order expectedOrder = Order.of(
 			expectedId,
 			1L,
-			OrderStatus.ACCEPT,
+			Order.OrderStatus.ACCEPT,
 			LocalDateTime.now(),
 			1L,
 			LocalDateTime.now(),
@@ -103,7 +101,7 @@ public class OrderSelectMapperTest {
 		Order expectedOrder = Order.of(
 			1L,
 			1L,
-			OrderStatus.ACCEPT,
+			Order.OrderStatus.ACCEPT,
 			LocalDateTime.now(),
 			1L,
 			LocalDateTime.now(),
@@ -146,7 +144,7 @@ public class OrderSelectMapperTest {
 		Order expectedOrder = Order.of(
 			1L,
 			1L,
-			OrderStatus.ACCEPT,
+			Order.OrderStatus.ACCEPT,
 			LocalDateTime.now(),
 			1L,
 			LocalDateTime.now(),
@@ -191,7 +189,7 @@ public class OrderSelectMapperTest {
 		Order expectedOrder = Order.of(
 			1L,
 			1L,
-			OrderStatus.ACCEPT,
+			Order.OrderStatus.ACCEPT,
 			LocalDateTime.now(),
 			1L,
 			LocalDateTime.now(),

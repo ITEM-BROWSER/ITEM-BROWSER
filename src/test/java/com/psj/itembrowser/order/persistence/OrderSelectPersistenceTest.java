@@ -21,7 +21,6 @@ import com.psj.itembrowser.member.domain.vo.Member;
 import com.psj.itembrowser.member.domain.vo.MemberNo;
 import com.psj.itembrowser.member.domain.vo.Name;
 import com.psj.itembrowser.order.domain.vo.Order;
-import com.psj.itembrowser.order.domain.vo.OrderStatus;
 import com.psj.itembrowser.order.domain.vo.OrdersProductRelation;
 import com.psj.itembrowser.order.mapper.OrderMapper;
 import com.psj.itembrowser.product.domain.vo.Product;
@@ -74,19 +73,19 @@ public class OrderSelectPersistenceTest {
 			null,
 			null);
 
-		OrdersProductRelation expectedOrderRelation1 = OrdersProductRelation.create(1L, 1L, 1, LocalDateTime.now(),
+		OrdersProductRelation expectedOrderRelation1 = OrdersProductRelation.of(1L, 1L, 1, LocalDateTime.now(),
 			null,
 			null,
 			new Product());
 
-		OrdersProductRelation expectedOrderRelation2 = OrdersProductRelation.create(2L, 1L, 1, LocalDateTime.now(),
+		OrdersProductRelation expectedOrderRelation2 = OrdersProductRelation.of(2L, 1L, 1, LocalDateTime.now(),
 			null,
 			null, new Product());
 
 		this.expectedOrder = Order.of(
 			1L,
 			1L,
-			OrderStatus.ACCEPT,
+			Order.OrderStatus.ACCEPT,
 			LocalDateTime.now(),
 			1L,
 			LocalDateTime.now(),

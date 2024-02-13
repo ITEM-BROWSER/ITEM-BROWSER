@@ -1,6 +1,6 @@
 package com.psj.itembrowser.order.persistence;
 
-import static com.psj.itembrowser.order.domain.vo.OrderStatus.*;
+import static com.psj.itembrowser.order.domain.vo.Order.OrderStatus.*;
 import static com.psj.itembrowser.security.common.exception.ErrorCode.*;
 
 import java.util.List;
@@ -60,7 +60,7 @@ public class OrderPersistence {
 		return findOrder;
 	}
 
-	public Order getOrderWithNoConditiojn(Long id) {
+	public Order getOrderWithNoCondition(Long id) {
 		Order findOrder = orderMapper.selectOrderWithNoCondition(id);
 
 		if (findOrder == null) {

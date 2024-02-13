@@ -47,7 +47,6 @@ import com.psj.itembrowser.member.domain.vo.Name;
 import com.psj.itembrowser.order.domain.dto.request.OrderPageRequestDTO;
 import com.psj.itembrowser.order.domain.dto.response.OrderResponseDTO;
 import com.psj.itembrowser.order.domain.vo.Order;
-import com.psj.itembrowser.order.domain.vo.OrderStatus;
 import com.psj.itembrowser.order.domain.vo.OrdersProductRelation;
 import com.psj.itembrowser.order.service.OrderService;
 import com.psj.itembrowser.product.domain.vo.Product;
@@ -118,13 +117,13 @@ public class OrderSelectApiControllerTest {
 			null,
 			null);
 
-		OrdersProductRelation expectedOrderRelation1 = OrdersProductRelation.create(1L, 1L, 1,
+		OrdersProductRelation expectedOrderRelation1 = OrdersProductRelation.of(1L, 1L, 1,
 			LocalDateTime.now(),
 			null,
 			null,
 			new Product());
 
-		OrdersProductRelation expectedOrderRelation2 = OrdersProductRelation.create(2L, 1L, 1,
+		OrdersProductRelation expectedOrderRelation2 = OrdersProductRelation.of(2L, 1L, 1,
 			LocalDateTime.now(),
 			null,
 			null, new Product());
@@ -132,7 +131,7 @@ public class OrderSelectApiControllerTest {
 		this.expectedOrderWithADMINUser = Order.of(
 			1L,
 			1L,
-			OrderStatus.ACCEPT,
+			Order.OrderStatus.ACCEPT,
 			LocalDateTime.now(),
 			1L,
 			LocalDateTime.now(),
@@ -148,7 +147,7 @@ public class OrderSelectApiControllerTest {
 		this.expectedOrderWithCUSTOMERUser = Order.of(
 			1L,
 			1L,
-			OrderStatus.ACCEPT,
+			Order.OrderStatus.ACCEPT,
 			LocalDateTime.now(),
 			1L,
 			LocalDateTime.now(),
@@ -168,7 +167,7 @@ public class OrderSelectApiControllerTest {
 	void When_GetOrderWithCustomer_Expect_Status200() throws Exception {
 		// given
 		long orderId = 1L;
-		OrderResponseDTO expectedOrderResponseDTO = OrderResponseDTO.create(expectedOrderWithCUSTOMERUser);
+		OrderResponseDTO expectedOrderResponseDTO = OrderResponseDTO.of(expectedOrderWithCUSTOMERUser);
 		given(orderService.getOrderWithNotDeleted(orderId)).willReturn(expectedOrderResponseDTO);
 		given(userDetailsService.loadUserByJwt(any())).willReturn(
 			new UserDetailsServiceImpl.CustomUserDetails(expectedOrderResponseDTO.getMember()));
@@ -243,7 +242,7 @@ public class OrderSelectApiControllerTest {
 	void When_GetOrderWithAdmin_Expect_Status200() throws Exception {
 		// given
 		long orderId = 1L;
-		OrderResponseDTO expectedOrderResponseDTO = OrderResponseDTO.create(expectedOrderWithADMINUser);
+		OrderResponseDTO expectedOrderResponseDTO = OrderResponseDTO.of(expectedOrderWithADMINUser);
 		given(orderService.getOrderWithNoCondition(orderId)).willReturn(expectedOrderResponseDTO);
 		given(userDetailsService.loadUserByJwt(any())).willReturn(
 			new UserDetailsServiceImpl.CustomUserDetails(expectedOrderResponseDTO.getMember()));
@@ -404,7 +403,7 @@ public class OrderSelectApiControllerTest {
 		int pageSize = 10;
 		String requestYear = "2024";
 
-		OrderResponseDTO expectedOrderResponseDTO = OrderResponseDTO.create(expectedOrderWithCUSTOMERUser);
+		OrderResponseDTO expectedOrderResponseDTO = OrderResponseDTO.of(expectedOrderWithCUSTOMERUser);
 
 		Member member = Member.from(MemberResponseDTO.from(expectedOrderWithCUSTOMERUser.getMember()));
 
@@ -561,7 +560,7 @@ public class OrderSelectApiControllerTest {
 		int pageSize = 10;
 		String requestYear = "2024";
 
-		OrderResponseDTO expectedOrderResponseDTO = OrderResponseDTO.create(expectedOrderWithADMINUser);
+		OrderResponseDTO expectedOrderResponseDTO = OrderResponseDTO.of(expectedOrderWithADMINUser);
 
 		Member member = Member.from(MemberResponseDTO.from(expectedOrderWithADMINUser.getMember()));
 
