@@ -36,7 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 public class OrderServiceImpl implements OrderService {
 
 	private final OrderPersistence orderPersistence;
-	private final OrderCalculationService orderCalculationService;
+	private final OrderCalculationServiceImpl orderCalculationService;
 	private final AuthenticationService authenticationService;
 	private final ProductValidationHelper productValidationHelper;
 
