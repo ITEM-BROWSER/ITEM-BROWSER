@@ -76,4 +76,9 @@ public class ProductServiceImpl implements ProductService {
 
 		fileService.updateProductImages(productUpdateDTO, productId);
 	}
+
+	@Override
+	public void decreaseStock(Product quantity) {
+		//TODO 재고 관련 로직 추가
+	}
 }
