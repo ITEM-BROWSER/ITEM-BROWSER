@@ -13,6 +13,7 @@ import com.psj.itembrowser.order.service.impl.OrderCalculationResult;
 import com.psj.itembrowser.shippingInfos.domain.vo.ShippingInfo;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,7 @@ import lombok.ToString;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @EqualsAndHashCode(of = {"id", "ordererNumber", "orderStatus"})
 @ToString
 public class Order implements Cancelable {
