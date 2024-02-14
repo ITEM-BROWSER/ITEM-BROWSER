@@ -32,6 +32,7 @@ public enum ErrorCode {
 	ORDER_NOT_CANCELABLE(HttpStatus.BAD_REQUEST, "ORDER_004", "Order is not cancelable"),
 	ORDER_IS_NOT_MATCH_CURRENT_MEMBER(HttpStatus.BAD_REQUEST, "ORDER_005",
 		"Order is not match current member"),
+	ORDER_PRODUCTS_EMPTY(HttpStatus.BAD_REQUEST, "ORDER_006", "Order Products is empty"),
 
 	// common
 	COMMON_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON_001", "Internal Server Error"),
@@ -49,6 +50,7 @@ public enum ErrorCode {
 	PRODUCT_DELETE_FAIL(HttpStatus.BAD_REQUEST, "PRODUCT_004", "Fail to delete to product"),
 	PRODUCT_VALIDATION_FAIL(HttpStatus.BAD_REQUEST, "PRODUCT_005", "Validation Error"),
 	PRODUCT_QUANTITY_NOT_ENOUGH(HttpStatus.BAD_REQUEST, "PRODUCT_006", "Product Quantity is not enough"),
+
 
 	// Address
 	ADDRESS_NOT_FOUND(HttpStatus.NOT_FOUND, "ADDRESS_001", "Not Found Address"),

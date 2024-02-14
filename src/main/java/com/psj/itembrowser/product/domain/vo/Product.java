@@ -176,6 +176,7 @@ public class Product extends BaseDateTimeEntity {
 			.name(productResponseDTO.getName())
 			.status(productResponseDTO.getStatus())
 			.quantity(productResponseDTO.getQuantity())
+			.unitPrice(productResponseDTO.getUnitPrice())
 			.sellStartDatetime(productResponseDTO.getSellStartDatetime())
 			.sellEndDatetime(productResponseDTO.getSellEndDatetime())
 			.displayName(productResponseDTO.getDisplayName())

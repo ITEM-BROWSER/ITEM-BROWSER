@@ -6,6 +6,7 @@ import com.psj.itembrowser.order.service.impl.OrderCalculationResult;
 import com.psj.itembrowser.product.domain.vo.Product;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ import lombok.ToString;
 @Getter
 @EqualsAndHashCode(of = {"groupId", "productId", "productQuantity"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @ToString
 public class OrdersProductRelation {
 	/**

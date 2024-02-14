@@ -22,6 +22,8 @@ public class ProductResponseDTO {
 
 	private Integer quantity;
 
+	private Integer unitPrice;
+
 	private LocalDateTime sellStartDatetime;
 
 	private LocalDateTime sellEndDatetime;
@@ -46,6 +48,7 @@ public class ProductResponseDTO {
 			.name(product.getName())
 			.status(product.getStatus())
 			.quantity(product.getQuantity())
+			.unitPrice(product.getUnitPrice())
 			.sellStartDatetime(product.getSellStartDatetime())
 			.sellEndDatetime(product.getSellEndDatetime())
 			.displayName(product.getDisplayName())
