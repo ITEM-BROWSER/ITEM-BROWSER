@@ -13,7 +13,7 @@ import lombok.experimental.UtilityClass;
 public class FileUtil {
 
 	private static final Set<String> ALLOWED_IMAGE_MIME_TYPES = new HashSet<>(
-		Arrays.asList("image/png", "image/jpg", "image/gif", "image/bmp", "image/jpeg")
+		List.of("image/png", "image/jpg", "image/gif", "image/bmp", "image/jpeg")
 	);
 
 	public void validateImageFile(MultipartFile file) {

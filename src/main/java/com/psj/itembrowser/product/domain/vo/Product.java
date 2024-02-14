@@ -153,13 +153,21 @@ public class Product extends BaseDateTimeEntity {
 			.builder()
 			.id(this.id)
 			.name(this.name)
+			.category(this.category)
+			.detail(this.detail)
 			.status(this.status)
+			.quantity(this.quantity)
+			.unitPrice(this.unitPrice)
+			.sellerId(this.sellerId)
 			.sellStartDatetime(this.sellStartDatetime)
 			.sellEndDatetime(this.sellEndDatetime)
 			.displayName(this.displayName)
 			.brand(this.brand)
 			.deliveryMethod(this.deliveryMethod)
 			.deliveryDefaultFee(this.deliveryDefaultFee)
+			.freeShipOverAmount(this.freeShipOverAmount)
+			.returnCenterCode(this.returnCenterCode)
+			.productImages(this.productImages)
 			.build();
 	}
 

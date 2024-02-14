@@ -60,6 +60,13 @@ pagehelper:
 file:
   upload-dir: ./src/main/resources/static/uploads/
 
+aws:
+  s3:
+    access-key: AKIAZI2LCIURF7KVYVO3
+    secret-key: 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
+    region: ${AWS_REGION}
+    bucket: item-browser-bucket
+
 server:
   error:
     include-stacktrace: never

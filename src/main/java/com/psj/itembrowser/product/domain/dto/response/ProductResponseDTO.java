@@ -18,9 +18,17 @@ public class ProductResponseDTO {
 
 	private String name;
 
+	private Integer category;
+
+	private String detail;
+
 	private ProductStatus status;
 
 	private Integer quantity;
+
+	private Integer unitPrice;
+
+	private String sellerId;
 
 	private LocalDateTime sellStartDatetime;
 
@@ -34,6 +42,10 @@ public class ProductResponseDTO {
 
 	private Integer deliveryDefaultFee;
 
+	private Integer freeShipOverAmount;
+
+	private String returnCenterCode;
+
 	private List<ProductImage> productImages;
 
 	public static ProductResponseDTO of(Product product) {
@@ -44,14 +56,20 @@ public class ProductResponseDTO {
 		return ProductResponseDTO.builder()
 			.id(product.getId())
 			.name(product.getName())
+			.category(product.getCategory())
+			.detail(product.getDetail())
 			.status(product.getStatus())
 			.quantity(product.getQuantity())
+			.unitPrice(product.getUnitPrice())
+			.sellerId(product.getSellerId())
 			.sellStartDatetime(product.getSellStartDatetime())
 			.sellEndDatetime(product.getSellEndDatetime())
 			.displayName(product.getDisplayName())
 			.brand(product.getBrand())
 			.deliveryMethod(product.getDeliveryMethod())
 			.deliveryDefaultFee(product.getDeliveryDefaultFee())
+			.freeShipOverAmount(product.getFreeShipOverAmount())
+			.returnCenterCode(product.getReturnCenterCode())
 			.productImages(product.getProductImages())
 			.build();
 	}

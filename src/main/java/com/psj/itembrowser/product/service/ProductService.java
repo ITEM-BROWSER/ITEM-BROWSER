@@ -33,4 +33,6 @@ public interface ProductService {
 	void createProduct(ProductRequestDTO productRequestDTO);
 
 	void updateProduct(ProductUpdateDTO productUpdateDTO, Long id);
+
+    void deleteProduct(Long productId);
 }

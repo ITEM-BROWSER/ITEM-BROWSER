@@ -1,286 +1,314 @@
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.psj.itembrowser.product.mapper.ProductMapper">
-    <resultMap id="productResultMap" type="com.psj.itembrowser.product.domain.vo.Product">
-        <id property="id" column="ID"/>
-        <result property="name" column="NAME"/>
-        <result property="category" column="CATEGORY"/>
-        <result property="detail" column="DETAIL"/>
-        <result property="status" column="STATUS"/>
-        <result property="quantity" column="QUANTITY"/>
-        <result property="sellerId" column="SELLER_ID"/>
-        <result property="sellStartDatetime" column="SELL_START_DATETIME"/>
-        <result property="sellEndDatetime" column="SELL_END_DATETIME"/>
-        <result property="displayName" column="DISPLAY_NAME"/>
-        <result property="unitPrice" column="UNIT_PRICE"/>
-        <result property="brand" column="BRAND"/>
-        <result property="deliveryFeeType" column="DELIVERY_FEE_TYPE"/>
-        <result property="deliveryMethod" column="DELIVERY_METHOD"/>
-        <result property="deliveryDefaultFee" column="DELIVERY_DEFAULT_FEE"/>
-        <result property="freeShipOverAmount" column="FREE_SHIP_OVER_AMOUNT"/>
-        <result property="returnCenterCode" column="RETURN_CENTER_CODE"/>
-        <result property="createdDate" column="CREATED_DATE"/>
-        <result property="updatedDate" column="UPDATED_DATE"/>
-        <result property="deleteDate" column="DELETE_DATE"/>
-        <collection property="productImages"
-                    ofType="com.psj.itembrowser.product.domain.vo.ProductImage">
-            <id property="id" column="IMG_ID"/>
-            <result property="productId" column="PRODUCT_ID"/>
-            <result property="fileName" column="FILE_NAME"/>
-            <result property="filePath" column="FILE_PATH"/>
-            <result property="type" column="TYPE"/>
-            <result property="size" column="SIZE"/>
-            <result property="createdDate" column="IMG_CREATED_DATE"/>
-            <result property="updatedDate" column="IMG_UPDATED_DATE"/>
-            <result property="deleteDate" column="IMG_DELETE_DATE"/>
-        </collection>
-    </resultMap>
+  <resultMap id="productResultMap" type="com.psj.itembrowser.product.domain.vo.Product">
+    <id property="id" column="ID"/>
+    <result property="name" column="NAME"/>
+    <result property="category" column="CATEGORY"/>
+    <result property="detail" column="DETAIL"/>
+    <result property="status" column="STATUS"/>
+    <result property="quantity" column="QUANTITY"/>
+    <result property="sellerId" column="SELLER_ID"/>
+    <result property="sellStartDatetime" column="SELL_START_DATETIME"/>
+    <result property="sellEndDatetime" column="SELL_END_DATETIME"/>
+    <result property="displayName" column="DISPLAY_NAME"/>
+    <result property="unitPrice" column="UNIT_PRICE"/>
+    <result property="brand" column="BRAND"/>
+    <result property="deliveryFeeType" column="DELIVERY_FEE_TYPE"/>
+    <result property="deliveryMethod" column="DELIVERY_METHOD"/>
+    <result property="deliveryDefaultFee" column="DELIVERY_DEFAULT_FEE"/>
+    <result property="freeShipOverAmount" column="FREE_SHIP_OVER_AMOUNT"/>
+    <result property="returnCenterCode" column="RETURN_CENTER_CODE"/>
+    <result property="createdDate" column="CREATED_DATE"/>
+    <result property="updatedDate" column="UPDATED_DATE"/>
+    <result property="deleteDate" column="DELETE_DATE"/>
+    <collection property="productImages"
+      ofType="com.psj.itembrowser.product.domain.vo.ProductImage">
+      <id property="id" column="IMG_ID"/>
+      <result property="productId" column="PRODUCT_ID"/>
+      <result property="fileName" column="FILE_NAME"/>
+      <result property="filePath" column="FILE_PATH"/>
+      <result property="type" column="TYPE"/>
+      <result property="size" column="SIZE"/>
+      <result property="createdDate" column="IMG_CREATED_DATE"/>
+      <result property="updatedDate" column="IMG_UPDATED_DATE"/>
+      <result property="deleteDate" column="IMG_DELETE_DATE"/>
+    </collection>
+  </resultMap>
 
-    <resultMap id="imageResultMap" type="com.psj.itembrowser.product.domain.vo.ProductImage">
-        <id property="id" column="ID"/>
-        <result property="productId" column="PRODUCT_ID"/>
-        <result property="fileName" column="FILE_NAME"/>
-        <result property="filePath" column="FILE_PATH"/>
-        <result property="type" column="TYPE"/>
-        <result property="size" column="SIZE"/>
-        <result property="createdDate" column="CREATED_DATE"/>
-        <result property="updatedDate" column="UPDATED_DATE"/>
-        <result property="deleteDate" column="DELETE_DATE"/>
-    </resultMap>
+  <resultMap id="imageResultMap" type="com.psj.itembrowser.product.domain.vo.ProductImage">
+    <id property="id" column="ID"/>
+    <result property="productId" column="PRODUCT_ID"/>
+    <result property="fileName" column="FILE_NAME"/>
+    <result property="filePath" column="FILE_PATH"/>
+    <result property="type" column="TYPE"/>
+    <result property="size" column="SIZE"/>
+    <result property="createdDate" column="CREATED_DATE"/>
+    <result property="updatedDate" column="UPDATED_DATE"/>
+    <result property="deleteDate" column="DELETE_DATE"/>
+  </resultMap>
 
-    <select id="findProductById" resultMap="productResultMap">
-        SELECT P.ID,
-        P.NAME,
-        P.CATEGORY,
-        P.DETAIL,
-        P.STATUS,
-        P.QUANTITY,
-        P.SELLER_ID,
-        P.SELL_START_DATETIME,
-        P.SELL_END_DATETIME,
-        P.DISPLAY_NAME,
-        P.UNIT_PRICE,
-        P.BRAND,
-        P.DELIVERY_FEE_TYPE,
-        P.DELIVERY_METHOD,
-        P.DELIVERY_DEFAULT_FEE,
-        P.FREE_SHIP_OVER_AMOUNT,
-        P.RETURN_CENTER_CODE,
-        P.CREATED_DATE,
-        P.UPDATED_DATE,
-        I.ID AS IMG_ID,
-        I.FILE_NAME,
-        I.FILE_PATH,
-        I.TYPE,
-        I.SIZE,
-        I.CREATED_DATE AS IMG_CREATED_DATE,
-        I.UPDATED_DATE AS IMG_UPDATED_DATE
-        FROM PRODUCT P
-        LEFT JOIN PRODUCT_IMAGE I ON P.ID = I.PRODUCT_ID
-        WHERE P.ID = #{productId}
-        AND P.DELETED_DATE IS NULL
-        AND I.DELETED_DATE IS NULL
-    </select>
+  <select id="findProductById" resultMap="productResultMap">
+    SELECT P.ID,
+           P.NAME,
+           P.CATEGORY,
+           P.DETAIL,
+           P.STATUS,
+           P.QUANTITY,
+           P.SELLER_ID,
+           P.SELL_START_DATETIME,
+           P.SELL_END_DATETIME,
+           P.DISPLAY_NAME,
+           P.UNIT_PRICE,
+           P.BRAND,
+           P.DELIVERY_FEE_TYPE,
+           P.DELIVERY_METHOD,
+           P.DELIVERY_DEFAULT_FEE,
+           P.FREE_SHIP_OVER_AMOUNT,
+           P.RETURN_CENTER_CODE,
+           P.CREATED_DATE,
+           P.UPDATED_DATE,
+           I.ID           AS IMG_ID,
+           I.FILE_NAME,
+           I.FILE_PATH,
+           I.TYPE,
+           I.SIZE,
+           I.CREATED_DATE AS IMG_CREATED_DATE,
+           I.UPDATED_DATE AS IMG_UPDATED_DATE
+    FROM PRODUCT P
+           LEFT JOIN PRODUCT_IMAGE I ON P.ID = I.PRODUCT_ID
+    WHERE P.ID = #{productId}
+      AND P.DELETED_DATE IS NULL
+      AND I.DELETED_DATE IS NULL
+  </select>
 
-    <select id="lockProductById" resultMap="productResultMap">
-        SELECT ID,
-        NAME,
-        CATEGORY,
-        DETAIL,
-        STATUS,
-        QUANTITY,
-        SELLER_ID,
-        SELL_START_DATETIME,
-        SELL_END_DATETIME,
-        DISPLAY_NAME,
-        UNIT_PRICE,
-        BRAND,
-        DELIVERY_FEE_TYPE,
-        DELIVERY_METHOD,
-        DELIVERY_DEFAULT_FEE,
-        FREE_SHIP_OVER_AMOUNT,
-        RETURN_CENTER_CODE,
-        CREATED_DATE,
-        UPDATED_DATE
-        FROM PRODUCT
-        WHERE ID = #{productId} LIMIT 1
-        FOR
+  <select id="lockProductById" resultMap="productResultMap">
+    SELECT P.ID,
+           P.NAME,
+           P.CATEGORY,
+           P.DETAIL,
+           P.STATUS,
+           P.QUANTITY,
+           P.SELLER_ID,
+           P.SELL_START_DATETIME,
+           P.SELL_END_DATETIME,
+           P.DISPLAY_NAME,
+           P.UNIT_PRICE,
+           P.BRAND,
+           P.DELIVERY_FEE_TYPE,
+           P.DELIVERY_METHOD,
+           P.DELIVERY_DEFAULT_FEE,
+           P.FREE_SHIP_OVER_AMOUNT,
+           P.RETURN_CENTER_CODE,
+           P.CREATED_DATE,
+           P.UPDATED_DATE,
+           I.ID           AS IMG_ID,
+           I.FILE_NAME,
+           I.FILE_PATH,
+           I.TYPE,
+           I.SIZE,
+           I.CREATED_DATE AS IMG_CREATED_DATE,
+           I.UPDATED_DATE AS IMG_UPDATED_DATE
+    FROM PRODUCT P
+           LEFT JOIN PRODUCT_IMAGE I ON P.ID = I.PRODUCT_ID
+    WHERE P.ID = #{productId}
+      AND P.DELETED_DATE IS NULL
+      AND I.DELETED_DATE IS NULL
+      FOR
         UPDATE
-    </select>
+  </select>
 
-    <select id="findProductsByIds" parameterType="list" resultType="list"
-            resultMap="productResultMap">
-        SELECT P.ID,
-        P.NAME,
-        P.CATEGORY,
-        P.DETAIL,
-        P.STATUS,
-        P.QUANTITY,
-        P.SELLER_ID,
-        P.SELL_START_DATETIME,
-        P.SELL_END_DATETIME,
-        P.DISPLAY_NAME,
-        P.UNIT_PRICE,
-        P.BRAND,
-        P.DELIVERY_FEE_TYPE,
-        P.DELIVERY_METHOD,
-        P.DELIVERY_DEFAULT_FEE,
-        P.FREE_SHIP_OVER_AMOUNT,
-        P.RETURN_CENTER_CODE,
-        P.CREATED_DATE,
-        P.UPDATED_DATE,
-        I.ID AS IMG_ID,
-        I.FILE_NAME,
-        I.FILE_PATH,
-        I.TYPE,
-        I.SIZE,
-        I.CREATED_DATE AS IMG_CREATED_DATE,
-        I.UPDATED_DATE AS IMG_UPDATED_DATE
-        FROM PRODUCT P
-        LEFT JOIN PRODUCT_IMAGE I ON P.ID = I.PRODUCT_ID
-        WHERE P.ID IN
-        (
-        <foreach collection="productIds" item="id" index="index" separator=",">
-            #{id}
-        </foreach>
-        )
-        AND P.DELETED_DATE IS NULL
-    </select>
+  <select id="findProductsByIds" parameterType="list" resultType="list"
+    resultMap="productResultMap">
+    SELECT P.ID,
+    P.NAME,
+    P.CATEGORY,
+    P.DETAIL,
+    P.STATUS,
+    P.QUANTITY,
+    P.SELLER_ID,
+    P.SELL_START_DATETIME,
+    P.SELL_END_DATETIME,
+    P.DISPLAY_NAME,
+    P.UNIT_PRICE,
+    P.BRAND,
+    P.DELIVERY_FEE_TYPE,
+    P.DELIVERY_METHOD,
+    P.DELIVERY_DEFAULT_FEE,
+    P.FREE_SHIP_OVER_AMOUNT,
+    P.RETURN_CENTER_CODE,
+    P.CREATED_DATE,
+    P.UPDATED_DATE,
+    I.ID AS IMG_ID,
+    I.FILE_NAME,
+    I.FILE_PATH,
+    I.TYPE,
+    I.SIZE,
+    I.CREATED_DATE AS IMG_CREATED_DATE,
+    I.UPDATED_DATE AS IMG_UPDATED_DATE
+    FROM PRODUCT P
+    LEFT JOIN PRODUCT_IMAGE I ON P.ID = I.PRODUCT_ID
+    WHERE P.ID IN
+    (
+    <foreach collection="productIds" item="id" index="index" separator=",">
+      #{id}
+    </foreach>
+    )
+    AND P.DELETED_DATE IS NULL
+  </select>
 
-    <select id="lockAndFindProductsByIds" parameterType="list" resultType="list"
-            resultMap="productResultMap">
-        SELECT ID,
-        NAME,
-        CATEGORY,
-        DETAIL,
-        STATUS,
-        QUANTITY,
-        SELLER_ID,
-        SELL_START_DATETIME,
-        SELL_END_DATETIME,
-        DISPLAY_NAME,
-        UNIT_PRICE,
-        BRAND,
-        DELIVERY_FEE_TYPE,
-        DELIVERY_METHOD,
-        DELIVERY_DEFAULT_FEE,
-        FREE_SHIP_OVER_AMOUNT,
-        RETURN_CENTER_CODE,
-        CREATED_DATE,
-        UPDATED_DATE
-        FROM PRODUCT
-        WHERE ID IN
-        <foreach collection="productIds" item="id" index="index" separator=",">
-            (#{id})
-        </foreach>
-        AND DELETED_DATE IS NULL
-        FOR
-        UPDATE
-    </select>
+  <select id="lockAndFindProductsByIds" parameterType="list" resultType="list"
+    resultMap="productResultMap">
+    SELECT ID,
+    NAME,
+    CATEGORY,
+    DETAIL,
+    STATUS,
+    QUANTITY,
+    SELLER_ID,
+    SELL_START_DATETIME,
+    SELL_END_DATETIME,
+    DISPLAY_NAME,
+    UNIT_PRICE,
+    BRAND,
+    DELIVERY_FEE_TYPE,
+    DELIVERY_METHOD,
+    DELIVERY_DEFAULT_FEE,
+    FREE_SHIP_OVER_AMOUNT,
+    RETURN_CENTER_CODE,
+    CREATED_DATE,
+    UPDATED_DATE
+    FROM PRODUCT
+    WHERE ID IN
+    <foreach collection="productIds" item="id" index="index" separator=",">
+      (#{id})
+    </foreach>
+    AND DELETED_DATE IS NULL
+    FOR
+    UPDATE
+  </select>
 
-    <select id="findProductsByOrderId" resultMap="productResultMap">
-        SELECT P.ID,
-        P.NAME,
-        P.CATEGORY,
-        P.DETAIL,
-        P.STATUS,
-        P.QUANTITY,
-        P.SELLER_ID,
-        P.SELL_START_DATETIME,
-        P.SELL_END_DATETIME,
-        P.DISPLAY_NAME,
-        P.UNIT_PRICE,
-        P.BRAND,
-        P.DELIVERY_FEE_TYPE,
-        P.DELIVERY_METHOD,
-        P.DELIVERY_DEFAULT_FEE,
-        P.FREE_SHIP_OVER_AMOUNT,
-        P.RETURN_CENTER_CODE,
-        P.CREATED_DATE,
-        P.UPDATED_DATE
-        FROM PRODUCT P
-        LEFT JOIN ORDERS_PRODUCT_RELATION OPR ON OPR.PRODUCT_ID = P.ID
-        WHERE OPR.GROUP_ID = #{orderId}
-    </select>
+  <select id="findProductsByOrderId" resultMap="productResultMap">
+    SELECT P.ID,
+           P.NAME,
+           P.CATEGORY,
+           P.DETAIL,
+           P.STATUS,
+           P.QUANTITY,
+           P.SELLER_ID,
+           P.SELL_START_DATETIME,
+           P.SELL_END_DATETIME,
+           P.DISPLAY_NAME,
+           P.UNIT_PRICE,
+           P.BRAND,
+           P.DELIVERY_FEE_TYPE,
+           P.DELIVERY_METHOD,
+           P.DELIVERY_DEFAULT_FEE,
+           P.FREE_SHIP_OVER_AMOUNT,
+           P.RETURN_CENTER_CODE,
+           P.CREATED_DATE,
+           P.UPDATED_DATE
+    FROM PRODUCT P
+           LEFT JOIN ORDERS_PRODUCT_RELATION OPR ON OPR.PRODUCT_ID = P.ID
+    WHERE OPR.GROUP_ID = #{orderId}
+  </select>
 
-    <update id="updateProductQuantity">
-        UPDATE PRODUCT
-        SET QUANTITY = #{quantity}
-        WHERE ID = #{id}
-    </update>
+  <update id="updateProductQuantity">
+    UPDATE PRODUCT
+    SET QUANTITY = #{quantity}
+    WHERE ID = #{id}
+  </update>
 
-    <insert id="insertProduct" useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
-        INSERT INTO product (NAME, CATEGORY, DETAIL, STATUS, QUANTITY, SELLER_ID,
-        SELL_START_DATETIME, SELL_END_DATETIME, DISPLAY_NAME,
-        UNIT_PRICE, BRAND, DELIVERY_FEE_TYPE, DELIVERY_METHOD,
-        DELIVERY_DEFAULT_FEE, FREE_SHIP_OVER_AMOUNT, RETURN_CENTER_CODE,
-        CREATED_DATE, UPDATED_DATE)
-        VALUES (#{name}, #{category}, #{detail}, #{status}, #{quantity}, #{sellerId},
-        #{sellStartDatetime}, #{sellEndDatetime}, #{displayName},
-        #{unitPrice}, #{brand}, #{deliveryFeeType}, #{deliveryMethod},
-        #{deliveryDefaultFee}, #{freeShipOverAmount}, #{returnCenterCode},
-        now(), now())
-    </insert>
+  <insert id="insertProduct" useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
+    INSERT INTO product (NAME, CATEGORY, DETAIL, STATUS, QUANTITY, SELLER_ID,
+                         SELL_START_DATETIME, SELL_END_DATETIME, DISPLAY_NAME,
+                         UNIT_PRICE, BRAND, DELIVERY_FEE_TYPE, DELIVERY_METHOD,
+                         DELIVERY_DEFAULT_FEE, FREE_SHIP_OVER_AMOUNT, RETURN_CENTER_CODE,
+                         CREATED_DATE, UPDATED_DATE)
+    VALUES (#{name}, #{category}, #{detail}, #{status}, #{quantity}, #{sellerId},
+            #{sellStartDatetime}, #{sellEndDatetime}, #{displayName},
+            #{unitPrice}, #{brand}, #{deliveryFeeType}, #{deliveryMethod},
+            #{deliveryDefaultFee}, #{freeShipOverAmount}, #{returnCenterCode},
+            now(), now())
+  </insert>
 
-    <insert id="insertProductImages">
-        INSERT INTO product_image (PRODUCT_ID, FILE_NAME, FILE_PATH, TYPE, SIZE)
-        VALUES
-        <foreach collection="productImages" item="image" separator=",">
-            (#{image.productId}, #{image.fileName}, #{image.filePath}, #{image.type}, #{image.size})
-        </foreach>
-    </insert>
+  <insert id="insertProductImages">
+    INSERT INTO product_image (PRODUCT_ID, FILE_NAME, FILE_PATH, TYPE, SIZE)
+    VALUES
+    <foreach collection="productImages" item="image" separator=",">
+      (#{image.productId}, #{image.fileName}, #{image.filePath}, #{image.type}, #{image.size})
+    </foreach>
+  </insert>
 
-    <select id="findProductImagesByImageIds" parameterType="list" resultType="list"
-            resultMap="imageResultMap">
-        SELECT ID,
-        PRODUCT_ID,
-        FILE_NAME,
-        FILE_PATH,
-        TYPE,
-        SIZE
-        FROM PRODUCT_IMAGE
-        WHERE ID IN
-        (
-        <foreach collection="imageIds" item="id" index="index" separator=",">
-            #{id}
-        </foreach>
-        )
-        AND DELETED_DATE IS NULL
-    </select>
-
-    <update id="deleteProductImages">
-        UPDATE PRODUCT_IMAGE
-        SET DELETED_DATE = now()
-        WHERE ID IN
-        (
-        <foreach collection="deleteImageIds" item="id" index="index" separator=",">
-            #{id}
-        </foreach>
-        )
-    </update>
-
-    <update id="updateProduct" parameterType="com.psj.itembrowser.product.domain.vo.Product">
-        UPDATE PRODUCT P
-        SET NAME = #{name},
-        CATEGORY = #{category},
-        DETAIL = #{detail},
-        STATUS = #{status},
-        QUANTITY = #{quantity},
-        SELLER_ID = #{sellerId},
-        SELL_START_DATETIME = #{sellStartDatetime},
-        SELL_END_DATETIME = #{sellEndDatetime},
-        DISPLAY_NAME = #{displayName},
-        UNIT_PRICE = #{unitPrice},
-        BRAND = #{brand},
-        DELIVERY_FEE_TYPE = #{deliveryFeeType},
-        DELIVERY_METHOD = #{deliveryMethod},
-        DELIVERY_DEFAULT_FEE = #{deliveryDefaultFee},
+  <update id="updateProduct" parameterType="com.psj.itembrowser.product.domain.vo.Product">
+    UPDATE PRODUCT P
+    SET NAME                  = #{name},
+        CATEGORY              = #{category},
+        DETAIL                = #{detail},
+        STATUS                = #{status},
+        QUANTITY              = #{quantity},
+        SELLER_ID             = #{sellerId},
+        SELL_START_DATETIME   = #{sellStartDatetime},
+        SELL_END_DATETIME     = #{sellEndDatetime},
+        DISPLAY_NAME          = #{displayName},
+        UNIT_PRICE            = #{unitPrice},
+        BRAND                 = #{brand},
+        DELIVERY_FEE_TYPE     = #{deliveryFeeType},
+        DELIVERY_METHOD       = #{deliveryMethod},
+        DELIVERY_DEFAULT_FEE  = #{deliveryDefaultFee},
         FREE_SHIP_OVER_AMOUNT = #{freeShipOverAmount},
-        RETURN_CENTER_CODE = #{returnCenterCode},
-        p.UPDATED_DATE = now()
-        WHERE ID = #{id}
-        AND p.DELETED_DATE IS NULL
-    </update>
+        RETURN_CENTER_CODE    = #{returnCenterCode},
+        p.UPDATED_DATE        = now()
+    WHERE ID = #{id}
+      AND p.DELETED_DATE IS NULL
+  </update>
+
+  <select id="findProductImagesByImageIds" parameterType="list" resultType="list"
+    resultMap="imageResultMap">
+    SELECT ID,
+    PRODUCT_ID,
+    FILE_NAME,
+    FILE_PATH,
+    TYPE,
+    SIZE
+    FROM PRODUCT_IMAGE
+    WHERE ID IN
+    (
+    <foreach collection="imageIds" item="id" index="index" separator=",">
+      #{id}
+    </foreach>
+    )
+    AND DELETED_DATE IS NULL
+  </select>
+
+  <select id="findProductImagesByProductId" parameterType="list" resultType="list"
+    resultMap="imageResultMap">
+    SELECT ID,
+           PRODUCT_ID,
+           FILE_NAME,
+           FILE_PATH,
+           TYPE, SIZE
+    FROM PRODUCT_IMAGE
+    WHERE PRODUCT_ID = #{productId}
+      AND DELETED_DATE IS NULL
+  </select>
+
+  <update id="softDeleteProductImages">
+    UPDATE PRODUCT_IMAGE
+    SET DELETED_DATE = now()
+    WHERE ID IN
+    (
+    <foreach collection="deleteImageIds" item="id" index="index" separator=",">
+      #{id}
+    </foreach>
+    )
+  </update>
+
+  <update id="softDeleteProduct">
+    UPDATE PRODUCT
+    SET DELETED_DATE = now()
+    WHERE ID = #{productId}
+  </update>
 </mapper>

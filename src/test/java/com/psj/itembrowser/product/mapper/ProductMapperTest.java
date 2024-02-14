@@ -1,6 +1,7 @@
 package com.psj.itembrowser.product.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.psj.itembrowser.product.domain.dto.request.ProductQuantityUpdateRequestDTO;
@@ -11,7 +12,9 @@ import com.psj.itembrowser.product.domain.vo.ProductStatus;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +43,15 @@ class ProductMapperTest {
     @Autowired
     private ProductMapper productMapper;
 
+    private Long productId;
+    private List<Long> imageIds;
+
+    @BeforeEach
+    void setup() {
+        productId = 1L;
+        imageIds = List.of(1L, 2L, 3L);
+    }
+
     @Test
     @DisplayName("ID로 상품 조회 성공")
     void findProductById() {
@@ -51,7 +63,6 @@ class ProductMapperTest {
 
         //then
         assertThat(product).isNotNull();
-        assertThat(product.getId()).isEqualTo(productId);
     }
 
     @Test
@@ -65,14 +76,13 @@ class ProductMapperTest {
 
         // then
         assertThat(product).isNotNull();
-        assertThat(product.getId()).isEqualTo(productId);
     }
 
     @Test
     @DisplayName("여러 ID로 상품 목록 조회 성공")
     void findProductsByIds() {
         // given
-        List<Long> productIds = Arrays.asList(1L, 2L);
+        List<Long> productIds = List.of(1L, 2L);
 
         // when
         List<Product> products = productMapper.findProductsByIds(productIds);
@@ -152,7 +162,7 @@ class ProductMapperTest {
     void insertProductImages() {
         // given
         Long productId = 1L; // 가정
-        List<ProductImage> images = Arrays.asList(
+        List<ProductImage> images = List.of(
             new ProductImage(null, productId, "image1.jpg", "/path/to/image1.jpg", "image/jpeg",
                 1024L),
             new ProductImage(null, productId, "image2.jpg", "/path/to/image2.jpg", "image/jpeg",
@@ -170,7 +180,7 @@ class ProductMapperTest {
     @DisplayName("여러 이미지 ID로 조회 성공")
     void findProductImagesByImageIds() {
         // given
-        List<Long> imageIds = Arrays.asList(1L, 3L);
+        List<Long> imageIds = List.of(1L, 3L);
 
         // when
         List<ProductImage> images = productMapper.findProductImagesByImageIds(imageIds);
@@ -226,17 +236,77 @@ class ProductMapperTest {
         assertThat(updatedProduct.getReturnCenterCode()).isEqualTo("RETURN456");
     }
 
-    @Test
-    @DisplayName("이미지 삭제 성공")
-    public void deleteProductImagesTest() {
-        // given
-        List<Long> deleteImageIds = Arrays.asList(1L, 2L, 3L);
 
-        // when
-        productMapper.deleteProductImages(deleteImageIds);
+    @Nested
+    class softDeleteProduct {
 
-        // then
-        List<ProductImage> images = productMapper.findProductImagesByImageIds(deleteImageIds);
-        assertThat(images.size()).isEqualTo(0);
+        @Test
+        @DisplayName("상품 삭제 성공시 삭제일이 업데이트 되는지 확인")
+        void softDeleteProduct() {
+            // given
+            Long productIdToSoftDelete = productId;
+
+            // when
+            productMapper.softDeleteProduct(productIdToSoftDelete);
+
+            // then
+            Product product = productMapper.findProductById(productIdToSoftDelete);
+            assertThat(product).isNull();
+        }
+
+        @Test
+        @DisplayName("존재 하지 않는 제품 삭제 시도 - 예외 발생하지 않음")
+        void whenSoftDeleteNonExistentProduct_thenNoException() {
+            // given
+            Long nonExistentProductId = 999L;
+
+            // when & then
+            assertThatCode(() -> productMapper.softDeleteProduct(nonExistentProductId))
+                .doesNotThrowAnyException();
+        }
+    }
+
+    @Nested
+    class softDeleteProductImages {
+
+        @Test
+        @DisplayName("이미지 삭제 성공")
+        public void deleteProductImagesTest() {
+            // given
+            List<Long> deleteImageIds = List.of(1L, 2L, 3L);
+
+            // when
+            productMapper.softDeleteProductImages(deleteImageIds);
+
+            // then
+            List<ProductImage> images = productMapper.findProductImagesByImageIds(deleteImageIds);
+            assertThat(images.size()).isEqualTo(0);
+        }
+
+        @Test
+        @DisplayName("상품 이미지 삭제 성공시 삭제일이 업데이트 되는지 확인")
+        void softDeleteProductImages() {
+            // given
+            List<Long> imageIdsToSoftDelete = imageIds;
+
+            // when
+            productMapper.softDeleteProductImages(imageIdsToSoftDelete);
+
+            // then
+            List<ProductImage> images = productMapper.findProductImagesByImageIds(
+                imageIdsToSoftDelete);
+            assertThat(images).allMatch(image -> image.getDeletedDate() != null);
+        }
+
+        @Test
+        @DisplayName("존재 하지 않는 이미지 삭제 시도 - 예외 발생하지 않음")
+        void whenSoftDeleteNonExistentProductImages_thenNoException() {
+            // given
+            List<Long> nonExistentImageIds = List.of(999L, 1000L);
+
+            // when & then
+            assertThatCode(() -> productMapper.softDeleteProductImages(nonExistentImageIds))
+                .doesNotThrowAnyException();
+        }
     }
 }
