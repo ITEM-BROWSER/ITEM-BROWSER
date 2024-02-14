@@ -10,6 +10,8 @@ import javax.validation.Valid;
 import com.psj.itembrowser.member.domain.vo.Member;
 import com.psj.itembrowser.order.controller.OrderCreateRequestDTO;
 import com.psj.itembrowser.order.service.impl.OrderCalculationResult;
+import com.psj.itembrowser.security.common.exception.BadRequestException;
+import com.psj.itembrowser.security.common.exception.ErrorCode;
 import com.psj.itembrowser.shippingInfos.domain.vo.ShippingInfo;
 
 import lombok.AccessLevel;
@@ -93,6 +95,9 @@ public class Order implements Cancelable {
 
 	//결제완료 처리한다.
 	public void completePayment() {
+		if (this.paymentStatus == PaymentStatus.COMPLETE) {
+			throw new BadRequestException(ErrorCode.ALREADY_COMPLETE_PAYMENT);
+		}
 		this.paymentStatus = PaymentStatus.COMPLETE;
 		this.paidDate = LocalDateTime.now();
 	}

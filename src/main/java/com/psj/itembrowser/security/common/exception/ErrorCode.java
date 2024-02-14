@@ -51,7 +51,6 @@ public enum ErrorCode {
 	PRODUCT_VALIDATION_FAIL(HttpStatus.BAD_REQUEST, "PRODUCT_005", "Validation Error"),
 	PRODUCT_QUANTITY_NOT_ENOUGH(HttpStatus.BAD_REQUEST, "PRODUCT_006", "Product Quantity is not enough"),
 
-
 	// Address
 	ADDRESS_NOT_FOUND(HttpStatus.NOT_FOUND, "ADDRESS_001", "Not Found Address"),
 
@@ -68,7 +67,10 @@ public enum ErrorCode {
 	ADMIN_NOT_AUTHORIZED(HttpStatus.UNAUTHORIZED, "AUTH_002", "Admin is not authorized"),
 	CUSTOMER_NOT_AUTHORIZED(HttpStatus.UNAUTHORIZED, "AUTH_003", "Customer is not authorized"),
 	PRINCIPAL_NOT_FOUND(HttpStatus.UNAUTHORIZED, "AUTH_004", "Principal is not found"),
-	INVALID_MEMBER_ROLE(HttpStatus.UNAUTHORIZED, "AUTH_005", "Invalid Member Role");
+	INVALID_MEMBER_ROLE(HttpStatus.UNAUTHORIZED, "AUTH_005", "Invalid Member Role"),
+
+	//Payment
+	ALREADY_COMPLETE_PAYMENT(HttpStatus.BAD_REQUEST, "PAYMENT_001", "Already complete payment");
 
 	private final HttpStatus status;
 	private final String code;
